@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
-const Header = ({ currentUser }: any) => {
+const Header = () => {
   return (
     <ul>
       <li>
@@ -13,7 +13,6 @@ const Header = ({ currentUser }: any) => {
       <li>
         <Link href="/banking/deposit">입금하기</Link>
       </li>
-      <li>{currentUser ? "로그인" : "로그아웃"}</li>
     </ul>
   );
 };
