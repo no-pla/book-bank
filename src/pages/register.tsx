@@ -1,5 +1,5 @@
-import SignUpForm from "@/components/Auth/SignUp";
 import React from "react";
+import SignUpForm from "@/components/Auth/SignUpForm";
 
 const Register = () => {
   return <SignUpForm />;

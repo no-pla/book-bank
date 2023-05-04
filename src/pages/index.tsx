@@ -1,3 +1,3 @@
-export default function Home() {
-  return <h1>메인 화면</h1>;
+export default function Home({ currentUser }: any) {
+  return <h1>{currentUser?.displayName || "닉네임"} 님</h1>;
 }

@@ -1,10 +1,10 @@
-import axios from "axios";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/share/firebase";
+import axios from "axios";
 
 interface IUserData {
   email: string;
@@ -31,11 +31,18 @@ const SignUpForm = () => {
   const onSubmit = async ({ email, password, username }: IUserData) => {
     try {
       await createUserWithEmailAndPassword(auth, email, password).then(
-        (userCredential) => {
+        async (userCredential) => {
           // 입력값 DB에 저장
           const user = userCredential.user;
-          updateProfile(user, {
+          await updateProfile(user, {
             displayName: username,
+          }).then(async () => {
+            await axios.post("http://localhost:3001/users", {
+              id: user.uid,
+              nickname: user.displayName,
+              totalBook: 0,
+              email: user.email,
+            });
           });
         }
       );
@@ -112,7 +119,7 @@ const SignUpForm = () => {
           },
           maxLength: {
             value: 10,
-            message: "닉네임은 1글자 이상 10글자 이하로 설정해 주세요.",
+            message: "닉네임은 2글자 이상 10글자 이하로 설정해 주세요.",
           },
           required: {
             value: true,
