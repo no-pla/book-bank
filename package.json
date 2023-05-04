@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
     "@types/node": "18.16.3",
     "@types/react": "18.2.1",
     "@types/react-dom": "18.2.2",
@@ -22,6 +25,7 @@
     "react-hook-form": "^7.43.9",
     "react-query": "^3.39.3",
     "recoil": "^0.7.7",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "uuidv4": "^6.2.13"
   }
 }

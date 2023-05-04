@@ -1,5 +1,4 @@
 import { auth } from "@/share/firebase";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -11,14 +10,14 @@ const useAuth = () => {
     const unSub = auth.onAuthStateChanged(async (currentUser) => {
       if (!currentUser) {
         // 로그인 X 일때 | 기본적으로 login 페이지로 이동
-        if (router.pathname !== "/register") {
+        if (router.pathname !== "/login" && router.pathname !== "/register") {
+          // 로그인 & 회원 가입 페이지가 아니면 로그인 페이지로
           return router.push("/login");
         }
-        return;
-      }
-
-      if (router.pathname === "/login" || router.pathname === "/register") {
-        return router.push("/");
+      } else {
+        if (router.pathname === "/login" || router.pathname === "/register") {
+          return router.push("/");
+        }
       }
       setUser(currentUser);
     });

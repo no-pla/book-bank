@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import axios from "axios";
+import { DB_LINK } from "@/share/server";
 
 interface IUserData {
   email: string;
@@ -37,7 +38,7 @@ const SignUpForm = () => {
           await updateProfile(user, {
             displayName: username,
           }).then(async () => {
-            await axios.post("http://localhost:3001/users", {
+            await axios.post(`${DB_LINK}/users`, {
               id: user.uid,
               nickname: user.displayName,
               totalBook: 0,
@@ -51,7 +52,7 @@ const SignUpForm = () => {
         alert("이미 가입된 계정입니다."); // 추후 모달로 수정
         return;
       } else {
-        alert("예기치 못한 오류로 회원가입에 실패했습니다."); // 추후 모달로 수정
+        alert("예기치 못한 오류로 회원가입을 실패했습니다."); // 추후 모달로 수정
         return;
       }
     }
