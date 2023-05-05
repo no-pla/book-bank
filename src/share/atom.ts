@@ -9,3 +9,8 @@ export const selectMyBookState = atom({
   key: "selectMyBookState",
   default: {},
 });
+
+export const isFormEdit = atom<boolean>({
+  key: "isFormEdit",
+  default: false,
+});

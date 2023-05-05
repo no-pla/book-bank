@@ -1,19 +1,19 @@
-import { DB_LINK } from "@/share/server";
+import React from "react";
 import axios from "axios";
 import { useQuery } from "react-query";
 
 const useUser = (uid: string) => {
-  const { data } = useQuery(
-    "getUserInfo",
+  const { data: userInfo } = useQuery(
+    "getReadBookInfo",
     async () => {
-      return await axios.get(`${DB_LINK}/users/${uid}`);
+      return await axios.get(`http://localhost:3001/review?uid=${uid}`);
     },
     {
       select: (data) => data.data,
       enabled: !!uid,
     }
   );
-  return data;
+  return userInfo;
 };
 
 export default useUser;
