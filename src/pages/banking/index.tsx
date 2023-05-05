@@ -1,22 +1,25 @@
-import useUser from "@/components/Hooks/useUser";
-import { selectMyBookState } from "@/share/atom";
-import { DB_LINK } from "@/share/server";
 import axios from "axios";
-import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useInfiniteQuery, useQueryClient } from "react-query";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { DB_LINK } from "@/share/server";
+import useUser from "@/components/Hooks/useUser";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
+import { useRecoilValue, useResetRecoilState } from "recoil";
+import EditForm from "@/components/Banking/EditForm";
+import ReviewItem from "@/components/Banking/ReviewItem";
+import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
+import styled from "@emotion/styled";
 
 const Index = ({ currentUser }: any) => {
   const queryClient = useQueryClient();
+  const resetList = useResetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
-  const setMyBookData = useSetRecoilState(selectMyBookState);
-  const targetMyBookData = useRecoilValue(selectMyBookState);
   const MAX_BOOK = 10;
-  console.log(targetMyBookData);
+  const isEdit = useRecoilValue(isFormEdit);
+  const resetEdit = useResetRecoilState(isFormEdit);
 
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
-    "getMyBookList",
+  const { data, fetchNextPage, hasNextPage, remove } = useInfiniteQuery(
+    ["getMyBookList", currentUser?.uid],
     ({ pageParam = 1 }) => fetchBookList(pageParam, currentUser?.uid),
     {
       enabled: !!currentUser?.uid,
@@ -31,45 +34,48 @@ const Index = ({ currentUser }: any) => {
     }
   );
 
-  const fetchBookList = async (pageParam: number, userId: string) => {
+  const fetchBookList = async (pageParam: number = 1, userId: string) => {
     return await axios.get(
-      `${DB_LINK}/review?_limit=${MAX_BOOK}&_page=${pageParam}&_uid=${userId}`
+      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&_uid=${userId}`
     );
   };
 
+  const getNextPage = () => {
+    fetchNextPage();
+    if (isEdit === true) {
+      resetEdit();
+    }
+  };
+
   useEffect(() => {
-    queryClient.invalidateQueries("getReadBookInfo");
+    queryClient.invalidateQueries("getReadBookInfo"); // 도서 입금 후 제대로 뜨지 않는 경우가 있어서 수정
+    resetList(); // 옆 상세 페이지 닫기
+    remove(); // pageParams 리셋용
+    resetEdit();
   }, []);
 
   return (
-    <>
-      <div>{userInfo?.length.toLocaleString("ko-KR")}권</div>
+    <Container>
       <div>
-        {data?.pages?.map((list: any) => {
-          return list?.data.map((book: any, index: number) => {
-            return (
-              <div
-                key={book.id}
-                onClick={() => setMyBookData(list.data[index])}
-              >
-                <Image
-                  src={book.thumbnail}
-                  width={100}
-                  height={150}
-                  alt={`${book?.title}의 표지입니다.`}
-                />
-                <div>{book?.title}</div>
-                <button>상세보기</button>
-              </div>
-            );
-          });
-        })}
+        <ReviewItem data={data} />
+        <button disabled={!hasNextPage} onClick={getNextPage}>
+          더보기
+        </button>
       </div>
-      <button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
-        더보기
-      </button>
-    </>
+      <div>{isEdit ? <EditForm /> : <ReviewDetailItem />}</div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  display: flex;
+  > div:first-of-type {
+    background-color: #33ff33;
+  }
+  > div:nth-of-type(2) {
+    background-color: magenta;
+    flex-grow: 1;
+  }
+`;
 
 export default Index;
