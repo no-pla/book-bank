@@ -34,6 +34,7 @@ const EditForm = () => {
     const editReview = {
       ...targetMyBookData,
       ...data,
+      price: +data?.price,
     };
     await updateReview(editReview);
     resetEdit();
