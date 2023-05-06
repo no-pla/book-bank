@@ -14,3 +14,8 @@ export const isFormEdit = atom<boolean>({
   key: "isFormEdit",
   default: false,
 });
+
+export const showDetailBookReview = atom<boolean>({
+  key: "showDetailBookReview",
+  default: false,
+});
