@@ -1,20 +1,38 @@
 import styled from "@emotion/styled";
 import React from "react";
+import { createPortal } from "react-dom";
 
 const ErrorModal = ({ title, content, toggle, onFunc }: any) => {
   return (
-    <Backdrop>
-      <Modal>
-        <ModalTitle>{title}</ModalTitle>
-        <ModalContent>{content}</ModalContent>
-        <ModalButtonContainer>
-          <ModalButton onClick={toggle}>닫기</ModalButton>
-          <ModalButton onClick={onFunc}>확인</ModalButton>
-        </ModalButtonContainer>
-      </Modal>
-    </Backdrop>
+    <>
+      {createPortal(
+        <ModalContainer>
+          <Modal>
+            <ModalTitle>{title}</ModalTitle>
+            <ModalContent>{content}</ModalContent>
+            <ModalButtonContainer>
+              <ModalButton onClick={toggle}>닫기</ModalButton>
+              <ModalButton onClick={onFunc}>확인</ModalButton>
+            </ModalButtonContainer>
+          </Modal>
+        </ModalContainer>,
+        document.getElementById("portal")!
+      )}
+    </>
   );
 };
+
+const ModalContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(159, 159, 159, 0.6);
+`;
 
 const Modal = styled.div`
   text-align: center;
@@ -25,6 +43,7 @@ const Modal = styled.div`
   flex-direction: column;
   height: calc(min(32vw, 140px));
   justify-content: space-between;
+  z-index: 10;
 `;
 
 const ModalTitle = styled.h3`
@@ -57,21 +76,6 @@ const ModalButton = styled.button`
   width: 50%;
   border: 1px solid lightgray;
   cursor: pointer;
-`;
-
-const Backdrop = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 100;
-  background: rgba(159, 159, 159, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  overflow-y: hidden;
 `;
 
 export default ErrorModal;

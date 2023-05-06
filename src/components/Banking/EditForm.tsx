@@ -1,16 +1,18 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { useUpdateBook } from "../Hooks/useBanking";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import ErrorModal from "../Custom/ErrorModal";
+import useModal from "../Hooks/useModal";
 
-const EditForm = ({ editToggle, editIsShowing }: any) => {
+const EditForm = () => {
   const targetMyBookData = useRecoilValue<any>(selectMyBookState);
   const { mutate: updateReview } = useUpdateBook();
-  const isEdit = useRecoilValue(isFormEdit);
-  const resetEdit = useResetRecoilState(isFormEdit);
   const setDetail = useSetRecoilState<any>(selectMyBookState);
+  const { isShowing, toggle } = useModal();
+  const isEdit = useRecoilValue(isFormEdit);
+  const setIsEdit = useSetRecoilState(isFormEdit);
 
   const {
     register,
@@ -29,15 +31,29 @@ const EditForm = ({ editToggle, editIsShowing }: any) => {
   const onEdit = async (data: any) => {
     const editReview = {
       ...targetMyBookData,
-      ...data,
-      price: +data?.price,
+      authors: data.authors.split(",").map((author: string) => author.trim()),
+      price: +data.price,
+      publisher: data.publisher,
+      review: data?.review,
+      title: data.title,
     };
+    console.log(editReview);
+
     await updateReview(editReview);
     setDetail(editReview);
+    setIsEdit(!isEdit);
   };
 
   return (
     <>
+      {isShowing === true && (
+        <ErrorModal
+          title="정말로 수정을 취소할까요?"
+          content="이 작업은 되돌릴 수 없습니다!"
+          toggle={toggle}
+          onFunc={() => setIsEdit(!isEdit)}
+        />
+      )}
       <form onSubmit={handleSubmit((data) => onEdit(data))}>
         <input
           {...register("title", {
@@ -93,7 +109,9 @@ const EditForm = ({ editToggle, editIsShowing }: any) => {
         </p>
         <textarea {...register("review")} placeholder="리뷰 (선택)" />
         <button type="submit">수정</button>
-        <button onClick={editToggle}>수정 취소</button>
+        <button type="button" onClick={toggle}>
+          수정 취소
+        </button>
       </form>
     </>
   );

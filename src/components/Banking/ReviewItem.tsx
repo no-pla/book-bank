@@ -1,46 +1,77 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
-import Image from "next/image";
-import { selectMyBookState } from "@/share/atom";
-import styled from "@emotion/styled";
+import axios from "axios";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useInfiniteQuery } from "react-query";
+import useUser from "../Hooks/useUser";
+import { DB_LINK } from "@/share/server";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 
-const ReviewItem = ({ data, hasNextPage, getNextPage, toggle }: any) => {
+const ReviewItem = ({ currentUser }: any) => {
+  const userInfo = useUser(currentUser?.uid);
+  const MAX_BOOK = 2;
   const setMyBookData = useSetRecoilState(selectMyBookState);
+  const isEdit = useRecoilValue(isFormEdit);
+  const setIsEdit = useSetRecoilState(isFormEdit);
+  const {
+    data: myBookReviews,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    "getMyBookList",
+    ({ pageParam = 1 }) => fetchMyBookReivewList(pageParam),
+    {
+      enabled: !!currentUser?.uid,
+      notifyOnChangeProps: "tracked",
+      getNextPageParam: (_lastPage, pages) => {
+        if (pages.length < Math.ceil(userInfo?.length / MAX_BOOK)) {
+          return pages.length + 1;
+        } else {
+          return undefined;
+        }
+      },
+    }
+  );
 
-  console.log(data);
+  const fetchMyBookReivewList = async (pageParam: number) => {
+    return await axios.get(
+      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&_uid=${currentUser?.uid}`
+    );
+  };
+
+  const showDetailReview = (data: any) => {
+    console.log(data);
+    setMyBookData(data);
+    if (isEdit === true) {
+      // 수정 폼이 열린 상태로 상세보기를 누르면 경고 모달 on
+      console.log("일시겜에 우리 아기가 나오도록 해주세요");
+      setIsEdit(!isEdit);
+    }
+  };
 
   return (
-    <ReviewItemContainer>
-      {data?.pages?.map((list: any) => {
-        return list?.data.map((book: any, index: number) => {
-          return (
-            <Review key={book.id}>
-              <div>
-                {book?.title} - {book?.authors[0]}
-              </div>
-              <div>{book?.price}원</div>
-              <button onClick={() => setMyBookData(list.data[index])}>
-                상세보기
-              </button>
-            </Review>
-          );
-        });
-      })}
-      <button disabled={!hasNextPage} onClick={getNextPage}>
-        더보기
-      </button>
-    </ReviewItemContainer>
+    <div>
+      <ul style={{ height: "100vh" }}>
+        {myBookReviews?.pages?.map((list: any) => {
+          return list?.data.map((book: any, index: number) => {
+            return (
+              <li key={book.id}>
+                <div>
+                  {book?.title} - {book?.authors[0]}
+                </div>
+                <div>{book?.price}원</div>
+                <button onClick={() => showDetailReview(list.data[index])}>
+                  상세보기
+                </button>
+              </li>
+            );
+          });
+        })}
+        <button disabled={!hasNextPage} onClick={() => fetchNextPage()}>
+          더보기
+        </button>
+      </ul>
+    </div>
   );
 };
-
-const ReviewItemContainer = styled.ul`
-  height: 100vh;
-  overflow-y: hidden;
-`;
-
-const Review = styled.li`
-  color: whitesmoke;
-  background-color: #393b4c;
-`;
 
 export default ReviewItem;
