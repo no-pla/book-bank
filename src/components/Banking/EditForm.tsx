@@ -29,16 +29,19 @@ const EditForm = () => {
   });
 
   const onEdit = async (data: any) => {
+    let authors = data.authors;
+    if (typeof data.authors === "string") {
+      authors = authors.split(",").map((author: string) => author.trim());
+    }
+
     const editReview = {
       ...targetMyBookData,
-      authors: data.authors.split(",").map((author: string) => author.trim()),
+      authors,
       price: +data.price,
       publisher: data.publisher,
       review: data?.review,
       title: data.title,
     };
-    console.log(editReview);
-
     await updateReview(editReview);
     setDetail(editReview);
     setIsEdit(!isEdit);
