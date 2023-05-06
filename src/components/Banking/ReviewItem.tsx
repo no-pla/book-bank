@@ -43,7 +43,6 @@ const ReviewItem = ({ currentUser }: any) => {
     setMyBookData(data);
     if (isEdit === true) {
       // 수정 폼이 열린 상태로 상세보기를 누르면 경고 모달 on
-      console.log("일시겜에 우리 아기가 나오도록 해주세요");
       setIsEdit(!isEdit);
     }
   };
@@ -56,7 +55,8 @@ const ReviewItem = ({ currentUser }: any) => {
             return (
               <li key={book.id}>
                 <div>
-                  {book?.title} - {book?.authors[0]}
+                  {book?.title} - {book?.authors[0]}&nbsp;
+                  {book.authors.length > 1 && "외"}
                 </div>
                 <div>{book?.price}원</div>
                 <button onClick={() => showDetailReview(list.data[index])}>
