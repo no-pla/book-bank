@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import { useUpdateBook } from "../Hooks/useBanking";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import ErrorModal from "../Custom/ErrorModal";
 
-const EditForm = () => {
+const EditForm = ({ editToggle, editIsShowing }: any) => {
   const targetMyBookData = useRecoilValue<any>(selectMyBookState);
   const { mutate: updateReview } = useUpdateBook();
-  const setIsEdit = useSetRecoilState(isFormEdit);
   const isEdit = useRecoilValue(isFormEdit);
   const resetEdit = useResetRecoilState(isFormEdit);
   const setDetail = useSetRecoilState<any>(selectMyBookState);
@@ -26,10 +26,6 @@ const EditForm = () => {
     },
   });
 
-  const toggleEdit = () => {
-    setIsEdit(!isEdit);
-  };
-
   const onEdit = async (data: any) => {
     const editReview = {
       ...targetMyBookData,
@@ -37,7 +33,6 @@ const EditForm = () => {
       price: +data?.price,
     };
     await updateReview(editReview);
-    resetEdit();
     setDetail(editReview);
   };
 
@@ -98,7 +93,7 @@ const EditForm = () => {
         </p>
         <textarea {...register("review")} placeholder="리뷰 (선택)" />
         <button type="submit">수정</button>
-        <button onClick={() => toggleEdit()}>수정 취소</button>
+        <button onClick={editToggle}>수정 취소</button>
       </form>
     </>
   );

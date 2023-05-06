@@ -4,19 +4,28 @@ import { useInfiniteQuery, useQueryClient } from "react-query";
 import { DB_LINK } from "@/share/server";
 import useUser from "@/components/Hooks/useUser";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import EditForm from "@/components/Banking/EditForm";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 import styled from "@emotion/styled";
+import ErrorModal from "@/components/Custom/ErrorModal";
+import useModal from "@/components/Hooks/useModal";
+import { useDeleteBook } from "@/components/Hooks/useBanking";
+import { useRouter } from "next/router";
 
 const Index = ({ currentUser }: any) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const resetList = useResetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
-  const MAX_BOOK = 10;
   const isEdit = useRecoilValue(isFormEdit);
   const resetEdit = useResetRecoilState(isFormEdit);
+  const { mutate: deleteReview } = useDeleteBook();
+  const { isShowing, toggle } = useModal();
+  const { isShowing: editIsShowing, toggle: editToggle } = useModal();
+  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
+  const MAX_BOOK = 3;
 
   const { data, fetchNextPage, hasNextPage, remove } = useInfiniteQuery(
     ["getMyBookList", currentUser?.uid],
@@ -40,9 +49,14 @@ const Index = ({ currentUser }: any) => {
     );
   };
 
+  const onDelete = async () => {
+    await deleteReview(targetMyBookData?.id);
+    toggle();
+  };
+
   const getNextPage = () => {
     fetchNextPage();
-    if (isEdit === true) {
+    if (isEdit) {
       resetEdit();
     }
   };
@@ -54,16 +68,50 @@ const Index = ({ currentUser }: any) => {
     resetEdit();
   }, []);
 
+  const calcelEdit = () => {
+    editToggle();
+    setIsEdit((prev) => !prev);
+  };
+
+  const setIsEdit = useSetRecoilState(isFormEdit);
+
+  useEffect(() => {
+    console.log("0410");
+  }, [router.pathname]);
+
   return (
-    <Container>
-      <div>
-        <ReviewItem data={data} />
-        <button disabled={!hasNextPage} onClick={getNextPage}>
-          더보기
-        </button>
-      </div>
-      <div>{isEdit ? <EditForm /> : <ReviewDetailItem />}</div>
-    </Container>
+    <>
+      {isShowing && (
+        <ErrorModal
+          title="정말로 삭제할까요?"
+          content="이 작업은 되돌릴 수 없습니다!"
+          isShowing={isShowing}
+          toggle={toggle}
+          onFunc={onDelete}
+        />
+      )}
+      {editIsShowing && (
+        <ErrorModal
+          title="정말로 수정을 취소할까요?"
+          content="이 작업은 되돌릴 수 없습니다!"
+          isShowing={editIsShowing}
+          toggle={editToggle}
+          onFunc={() => calcelEdit()}
+        />
+      )}
+      <Container>
+        <ReviewItem
+          data={data}
+          hasNextPage={hasNextPage}
+          getNextPage={getNextPage}
+        />
+        {isEdit ? (
+          <EditForm editToggle={editToggle} editIsShowing={editIsShowing} />
+        ) : (
+          <ReviewDetailItem toggle={toggle} />
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -71,7 +119,9 @@ const Container = styled.div`
   display: flex;
   > div:first-of-type {
     background-color: #33ff33;
+    flex-grow: 1;
   }
+
   > div:nth-of-type(2) {
     background-color: magenta;
     flex-grow: 1;

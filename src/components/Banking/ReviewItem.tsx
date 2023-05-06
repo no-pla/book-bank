@@ -2,33 +2,45 @@ import React from "react";
 import { useSetRecoilState } from "recoil";
 import Image from "next/image";
 import { selectMyBookState } from "@/share/atom";
+import styled from "@emotion/styled";
 
-const ReviewItem = ({ data }: any) => {
+const ReviewItem = ({ data, hasNextPage, getNextPage, toggle }: any) => {
   const setMyBookData = useSetRecoilState(selectMyBookState);
 
+  console.log(data);
+
   return (
-    <div>
+    <ReviewItemContainer>
       {data?.pages?.map((list: any) => {
         return list?.data.map((book: any, index: number) => {
           return (
-            <div key={book.id}>
-              <Image
-                src={book.thumbnail}
-                width={100}
-                height={150}
-                alt={`${book?.title}의 표지입니다.`}
-                priority={true}
-              />
-              <div>{book?.title}</div>
+            <Review key={book.id}>
+              <div>
+                {book?.title} - {book?.authors[0]}
+              </div>
+              <div>{book?.price}원</div>
               <button onClick={() => setMyBookData(list.data[index])}>
                 상세보기
               </button>
-            </div>
+            </Review>
           );
         });
       })}
-    </div>
+      <button disabled={!hasNextPage} onClick={getNextPage}>
+        더보기
+      </button>
+    </ReviewItemContainer>
   );
 };
+
+const ReviewItemContainer = styled.ul`
+  height: 100vh;
+  overflow-y: hidden;
+`;
+
+const Review = styled.li`
+  color: whitesmoke;
+  background-color: #393b4c;
+`;
 
 export default ReviewItem;
