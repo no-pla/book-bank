@@ -23,7 +23,6 @@ const SearchForm = () => {
       setPage(1);
     }
   };
-  console.log(bookList);
 
   return (
     <>

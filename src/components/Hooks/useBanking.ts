@@ -73,8 +73,6 @@ export const useGetBookList = (userId: string) => {
 };
 
 const fetchBookList = async (pageParam: number, userId: string) => {
-  console.log(userId);
-
   return await axios.get(
     `${DB_LINK}/review?_limit=2&_page=${pageParam}&_userId=${userId}`
   );

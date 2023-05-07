@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import useUser from "@/components/Hooks/useUser";
@@ -12,7 +13,8 @@ export default function Home({ currentUser }: any) {
 
   return (
     <>
-      <div>{currentUser?.displayName || "닉네임"}</div>
+      <div>{currentUser?.displayName || "닉네임 없음"}</div>
+      <Link href="/user/setting">프로필 설정</Link>
       <div>{userInfo?.length.toLocaleString("ko-KR")}권</div>
       <div>
         {userInfo
