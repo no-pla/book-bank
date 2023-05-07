@@ -5,6 +5,7 @@ import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
 import { DB_LINK } from "@/share/server";
 import ErrorModal from "@/components/Custom/ErrorModal";
+import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {
   const currentUser = useAuth();
@@ -62,6 +63,7 @@ const Setting = () => {
       )}
       <div>회원 탈퇴</div>
       <button onClick={() => toggle()}>회원탈퇴</button>
+      <UpdateProfileForm />
     </div>
   );
 };

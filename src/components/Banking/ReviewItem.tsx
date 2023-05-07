@@ -39,7 +39,6 @@ const ReviewItem = ({ currentUser }: any) => {
   };
 
   const showDetailReview = (data: any) => {
-    console.log(data);
     setMyBookData(data);
     if (isEdit === true) {
       // 수정 폼이 열린 상태로 상세보기를 누르면 경고 모달 on
