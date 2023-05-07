@@ -41,7 +41,6 @@ const SignUpForm = () => {
             await axios.post(`${DB_LINK}/users`, {
               id: user.uid,
               nickname: user.displayName,
-              totalBook: 0,
               email: user.email,
             });
           });
