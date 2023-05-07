@@ -2,6 +2,8 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import useUser from "@/components/Hooks/useUser";
+import { signOut } from "firebase/auth";
+import { auth } from "@/share/firebase";
 
 export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();
@@ -10,6 +12,15 @@ export default function Home({ currentUser }: any) {
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
   }, []);
+
+  const onSignOut = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.log(error);
+      alert("로그아웃 실패했습니다.");
+    }
+  };
 
   return (
     <>
@@ -24,6 +35,7 @@ export default function Home({ currentUser }: any) {
           .toLocaleString("ko-KR")}
         원
       </div>
+      <button onClick={onSignOut}>로그아웃</button>
     </>
   );
 }
