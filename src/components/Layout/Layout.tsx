@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./Header";
+import Navigation from "./Navigation";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 
@@ -8,9 +8,9 @@ const Layout = ({ children }: any) => {
   return (
     <LayoutContainer>
       {router.pathname !== "/login" && router.pathname !== "/register" && (
-        <Header />
+        <Navigation />
       )}
-      <>{children}</>
+      {children}
     </LayoutContainer>
   );
 };
@@ -19,7 +19,12 @@ export default Layout;
 
 const LayoutContainer = styled.div`
   display: flex;
-  > header {
-    width: 10%;
+  > nav {
+    width: 16%;
+  }
+  @media (max-width: 600px) {
+    > nav {
+      display: none;
+    }
   }
 `;

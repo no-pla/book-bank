@@ -1,6 +1,7 @@
 :root {
   --bg-color: #eaebe7;
   --text-color: #2c2d31;
+  --main-color: #d1d1e0;
   --point-color1: #30e0a1;
   --point-color2: #eb7050;
 }
@@ -132,4 +133,14 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-color);
 }
