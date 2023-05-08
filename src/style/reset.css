@@ -1,3 +1,9 @@
+:root {
+  --bg-color: #eaebe7;
+  --text-color: #2c2d31;
+  --point-color1: #30e0a1;
+  --point-color2: #eb7050;
+}
 /* http://meyerweb.com/eric/tools/css/reset/ 
      v2.0 | 20110126
      License: none (public domain)
