@@ -32,6 +32,9 @@ const ReviewForm = () => {
       review: ReviewAreaRef.current?.value,
       uid: currentUser.uid,
       createdAt: Date.now(),
+      createdYear: new Date().getFullYear(),
+      createdMonth: new Date().getMonth() + 1,
+      createdDay: new Date().getDate(),
     };
     try {
       await addNewBookReview(newBookReview);
