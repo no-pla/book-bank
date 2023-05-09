@@ -1,0 +1,51 @@
+import React from "react";
+import styled from "@emotion/styled";
+import { useFormContext } from "react-hook-form";
+
+const AuthInput = ({ placeholder, type, name, validation }: any) => {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<any>();
+
+  return (
+    <>
+      <Label htmlFor={name}>{placeholder}</Label>
+      {/* placeholder는 스크린 리더가 읽지 못할 수도 있기 때문에 label를 추가해주어야 한다. */}
+      <Input
+        placeholder={placeholder}
+        type={type}
+        {...register(name, validation)}
+        id={name}
+        name={name}
+      />
+      <ErrorMessage>
+        {errors[name] && <>{errors[name]?.message?.toString()}</>}
+      </ErrorMessage>
+    </>
+  );
+};
+
+const Label = styled.label`
+  padding: 4px 0;
+  width: 100%;
+`;
+
+const Input = styled.input`
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+  width: 100%;
+  color: var(--text-color);
+  box-sizing: border-box;
+`;
+
+const ErrorMessage = styled.p`
+  color: var(--point-color2);
+  text-align: left;
+  padding: 2px 0 4px 12px;
+  font-size: 0.8rem;
+  width: 100%;
+`;
+
+export default AuthInput;
