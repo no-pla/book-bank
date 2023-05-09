@@ -54,6 +54,10 @@ export default function Home({ currentUser }: any) {
 const DataInfo = styled.div`
   display: flex;
   gap: 12px;
+  height: 100%;
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 const InfoContainer = styled.section`
@@ -67,7 +71,6 @@ const InfoContainer = styled.section`
   justify-content: space-between;
   @media (max-width: 600px) {
     flex-direction: column;
-    margin-top: 60px;
   }
 `;
 
@@ -81,10 +84,9 @@ const UserInfo = styled.section`
   align-items: center;
   justify-content: space-around;
   width: 40%;
-  height: 100%;
-  padding: 20px 0;
+  height: 50%;
   @media (max-width: 600px) {
-    height: 32%;
+    height: 50%;
     width: 100%;
   }
 `;
@@ -100,9 +102,9 @@ const BankingInfo = styled.section`
   align-items: center;
   max-height: 600px;
   justify-content: space-around;
-  height: 100%;
+  height: 50%;
   @media (max-width: 600px) {
-    height: 32%;
+    height: 50%;
     width: 100%;
   }
 `;

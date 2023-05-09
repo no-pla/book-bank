@@ -1,10 +1,10 @@
-import type { AppProps } from "next/app";
-import { QueryClient, QueryClientProvider } from "react-query";
 import { RecoilRoot } from "recoil";
+import type { AppProps } from "next/app";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "@/components/Layout/Layout";
-import "../style/reset.css";
 import useAuth from "@/components/Hooks/useAuth";
+import "../style/reset.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
