@@ -1,17 +1,19 @@
 import React, { useRef, useState } from "react";
+import styled from "@emotion/styled";
+import BookItem from "./BookItem";
+import { Input } from "../Custom/AuthInput";
 import { useGetSearchBookList } from "../Hooks/useBanking";
-import { useSetRecoilState } from "recoil";
-import { selectBookState } from "@/share/atom";
 
 const SearchForm = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number>(1);
   const [searchBookName, setSearchBookName] = useState("");
   const SearchInputRef = useRef<HTMLInputElement>(null);
   const { data: bookList } = useGetSearchBookList(searchBookName, page);
-  const setSelectBook = useSetRecoilState(selectBookState);
 
   const SearchInput = () => {
-    return <input ref={SearchInputRef} />;
+    return (
+      <Input ref={SearchInputRef} placeholder="검색할 책을 입력해주세요." />
+    );
   };
 
   const onSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -25,30 +27,56 @@ const SearchForm = () => {
   };
 
   return (
-    <>
+    <Container>
       <form onSubmit={(event) => onSearchSubmit(event)}>
         <SearchInput />
       </form>
-      <ul>
+      <BookListContainer>
         {bookList?.documents.map((book: any) => {
-          return (
-            <li key={book?.id} onClick={() => setSelectBook(book)}>
-              {book.title}
-            </li>
-          );
+          return <BookItem key={book.id} book={book} />;
         })}
-      </ul>
-      <button disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>
-        이전
-      </button>
-      <button
-        disabled={bookList?.meta.is_end === true || bookList === undefined}
-        onClick={() => setPage((prev) => prev + 1)}
-      >
-        이후
-      </button>
-    </>
+      </BookListContainer>
+      <SearchButtonContainer>
+        <SearchButton
+          disabled={page === 1}
+          onClick={() => setPage((prev) => prev - 1)}
+        >
+          이전
+        </SearchButton>
+        <SearchButton
+          disabled={bookList?.meta.is_end === true || bookList === undefined}
+          onClick={() => setPage((prev) => prev + 1)}
+        >
+          이후
+        </SearchButton>
+      </SearchButtonContainer>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: flex-start;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+const BookListContainer = styled.ul`
+  height: 100%;
+  padding: 12px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const SearchButtonContainer = styled.div``;
+const SearchButton = styled.button`
+  width: 50%;
+  padding: 8px 0;
+`;
 
 export default SearchForm;

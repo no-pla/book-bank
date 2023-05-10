@@ -3,8 +3,8 @@ import Image from "next/image";
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useQueryClient } from "react-query";
-import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
+import Chart from "@/components/Banking/Chart";
 
 export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();
@@ -55,6 +55,7 @@ const DataInfo = styled.div`
   display: flex;
   gap: 12px;
   height: 100%;
+  max-height: 400px;
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -68,7 +69,7 @@ const InfoContainer = styled.section`
   box-sizing: border-box;
   width: 100vw;
   height: 100vh;
-  justify-content: space-between;
+  justify-content: flex-start;
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -96,13 +97,12 @@ const BankingInfo = styled.section`
   background-color: var(--main-color);
   box-sizing: border-box;
   border-radius: 12px;
-  height: calc(min(36%, 300px));
+  height: calc(min(50%, 300px));
   display: flex;
   flex-direction: column;
   align-items: center;
   max-height: 600px;
   justify-content: space-around;
-  height: 50%;
   @media (max-width: 600px) {
     height: 50%;
     width: 100%;

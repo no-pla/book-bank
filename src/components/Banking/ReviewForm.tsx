@@ -1,11 +1,11 @@
 import React, { useRef } from "react";
 import { v4 as uuid_v4 } from "uuid";
+import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
+import { useRouter } from "next/router";
+import useAuth from "../Hooks/useAuth";
 import { selectBookState } from "@/share/atom";
 import { useAddBook } from "../Hooks/useBanking";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import useAuth from "../Hooks/useAuth";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
@@ -16,7 +16,7 @@ const ReviewForm = () => {
 
   const ReviewArea = () => {
     return (
-      <textarea ref={ReviewAreaRef} placeholder="후기를 적어주세요. (선택)" />
+      <TextArea ref={ReviewAreaRef} placeholder="후기를 적어주세요. (선택)" />
     );
   };
 
@@ -45,23 +45,71 @@ const ReviewForm = () => {
   };
 
   return (
-    <>
+    <ReviewFormContainer>
       {Object.keys(targetBookData).length > 0 && (
-        <form onSubmit={(event) => onSubmitReview(event)}>
-          <div>{targetBookData?.title}</div>
-          <div>{targetBookData.authors}</div>
-          <Image
-            src={targetBookData.thumbnail}
-            alt={`${targetBookData.title}의 책표지입니다.`}
-            width={100}
-            height={150}
-          />
-          <ReviewArea />
-          <button>책 저금하기</button>
-        </form>
+        <div>
+          <BookInfo>
+            {targetBookData?.title} - {targetBookData.authors}
+          </BookInfo>
+          <FormContainer>
+            <ReviewWriteForm onSubmit={(event) => onSubmitReview(event)}>
+              <ReviewArea />
+              <DepositButton>책 저금하기</DepositButton>
+            </ReviewWriteForm>
+          </FormContainer>
+        </div>
       )}
-    </>
+    </ReviewFormContainer>
   );
 };
 
 export default ReviewForm;
+
+const BookInfo = styled.div`
+  padding: 16px;
+  font-weight: 700;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ReviewFormContainer = styled.div`
+  background-color: var(--bg-color);
+  height: calc(100vh - 24px);
+  > div {
+    margin: 12px 12px 0 12px;
+    border-radius: 12px;
+    background-color: whitesmoke;
+    height: 100%;
+    text-align: center;
+  }
+`;
+
+const ReviewWriteForm = styled.form`
+  border-radius: 4px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+const TextArea = styled.textarea`
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  height: 100%;
+  padding: 12px;
+`;
+
+const FormContainer = styled.div`
+  height: calc(100% - 72px);
+`;
+
+const DepositButton = styled.button`
+  padding: 12px 0;
+  border: none;
+  background-color: var(--point-color1);
+  cursor: pointer;
+`;

@@ -1,18 +1,29 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useUpdateBook } from "../Hooks/useBanking";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
+import { useUpdateBook } from "../Hooks/useBanking";
+import ErrorModal from "../Custom/ErrorModal";
+import styled from "@emotion/styled";
+import { Input } from "../Custom/AuthInput";
+import { emailRegex } from "@/share/utils";
+
+interface IEditData {
+  authors: string | string[];
+  price: number;
+  publisher: string;
+  review: string;
+  title: string;
+}
 
 const EditForm = () => {
-  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
-  const { mutate: updateReview } = useUpdateBook();
-  const setDetail = useSetRecoilState<any>(selectMyBookState);
   const { isShowing, toggle } = useModal();
+  const { mutate: updateReview } = useUpdateBook();
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
+  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
+  const setDetail = useSetRecoilState<any>(selectMyBookState);
 
   const {
     register,
@@ -29,6 +40,7 @@ const EditForm = () => {
   });
 
   const onEdit = async (data: any) => {
+    console.log("data", data);
     let authors = data.authors;
     if (typeof data.authors === "string") {
       authors = authors.split(",").map((author: string) => author.trim());
@@ -57,8 +69,9 @@ const EditForm = () => {
           onFunc={() => setIsEdit(!isEdit)}
         />
       )}
-      <form onSubmit={handleSubmit((data) => onEdit(data))}>
-        <input
+      <Form onSubmit={handleSubmit((data) => onEdit(data))}>
+        <Label htmlFor="title">책 제목</Label>
+        <Input
           {...register("title", {
             required: {
               value: true,
@@ -66,12 +79,14 @@ const EditForm = () => {
             },
           })}
           placeholder="제목 (필수)"
+          id="title"
         />
         <p>
           {errors.title?.type === "required" &&
             errors.title.message?.toString()}
         </p>
-        <input
+        <Label htmlFor="authors">작가</Label>
+        <Input
           {...register("authors", {
             required: {
               value: true,
@@ -79,25 +94,14 @@ const EditForm = () => {
             },
           })}
           placeholder="작가 (필수)"
+          id="authors"
         />
         <p>
           {errors.authors?.type === "required" &&
             errors.authors.message?.toString()}
         </p>
-        <input
-          {...register("price", {
-            required: {
-              value: true,
-              message: "필수 입력값입니다.",
-            },
-          })}
-          placeholder="금액 (필수)"
-        />
-        <p>
-          {errors.price?.type === "required" &&
-            errors.price.message?.toString()}
-        </p>
-        <input
+        <Label htmlFor="publisher">출판사</Label>
+        <Input
           {...register("publisher", {
             required: {
               value: true,
@@ -105,19 +109,71 @@ const EditForm = () => {
             },
           })}
           placeholder="출판사 (필수)"
+          id="publisher"
         />
         <p>
           {errors.publisher?.type === "required" &&
             errors.publisher.message?.toString()}
         </p>
-        <textarea {...register("review")} placeholder="리뷰 (선택)" />
+        <Label htmlFor="price">가격</Label>
+        <Input
+          {...register("price", {
+            pattern: {
+              value: /^\d+$/,
+              message: "금액은 쉼표 없이 숫자만 입력해 주세요",
+            },
+            required: {
+              value: true,
+              message: "필수 입력값입니다.",
+            },
+          })}
+          placeholder="금액 (필수)"
+          id="price"
+        />
+        <p>
+          {(errors.price?.type === "required" &&
+            errors.price.message?.toString()) ||
+            (errors.price?.type === "pattern" &&
+              errors.price.message?.toString())}
+        </p>
+        <Label htmlFor="review">리뷰</Label>
+        <TextArea
+          {...register("review")}
+          placeholder="리뷰 (선택) 최대 500글자"
+          id="review"
+        />
+        <p>
+          {errors.review?.type === "maxLength" &&
+            errors.review.message?.toString()}
+        </p>
         <button type="submit">수정</button>
         <button type="button" onClick={toggle}>
           수정 취소
         </button>
-      </form>
+      </Form>
     </>
   );
 };
 
 export default EditForm;
+
+const Form = styled.form`
+  background-color: whitesmoke;
+  margin: 12px;
+  border-radius: 4px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const TextArea = styled.textarea`
+  border: none;
+  resize: none;
+  border-radius: 4px;
+  height: 100%;
+`;
+
+const Label = styled.label`
+  margin: 8px 0;
+`;

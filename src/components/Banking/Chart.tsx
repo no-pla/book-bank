@@ -1,8 +1,8 @@
-import { DB_LINK } from "@/share/server";
+import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import React from "react";
 import { useQuery } from "react-query";
+import { DB_LINK } from "@/share/server";
 
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   /* next.js는 pre-rendering을 하는데 서버 사이드에서 코드를 실행할 때는
@@ -52,20 +52,20 @@ const Chart = ({ currentUser }: any) => {
 
         return [
           {
-            name: "1주차",
-            data: tempArray.slice(0, 8),
+            name: "1일",
+            data: tempArray.slice(0, 10),
           },
           {
-            name: "2주차",
-            data: tempArray.slice(9, 17),
+            name: "10일",
+            data: tempArray.slice(10, 20),
           },
           {
-            name: "3주차",
-            data: tempArray.slice(18, 26),
+            name: "20일",
+            data: tempArray.slice(20, 30),
           },
           {
-            name: "4주차",
-            data: tempArray.slice(27, 31),
+            name: "30일",
+            data: tempArray.slice(30),
           },
         ];
       },
@@ -91,15 +91,27 @@ const Chart = ({ currentUser }: any) => {
                 "6번째 날",
                 "7번째 날",
                 "8번째 날",
+                "9번째 날",
+                "10번째 날",
               ],
             },
             dataLabels: {
-              enabled: false,
+              enabled: true,
+              style: {
+                colors: ["#000"],
+              },
             },
             colors: ["#d1d1e0"],
             title: {
               text: `${new Date().getMonth() + 1}월 독서량`,
               align: "center",
+            },
+            plotOptions: {
+              heatmap: {
+                shadeIntensity: 0.5,
+                radius: 4,
+                useFillColorAsStroke: true,
+              },
             },
           }}
           series={isFetched ? series : defaultData}
