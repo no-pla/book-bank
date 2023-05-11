@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
+import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import { useQueryClient } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import styled from "@emotion/styled";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import useUser from "@/components/Hooks/useUser";
 import EditForm from "@/components/Banking/EditForm";
@@ -29,6 +30,7 @@ const Index = ({ currentUser }: any) => {
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
   const userInfo = useUser(currentUser?.uid);
+  const router = useRouter();
 
   useEffect(() => {
     queryClient.resetQueries();
@@ -41,13 +43,21 @@ const Index = ({ currentUser }: any) => {
   return (
     <Section>
       <UserInfoBox>
-        {userInfo
-          ?.reduce((cur: number, acc: IBookData) => {
-            console.log(acc);
-            return cur + acc.price;
-          }, 0)
-          .toLocaleString("ko-KR") || 0}
-        원&nbsp;(총 {userInfo?.length}권)
+        <div>
+          {userInfo
+            ?.reduce((cur: number, acc: IBookData) => {
+              console.log(acc);
+              return cur + acc.price;
+            }, 0)
+            .toLocaleString("ko-KR") || 0}
+          원&nbsp;(총 {userInfo?.length}권)
+        </div>
+        <div>
+          <button onClick={() => router.push("/banking/deposit")}>
+            입금하러 가기
+          </button>
+          <button>공유하기</button>
+        </div>
       </UserInfoBox>
       <Conatiner>
         {/* 전체 리스트 */}
@@ -78,6 +88,8 @@ const UserInfoBox = styled.section`
   font-size: 1.3rem;
   font-weight: 800;
   width: 100%;
+  flex-direction: column;
+  gap: 12px;
   @media (max-width: 600px) {
     width: 100vw;
   }

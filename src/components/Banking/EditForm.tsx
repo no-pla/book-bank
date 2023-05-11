@@ -1,13 +1,12 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import useModal from "../Hooks/useModal";
 import { useUpdateBook } from "../Hooks/useBanking";
 import ErrorModal from "../Custom/ErrorModal";
-import styled from "@emotion/styled";
 import { Input } from "../Custom/AuthInput";
-import { emailRegex } from "@/share/utils";
+import useModal from "../Hooks/useModal";
 
 interface IEditData {
   authors: string | string[];

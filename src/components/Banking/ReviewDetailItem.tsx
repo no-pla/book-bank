@@ -24,8 +24,6 @@ const ReviewDetailItem = () => {
     toggle();
   };
 
-  console.log(targetMyBookData);
-
   return (
     <>
       {isShowing && (
@@ -113,4 +111,8 @@ const BookDetailButtonContainer = styled.div`
 const Review = styled.div`
   border-top: 1px solid darkgrey;
   padding-top: 12px;
+  line-height: 20px;
+  font-size: 0.9rem;
+  word-break: break-all;
+  white-space: pre-wrap;
 `;

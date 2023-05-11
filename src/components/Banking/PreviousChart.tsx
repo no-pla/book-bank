@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import useAuth from "../Hooks/useAuth";
-import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,

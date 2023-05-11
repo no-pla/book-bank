@@ -1,12 +1,11 @@
 import React from "react";
 import axios from "axios";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import styled from "@emotion/styled";
 import { useInfiniteQuery } from "react-query";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import styled from "@emotion/styled";
-import Image from "next/image";
-import useUser from "../Hooks/useUser";
 
 const ReviewItem = ({ currentUser }: any) => {
   const userInfo = useUser(currentUser?.uid);
@@ -55,12 +54,6 @@ const ReviewItem = ({ currentUser }: any) => {
           return list?.data.map((book: any, index: number) => {
             return (
               <ReviewListItem key={book.id}>
-                <Image
-                  src={book.thumbnail}
-                  width={80}
-                  height={120}
-                  alt={`${book.title}의 책표지입니다.`}
-                />
                 <BookDescription>
                   <BookTitle>{book?.title}</BookTitle>
                   <div>
