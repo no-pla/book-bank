@@ -1,10 +1,12 @@
 import React from "react";
 import axios from "axios";
+import styled from "@emotion/styled";
 import { deleteUser } from "firebase/auth";
+import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
-import { DB_LINK } from "@/share/server";
-import ErrorModal from "@/components/Custom/ErrorModal";
+import ConfirmModal from "@/components/Custom/ConfirmModal";
+import PreviousChart from "@/components/Banking/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {
@@ -52,20 +54,35 @@ const Setting = () => {
   };
 
   return (
-    <div>
+    <SettingPage>
       {isShowing && (
-        <ErrorModal
+        <ConfirmModal
           title="정말로 탈퇴할까요?"
           content="이 작업은 되돌릴 수 없습니다!"
           toggle={toggle}
           onFunc={onWithdrawal}
         />
       )}
-      <div>회원 탈퇴</div>
-      <button onClick={() => toggle()}>회원탈퇴</button>
       <UpdateProfileForm />
-    </div>
+      <PreviousChart />
+      <WithdrawalButton onClick={() => toggle()}>회원탈퇴</WithdrawalButton>
+    </SettingPage>
   );
 };
 
 export default Setting;
+
+const SettingPage = styled.section`
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const WithdrawalButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: var(--point-color2);
+  float: right;
+  cursor: pointer;
+`;

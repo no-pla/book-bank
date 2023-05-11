@@ -1,8 +1,8 @@
-import styled from "@emotion/styled";
 import React from "react";
+import styled from "@emotion/styled";
 import { createPortal } from "react-dom";
 
-const ErrorModal = ({ title, content, toggle, onFunc }: any) => {
+const ConfirmModal = ({ title, content, toggle, onFunc }: any) => {
   return (
     <>
       {createPortal(
@@ -49,7 +49,7 @@ const Modal = styled.div`
 const ModalTitle = styled.h3`
   font-weight: 600;
   padding: 16px 0 0 0;
-  color: darkred;
+  color: var(--point-color2);
 `;
 
 const ModalContent = styled.p`
@@ -59,15 +59,18 @@ const ModalContent = styled.p`
 `;
 
 const ModalButtonContainer = styled.div`
-  background-color: rebeccapurple;
   height: 32%;
   border-radius: 0 0 4px 4px;
   > button:first-of-type {
     border-bottom-left-radius: 4px;
     border-right: none;
+    color: var(--point-color2);
+    font-weight: 700;
   }
   > button:nth-of-type(2) {
     border-bottom-right-radius: 4px;
+    color: var(--point-color1);
+    font-weight: 700;
   }
 `;
 
@@ -76,6 +79,7 @@ const ModalButton = styled.button`
   width: 50%;
   border: 1px solid lightgray;
   cursor: pointer;
+  background-color: transparent;
 `;
 
-export default ErrorModal;
+export default ConfirmModal;

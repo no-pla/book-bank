@@ -31,7 +31,7 @@ const Label = styled.label`
   width: 100%;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid lightgray;
