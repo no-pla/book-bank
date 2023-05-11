@@ -63,10 +63,9 @@ const Setting = () => {
           onFunc={onWithdrawal}
         />
       )}
-      <div>회원 탈퇴</div>
-      <button onClick={() => toggle()}>회원탈퇴</button>
       <UpdateProfileForm />
       <PreviousChart />
+      <WithdrawalButton onClick={() => toggle()}>회원탈퇴</WithdrawalButton>
     </SettingPage>
   );
 };
@@ -75,4 +74,15 @@ export default Setting;
 
 const SettingPage = styled.section`
   width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const WithdrawalButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: var(--point-color2);
+  float: right;
+  cursor: pointer;
 `;
