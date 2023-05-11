@@ -7,6 +7,7 @@ import { isFormEdit, selectMyBookState } from "@/share/atom";
 import useUser from "@/components/Hooks/useUser";
 import EditForm from "@/components/Banking/EditForm";
 import ReviewItem from "@/components/Banking/ReviewItem";
+import CustomButton from "@/components/Custom/CustomButton";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 
 export interface IBookData {
@@ -43,21 +44,20 @@ const Index = ({ currentUser }: any) => {
   return (
     <Section>
       <UserInfoBox>
-        <div>
-          {userInfo
-            ?.reduce((cur: number, acc: IBookData) => {
-              console.log(acc);
-              return cur + acc.price;
-            }, 0)
-            .toLocaleString("ko-KR") || 0}
-          원&nbsp;(총 {userInfo?.length}권)
-        </div>
-        <div>
-          <button onClick={() => router.push("/banking/deposit")}>
-            입금하러 가기
-          </button>
-          <button>공유하기</button>
-        </div>
+        {userInfo
+          ?.reduce((cur: number, acc: IBookData) => {
+            console.log(acc);
+            return cur + acc.price;
+          }, 0)
+          .toLocaleString("ko-KR") || 0}
+        원&nbsp;(총 {userInfo?.length}권)
+        <ButtonContainer>
+          <CustomButton
+            value="입금하러 가기"
+            onClick={() => router.push("/banking/deposit")}
+          />
+          <CustomButton value="공유하기" />
+        </ButtonContainer>
       </UserInfoBox>
       <Conatiner>
         {/* 전체 리스트 */}
@@ -101,6 +101,16 @@ const Conatiner = styled.section`
   display: flex;
   > * {
     width: 50%;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  > button {
+    color: var(--text-color);
+    border: 1px solid var(--main-color);
+  }
+  > button:first-of-type {
+    margin-right: 8px;
   }
 `;
 

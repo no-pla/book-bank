@@ -5,7 +5,7 @@ import { deleteUser } from "firebase/auth";
 import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
-import ErrorModal from "@/components/Custom/ErrorModal";
+import ConfirmModal from "@/components/Custom/ConfirmModal";
 import PreviousChart from "@/components/Banking/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 
@@ -56,7 +56,7 @@ const Setting = () => {
   return (
     <SettingPage>
       {isShowing && (
-        <ErrorModal
+        <ConfirmModal
           title="정말로 탈퇴할까요?"
           content="이 작업은 되돌릴 수 없습니다!"
           toggle={toggle}

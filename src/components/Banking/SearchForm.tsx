@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import styled from "@emotion/styled";
 import BookItem from "./BookItem";
 import { Input } from "../Custom/AuthInput";
+import CustomButton from "../Custom/CustomButton";
 import { useGetSearchBookList } from "../Hooks/useBanking";
 
 const SearchForm = () => {
@@ -37,18 +38,17 @@ const SearchForm = () => {
         })}
       </BookListContainer>
       <SearchButtonContainer>
-        <SearchButton
+        <CustomButton
+          value="이전"
           disabled={page === 1}
           onClick={() => setPage((prev) => prev - 1)}
-        >
-          이전
-        </SearchButton>
-        <SearchButton
+        />
+
+        <CustomButton
+          value="이후"
           disabled={bookList?.meta.is_end === true || bookList === undefined}
           onClick={() => setPage((prev) => prev + 1)}
-        >
-          이후
-        </SearchButton>
+        />
       </SearchButtonContainer>
     </Container>
   );
@@ -73,10 +73,16 @@ const BookListContainer = styled.ul`
   gap: 12px;
 `;
 
-const SearchButtonContainer = styled.div``;
-const SearchButton = styled.button`
-  width: 50%;
-  padding: 8px 0;
+const SearchButtonContainer = styled.div`
+  > button {
+    width: 50%;
+    color: var(--point-color1);
+    border: 1px solid var(--point-color1);
+  }
+  > button:disabled {
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+  }
 `;
 
 export default SearchForm;

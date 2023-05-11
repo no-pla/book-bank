@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import useAuth from "../Hooks/useAuth";
 import { selectBookState } from "@/share/atom";
 import { useAddBook } from "../Hooks/useBanking";
+import CustomButton from "../Custom/CustomButton";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
@@ -54,7 +55,7 @@ const ReviewForm = () => {
           <FormContainer>
             <ReviewWriteForm onSubmit={(event) => onSubmitReview(event)}>
               <ReviewArea />
-              <DepositButton>책 저금하기</DepositButton>
+              <CustomButton value="책 저금하기" type="submit" />
             </ReviewWriteForm>
           </FormContainer>
         </div>
@@ -93,6 +94,10 @@ const ReviewWriteForm = styled.form`
   display: flex;
   flex-direction: column;
   height: 100%;
+  > button {
+    color: var(--point-color1);
+    border: 1px solid var(--point-color1);
+  }
 `;
 
 const TextArea = styled.textarea`
@@ -105,11 +110,4 @@ const TextArea = styled.textarea`
 
 const FormContainer = styled.div`
   height: calc(100% - 72px);
-`;
-
-const DepositButton = styled.button`
-  padding: 12px 0;
-  border: none;
-  background-color: var(--point-color1);
-  cursor: pointer;
 `;

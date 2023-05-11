@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
 import Image from "next/image";
+import CustomButton from "../Custom/CustomButton";
 import { Input } from "../Custom/AuthInput";
 import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
@@ -78,10 +79,8 @@ const UpdateProfileForm = () => {
               }}
             />
             <ButtonContainer>
-              <Button type="button" onClick={toggle}>
-                취소
-              </Button>
-              <Button type="submit">수정하기</Button>
+              <CustomButton value="취소" type="button" onClick={toggle} />
+              <CustomButton type="submit" value="수정하기" />
             </ButtonContainer>
           </form>
         </Profile>
@@ -98,7 +97,7 @@ const UpdateProfileForm = () => {
           </div>
           <div>
             <h1>{currentUser?.displayName}</h1>
-            <Button onClick={toggle}>닉네임 변경하기</Button>
+            <CustomButton onClick={toggle} value="닉네임 변경하기" />
           </div>
         </Profile>
       )}

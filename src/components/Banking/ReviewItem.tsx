@@ -5,6 +5,8 @@ import { useInfiniteQuery } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
+import { Input } from "../Custom/AuthInput";
+import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewItem = ({ currentUser }: any) => {
@@ -49,6 +51,9 @@ const ReviewItem = ({ currentUser }: any) => {
 
   return (
     <ReivewItemContainer>
+      <SearchInputContainer>
+        <Input placeholder="검색하고 싶은 책 제목을 입력해 주세요." />
+      </SearchInputContainer>
       <ReviewListItemContainer>
         {myBookReviews?.pages?.map((list: any) => {
           return list?.data.map((book: any, index: number) => {
@@ -63,11 +68,10 @@ const ReviewItem = ({ currentUser }: any) => {
                   <BookPrice>
                     {book?.price?.toLocaleString("ko-KR")}원
                   </BookPrice>
-                  <ShowDetailButton
+                  <CustomButton
+                    value="상세보기"
                     onClick={() => showDetailReview(list.data[index])}
-                  >
-                    상세보기
-                  </ShowDetailButton>
+                  />
                 </BookDescription>
               </ReviewListItem>
             );
@@ -86,8 +90,15 @@ const ReviewItem = ({ currentUser }: any) => {
 
 export default ReviewItem;
 
+const SearchInputContainer = styled.div`
+  position: sticky;
+  width: 100%;
+  top: 0;
+`;
+
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;
+  position: relative;
 `;
 
 const ReviewListItemContainer = styled.ul`
@@ -116,6 +127,10 @@ const BookDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  > button {
+    border: 1px solid var(--main-color);
+    color: var(--text-color);
+  }
 `;
 
 const BookTitle = styled.div`
@@ -126,11 +141,6 @@ const BookTitle = styled.div`
 
 const BookPrice = styled.div`
   margin: 4px 0;
-`;
-
-const ShowDetailButton = styled.button`
-  cursor: pointer;
-  padding: 4px 8px;
 `;
 
 const GetNextPageButton = styled.button`
