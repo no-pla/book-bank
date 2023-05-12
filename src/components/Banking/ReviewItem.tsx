@@ -100,6 +100,9 @@ const SearchInputContainer = styled.div`
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ReviewListItemContainer = styled.ul`
@@ -107,7 +110,7 @@ const ReviewListItemContainer = styled.ul`
   flex-direction: column;
   gap: 8px;
   padding: 12px;
-  height: calc(max(fit-content, 100vh));
+  height: fit-content;
 `;
 
 const ReviewListItem = styled.li`
@@ -148,7 +151,6 @@ const GetNextPageButton = styled.button`
   padding: 12px;
   border: 1px solid lightgray;
   cursor: pointer;
-  bottom: 0;
   width: 100%;
   color: var(--point-color1);
   background-color: var(--main-color);
