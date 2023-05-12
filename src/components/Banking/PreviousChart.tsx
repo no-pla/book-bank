@@ -5,6 +5,8 @@ import { useQuery, useQueryClient } from "react-query";
 import useAuth from "../Hooks/useAuth";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
+import { Title } from "../Auth/UpdateProfileForm";
+import styled from "@emotion/styled";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -58,7 +60,7 @@ const PreviousChart = () => {
         });
         return [
           {
-            name: "월간 독서량",
+            name: "연간 독서량",
             data: tempArray,
           },
         ];
@@ -67,21 +69,24 @@ const PreviousChart = () => {
   );
 
   return (
-    <section>
-      <h2>연간 독서량</h2>
-      <select
-        onChange={(event) => {
-          setTargetYser(+event?.currentTarget?.value);
-        }}
-      >
-        {userInfo?.map((year: number) => {
-          return (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          );
-        })}
-      </select>
+    <Section>
+      <Title>연간 독서량</Title>
+      <div>
+        <span>연도 선택:&nbsp;</span>
+        <select
+          onChange={(event) => {
+            setTargetYser(+event?.currentTarget?.value);
+          }}
+        >
+          {userInfo?.map((year: number) => {
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <DynamicChart
         series={isFetched ? data : defaultData}
         type="bar"
@@ -129,8 +134,12 @@ const PreviousChart = () => {
           },
         }}
       />
-    </section>
+    </Section>
   );
 };
 
 export default PreviousChart;
+
+const Section = styled.section`
+  margin: 12px;
+`;

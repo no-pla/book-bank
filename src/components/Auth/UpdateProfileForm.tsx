@@ -107,7 +107,7 @@ const UpdateProfileForm = () => {
 };
 export default UpdateProfileForm;
 
-const Title = styled.h2`
+export const Title = styled.h2`
   font-weight: 700;
   font-size: 1.2rem;
   margin-bottom: 20px;
