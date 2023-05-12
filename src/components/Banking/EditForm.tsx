@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../Hooks/useBanking";
+import CustomButton from "../Custom/CustomButton";
 import ConfirmModal from "../Custom/ConfirmModal";
 import { Input } from "../Custom/AuthInput";
 import useModal from "../Hooks/useModal";
-import CustomButton from "../Custom/CustomButton";
 
 interface IEditData {
   authors: string | string[];
@@ -40,7 +40,6 @@ const EditForm = () => {
   });
 
   const onEdit = async (data: any) => {
-    console.log("data", data);
     let authors = data.authors;
     if (typeof data.authors === "string") {
       authors = authors.split(",").map((author: string) => author.trim());

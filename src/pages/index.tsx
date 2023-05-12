@@ -58,6 +58,7 @@ const DataInfo = styled.div`
   max-height: 400px;
   @media (max-width: 600px) {
     flex-direction: column;
+    padding-top: 16%;
   }
 `;
 
@@ -124,6 +125,5 @@ export const TotalAmount = styled.span`
 
 const BankingName = styled.div`
   text-align: left;
-  width: 100%;
-  margin-left: 48px;
+  width: 90%;
 `;

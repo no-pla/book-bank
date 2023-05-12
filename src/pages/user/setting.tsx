@@ -63,8 +63,10 @@ const Setting = () => {
           onFunc={onWithdrawal}
         />
       )}
-      <UpdateProfileForm />
-      <PreviousChart />
+      <div>
+        <UpdateProfileForm />
+        <PreviousChart />
+      </div>
       <WithdrawalButton onClick={() => toggle()}>회원탈퇴</WithdrawalButton>
     </SettingPage>
   );
@@ -75,8 +77,13 @@ export default Setting;
 const SettingPage = styled.section`
   width: 100vw;
   height: 100vh;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: 600px) {
+    padding-top: 12%;
+    height: 100%;
+  }
 `;
 
 const WithdrawalButton = styled.button`
@@ -85,4 +92,7 @@ const WithdrawalButton = styled.button`
   color: var(--point-color2);
   float: right;
   cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  margin: 8px;
 `;

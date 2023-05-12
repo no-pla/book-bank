@@ -59,9 +59,6 @@ const Container = styled.section`
   flex-direction: column;
   height: 100vh;
   justify-content: flex-start;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
 `;
 
 const BookListContainer = styled.ul`

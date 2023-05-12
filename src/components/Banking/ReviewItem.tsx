@@ -37,7 +37,7 @@ const ReviewItem = ({ currentUser }: any) => {
 
   const fetchMyBookReivewList = async (pageParam: number) => {
     return await axios.get(
-      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&_uid=${currentUser?.uid}`
+      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&uid=${currentUser?.uid}`
     );
   };
 
@@ -94,11 +94,15 @@ const SearchInputContainer = styled.div`
   position: sticky;
   width: 100%;
   top: 0;
+  left: 0;
 `;
 
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ReviewListItemContainer = styled.ul`
@@ -106,7 +110,7 @@ const ReviewListItemContainer = styled.ul`
   flex-direction: column;
   gap: 8px;
   padding: 12px;
-  border-right: 1px solid lightgray;
+  height: fit-content;
 `;
 
 const ReviewListItem = styled.li`
@@ -145,7 +149,12 @@ const BookPrice = styled.div`
 
 const GetNextPageButton = styled.button`
   padding: 12px;
-  width: 100%;
   border: 1px solid lightgray;
   cursor: pointer;
+  width: 100%;
+  color: var(--point-color1);
+  background-color: var(--main-color);
+  &:disabled {
+    color: var(--point-color2);
+  }
 `;

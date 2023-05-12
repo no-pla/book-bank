@@ -1,12 +1,16 @@
 import React from "react";
+import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
+import { DB_LINK } from "@/share/server";
 import AuthInput from "../Custom/AuthInput";
 import { emailRegex, passwordRegex } from "@/share/utils";
+import CustomButton from "../Custom/CustomButton";
 
 interface ILoginData {
   email: string;
@@ -15,6 +19,7 @@ interface ILoginData {
 
 const LoginForm = () => {
   const router = useRouter();
+  const provider = new GoogleAuthProvider();
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -36,6 +41,33 @@ const LoginForm = () => {
         alert("예기치 못한 에러가 발생했습니다."); // 추후 모달로 수정 예정
       }
     }
+  };
+
+  const googleLogin = async () => {
+    await signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        if (!credential) return;
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log(token, user);
+        await axios.post(`${DB_LINK}/users`, {
+          id: user.uid,
+          nickname: user.displayName,
+          email: user.email,
+          signUpDate: new Date().toLocaleDateString(),
+        });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, email, credential);
+        // ...
+      });
   };
 
   return (
@@ -83,6 +115,9 @@ const LoginForm = () => {
           </Form>
         </FormProvider>
         <ToggleLink href="/register">회원가입</ToggleLink>
+        <div>
+          <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
+        </div>
       </FormContainer>
     </Container>
   );
@@ -119,6 +154,10 @@ export const FormContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.3);
   padding: 40px;
   border-radius: 8px;
+  > div:last-of-type > button {
+    color: #db4437;
+    border: 2px solid #db4437;
+  }
 `;
 
 export const Form = styled.form`

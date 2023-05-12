@@ -22,9 +22,16 @@ const Deposit = () => {
 
 const DepositContainer = styled.div`
   display: flex;
-  width: calc(100vw - 16%);
+  width: 100vw;
+  height: 100vh;
   > * {
-    width: 50vw;
+    width: 50%;
+  }
+  @media (max-width: 600px) {
+    align-items: flex-end;
+    > section {
+      height: 92vh;
+    }
   }
 `;
 

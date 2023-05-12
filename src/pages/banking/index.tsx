@@ -3,11 +3,11 @@ import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import { useQueryClient } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isFormEdit, selectMyBookState } from "@/share/atom";
 import useUser from "@/components/Hooks/useUser";
 import EditForm from "@/components/Banking/EditForm";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import CustomButton from "@/components/Custom/CustomButton";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 
 export interface IBookData {
@@ -44,6 +44,7 @@ const Index = ({ currentUser }: any) => {
   return (
     <Section>
       <UserInfoBox>
+        <CustomButton value="뒤로" onClick={() => router.push("/")} />
         {userInfo
           ?.reduce((cur: number, acc: IBookData) => {
             console.log(acc);
@@ -84,14 +85,24 @@ const UserInfoBox = styled.section`
   background-color: var(--point-color1);
   display: flex;
   justify-content: center;
-  align-items: center;
   font-size: 1.3rem;
   font-weight: 800;
   width: 100%;
   flex-direction: column;
   gap: 12px;
+  align-items: center;
+  > button {
+    display: none;
+  }
   @media (max-width: 600px) {
     width: 100vw;
+    height: calc(160px - 7vh);
+    margin-top: 8vh;
+  }
+  > button {
+    align-self: flex-start;
+    margin-left: 20px;
+    border: 1px solid var(--main-color);
   }
 `;
 

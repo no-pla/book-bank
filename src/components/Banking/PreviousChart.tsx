@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import styled from "@emotion/styled";
 import { useQuery } from "react-query";
 import useAuth from "../Hooks/useAuth";
 import { DB_LINK } from "@/share/server";
+import { Title } from "../Auth/UpdateProfileForm";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -41,11 +43,11 @@ const PreviousChart = () => {
     },
   ];
 
-  const { data, isFetched, refetch } = useQuery(
+  const { data, isFetched } = useQuery(
     ["getParticularData", targetYear],
     async () => {
       return await axios.get(
-        `${DB_LINK}/review?_uid=${currentUser?.uid}&createdYear=${targetYear}`
+        `${DB_LINK}/review?uid=${currentUser?.uid}&createdYear=${targetYear}`
       );
     },
     {
@@ -57,7 +59,7 @@ const PreviousChart = () => {
         });
         return [
           {
-            name: "월간 독서량",
+            name: "연간 독서량",
             data: tempArray,
           },
         ];
@@ -66,21 +68,24 @@ const PreviousChart = () => {
   );
 
   return (
-    <section>
-      <h2>연간 독서량</h2>
-      <select
-        onChange={(event) => {
-          setTargetYser(+event?.currentTarget?.value);
-        }}
-      >
-        {userInfo?.map((year: number) => {
-          return (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          );
-        })}
-      </select>
+    <Section>
+      <Title>연간 독서량</Title>
+      <div>
+        <span>연도 선택:&nbsp;</span>
+        <select
+          onChange={(event) => {
+            setTargetYser(+event?.currentTarget?.value);
+          }}
+        >
+          {userInfo?.map((year: number) => {
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
+        </select>
+      </div>
       <DynamicChart
         series={isFetched ? data : defaultData}
         type="bar"
@@ -122,14 +127,18 @@ const PreviousChart = () => {
             bar: {
               borderRadius: 10,
               dataLabels: {
-                position: "top", // top, center, bottom
+                position: "top",
               },
             },
           },
         }}
       />
-    </section>
+    </Section>
   );
 };
 
 export default PreviousChart;
+
+const Section = styled.section`
+  margin: 12px;
+`;
