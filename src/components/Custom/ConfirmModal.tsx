@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { createPortal } from "react-dom";
 
-const ErrorModal = ({ title, content, toggle, onFunc }: any) => {
+const ConfirmModal = ({ title, content, toggle, onFunc }: any) => {
   return (
     <>
       {createPortal(
@@ -82,4 +82,4 @@ const ModalButton = styled.button`
   background-color: transparent;
 `;
 
-export default ErrorModal;
+export default ConfirmModal;

@@ -52,19 +52,19 @@ const Chart = ({ currentUser }: any) => {
 
         return [
           {
-            name: "1일",
+            name: "1일 ~ 10일",
             data: tempArray.slice(0, 10),
           },
           {
-            name: "10일",
+            name: "11일 ~ 20일",
             data: tempArray.slice(10, 20),
           },
           {
-            name: "20일",
+            name: "21일 ~ 30일",
             data: tempArray.slice(20, 30),
           },
           {
-            name: "30일",
+            name: "31일",
             data: tempArray.slice(30),
           },
         ];
@@ -83,16 +83,16 @@ const Chart = ({ currentUser }: any) => {
             xaxis: {
               type: "category",
               categories: [
-                "1번째 날",
-                "2번째 날",
-                "3번째 날",
-                "4번째 날",
-                "5번째 날",
-                "6번째 날",
-                "7번째 날",
-                "8번째 날",
-                "9번째 날",
-                "10번째 날",
+                "1일",
+                "2일",
+                "3일",
+                "4일",
+                "5일",
+                "6일",
+                "7일",
+                "8일",
+                "9일",
+                "10일",
               ],
             },
             dataLabels: {
@@ -116,7 +116,7 @@ const Chart = ({ currentUser }: any) => {
           }}
           series={isFetched ? series : defaultData}
           type="heatmap"
-          height={320}
+          height={240}
         />
       )}
     </>

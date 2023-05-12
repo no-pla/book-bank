@@ -19,12 +19,5 @@ export default Layout;
 
 const LayoutContainer = styled.div`
   display: flex;
-  > nav {
-    width: 16%;
-  }
-  @media (max-width: 600px) {
-    > nav {
-      display: none;
-    }
-  }
+  width: 100vw;
 `;

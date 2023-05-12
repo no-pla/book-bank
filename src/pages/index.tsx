@@ -19,7 +19,7 @@ export default function Home({ currentUser }: any) {
       <DataInfo>
         <UserInfo>
           <Image
-            src="https://user-images.githubusercontent.com/88391843/236830698-34b4cb1d-da10-4d6d-858e-f370ec613dff.jpg" // 임시값
+            src={currentUser?.photoURL}
             height={100}
             width={100}
             alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
@@ -58,6 +58,7 @@ const DataInfo = styled.div`
   max-height: 400px;
   @media (max-width: 600px) {
     flex-direction: column;
+    padding-top: 16%;
   }
 `;
 
@@ -124,6 +125,5 @@ export const TotalAmount = styled.span`
 
 const BankingName = styled.div`
   text-align: left;
-  width: 100%;
-  margin-left: 48px;
+  width: 90%;
 `;

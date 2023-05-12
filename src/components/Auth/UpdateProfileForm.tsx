@@ -6,7 +6,6 @@ import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
 import Image from "next/image";
 import CustomButton from "../Custom/CustomButton";
-import { Input } from "../Custom/AuthInput";
 import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
@@ -60,29 +59,33 @@ const UpdateProfileForm = () => {
       <Title>프로필 변경</Title>
       {isShowing ? (
         <Profile>
-          <Image
-            id="preview-image"
-            src={imageURL ? imageURL : currentUser?.photoURL}
-            height={100}
-            width={100}
-            style={{ borderRadius: "50%", objectFit: "cover" }}
-            alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
-          />
-          <form onSubmit={(event) => onUpdateProfile(event)}>
-            <UpdateNicknameInput />
-            <FileInput
-              type="file"
-              accept="image/*"
-              name="preview-image"
-              onChange={(event: any) => {
-                setSelectImage(event.target.files[0]);
-              }}
-            />
-            <ButtonContainer>
-              <CustomButton value="취소" type="button" onClick={toggle} />
-              <CustomButton type="submit" value="수정하기" />
-            </ButtonContainer>
-          </form>
+          <Form onSubmit={(event) => onUpdateProfile(event)}>
+            <div>
+              <Image
+                id="preview-image"
+                src={imageURL ? imageURL : currentUser?.photoURL}
+                height={100}
+                width={100}
+                style={{ borderRadius: "50%", objectFit: "cover" }}
+                alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
+              />
+              <FileInput
+                type="file"
+                accept="image/*"
+                name="preview-image"
+                onChange={(event: any) => {
+                  setSelectImage(event.target.files[0]);
+                }}
+              />
+            </div>
+            <div>
+              <UpdateNicknameInput />
+              <ButtonContainer>
+                <CustomButton value="취소" type="button" onClick={toggle} />
+                <CustomButton type="submit" value="수정하기" />
+              </ButtonContainer>
+            </div>
+          </Form>
         </Profile>
       ) : (
         <Profile>
@@ -106,6 +109,15 @@ const UpdateProfileForm = () => {
 };
 export default UpdateProfileForm;
 
+const Input = styled.input`
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+  color: var(--text-color);
+  box-sizing: border-box;
+  width: 144px;
+`;
+
 export const Title = styled.h2`
   font-weight: 700;
   font-size: 1.2rem;
@@ -119,8 +131,9 @@ const ProfileContainer = styled.section`
 
 const Profile = styled.div`
   display: flex;
-  gap: 40px;
+  gap: 2 0px;
   align-items: center;
+  gap: 12px;
   > div:nth-of-type(2) {
     display: flex;
     flex-direction: column;
@@ -158,5 +171,15 @@ const ButtonContainer = styled.div`
   & button:nth-of-type(2) {
     border: 1px solid var(--point-color1);
     color: var(--point-color1);
+  }
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  > div:first-of-type {
+    display: flex;
+    flex-direction: column;
   }
 `;

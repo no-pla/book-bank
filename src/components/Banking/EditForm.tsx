@@ -1,13 +1,13 @@
 import React from "react";
+import styled from "@emotion/styled";
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import useModal from "../Hooks/useModal";
 import { useUpdateBook } from "../Hooks/useBanking";
-import ErrorModal from "../Custom/ErrorModal";
-import styled from "@emotion/styled";
+import CustomButton from "../Custom/CustomButton";
+import ConfirmModal from "../Custom/ConfirmModal";
 import { Input } from "../Custom/AuthInput";
-import { emailRegex } from "@/share/utils";
+import useModal from "../Hooks/useModal";
 
 interface IEditData {
   authors: string | string[];
@@ -40,7 +40,6 @@ const EditForm = () => {
   });
 
   const onEdit = async (data: any) => {
-    console.log("data", data);
     let authors = data.authors;
     if (typeof data.authors === "string") {
       authors = authors.split(",").map((author: string) => author.trim());
@@ -62,7 +61,7 @@ const EditForm = () => {
   return (
     <>
       {isShowing === true && (
-        <ErrorModal
+        <ConfirmModal
           title="정말로 수정을 취소할까요?"
           content="이 작업은 되돌릴 수 없습니다!"
           toggle={toggle}
@@ -146,10 +145,8 @@ const EditForm = () => {
           {errors.review?.type === "maxLength" &&
             errors.review.message?.toString()}
         </p>
-        <button type="submit">수정</button>
-        <button type="button" onClick={toggle}>
-          수정 취소
-        </button>
+        <CustomButton value="수정" type="submit" />
+        <CustomButton value="수정 취소" type="button" onClick={toggle} />
       </Form>
     </>
   );
@@ -165,6 +162,15 @@ const Form = styled.form`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  > button:first-of-type {
+    color: var(--point-color1);
+    border: 1px solid var(--point-color1);
+    margin-bottom: 4px;
+  }
+  > button:last-of-type {
+    color: var(--point-color2);
+    border: 1px solid var(--point-color2);
+  }
 `;
 
 export const TextArea = styled.textarea`

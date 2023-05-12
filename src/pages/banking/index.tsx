@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
+import styled from "@emotion/styled";
+import { useRouter } from "next/router";
 import { useQueryClient } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import styled from "@emotion/styled";
-import { isFormEdit, selectMyBookState } from "@/share/atom";
 import useUser from "@/components/Hooks/useUser";
 import EditForm from "@/components/Banking/EditForm";
 import ReviewItem from "@/components/Banking/ReviewItem";
+import CustomButton from "@/components/Custom/CustomButton";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 
 export interface IBookData {
@@ -29,6 +31,7 @@ const Index = ({ currentUser }: any) => {
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
   const userInfo = useUser(currentUser?.uid);
+  const router = useRouter();
 
   useEffect(() => {
     queryClient.resetQueries();
@@ -41,6 +44,7 @@ const Index = ({ currentUser }: any) => {
   return (
     <Section>
       <UserInfoBox>
+        <CustomButton value="뒤로" onClick={() => router.push("/")} />
         {userInfo
           ?.reduce((cur: number, acc: IBookData) => {
             console.log(acc);
@@ -48,6 +52,13 @@ const Index = ({ currentUser }: any) => {
           }, 0)
           .toLocaleString("ko-KR") || 0}
         원&nbsp;(총 {userInfo?.length}권)
+        <ButtonContainer>
+          <CustomButton
+            value="입금하러 가기"
+            onClick={() => router.push("/banking/deposit")}
+          />
+          <CustomButton value="공유하기" />
+        </ButtonContainer>
       </UserInfoBox>
       <Conatiner>
         {/* 전체 리스트 */}
@@ -74,12 +85,24 @@ const UserInfoBox = styled.section`
   background-color: var(--point-color1);
   display: flex;
   justify-content: center;
-  align-items: center;
   font-size: 1.3rem;
   font-weight: 800;
   width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  > button {
+    display: none;
+  }
   @media (max-width: 600px) {
     width: 100vw;
+    height: calc(160px - 7vh);
+    margin-top: 8vh;
+  }
+  > button {
+    align-self: flex-start;
+    margin-left: 20px;
+    border: 1px solid var(--main-color);
   }
 `;
 
@@ -89,6 +112,16 @@ const Conatiner = styled.section`
   display: flex;
   > * {
     width: 50%;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  > button {
+    color: var(--text-color);
+    border: 1px solid var(--main-color);
+  }
+  > button:first-of-type {
+    margin-right: 8px;
   }
 `;
 

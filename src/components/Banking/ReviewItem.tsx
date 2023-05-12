@@ -1,12 +1,13 @@
 import React from "react";
 import axios from "axios";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useInfiniteQuery } from "react-query";
-import { DB_LINK } from "@/share/server";
-import { isFormEdit, selectMyBookState } from "@/share/atom";
 import styled from "@emotion/styled";
-import Image from "next/image";
+import { useInfiniteQuery } from "react-query";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import useUser from "../Hooks/useUser";
+import { DB_LINK } from "@/share/server";
+import { Input } from "../Custom/AuthInput";
+import CustomButton from "../Custom/CustomButton";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewItem = ({ currentUser }: any) => {
   const userInfo = useUser(currentUser?.uid);
@@ -36,7 +37,7 @@ const ReviewItem = ({ currentUser }: any) => {
 
   const fetchMyBookReivewList = async (pageParam: number) => {
     return await axios.get(
-      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&_uid=${currentUser?.uid}`
+      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&uid=${currentUser?.uid}`
     );
   };
 
@@ -50,17 +51,14 @@ const ReviewItem = ({ currentUser }: any) => {
 
   return (
     <ReivewItemContainer>
+      <SearchInputContainer>
+        <Input placeholder="검색하고 싶은 책 제목을 입력해 주세요." />
+      </SearchInputContainer>
       <ReviewListItemContainer>
         {myBookReviews?.pages?.map((list: any) => {
           return list?.data.map((book: any, index: number) => {
             return (
               <ReviewListItem key={book.id}>
-                <Image
-                  src={book.thumbnail}
-                  width={80}
-                  height={120}
-                  alt={`${book.title}의 책표지입니다.`}
-                />
                 <BookDescription>
                   <BookTitle>{book?.title}</BookTitle>
                   <div>
@@ -70,11 +68,10 @@ const ReviewItem = ({ currentUser }: any) => {
                   <BookPrice>
                     {book?.price?.toLocaleString("ko-KR")}원
                   </BookPrice>
-                  <ShowDetailButton
+                  <CustomButton
+                    value="상세보기"
                     onClick={() => showDetailReview(list.data[index])}
-                  >
-                    상세보기
-                  </ShowDetailButton>
+                  />
                 </BookDescription>
               </ReviewListItem>
             );
@@ -93,8 +90,16 @@ const ReviewItem = ({ currentUser }: any) => {
 
 export default ReviewItem;
 
+const SearchInputContainer = styled.div`
+  position: sticky;
+  width: 100%;
+  top: 0;
+  left: 0;
+`;
+
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;
+  position: relative;
 `;
 
 const ReviewListItemContainer = styled.ul`
@@ -102,7 +107,7 @@ const ReviewListItemContainer = styled.ul`
   flex-direction: column;
   gap: 8px;
   padding: 12px;
-  border-right: 1px solid lightgray;
+  height: calc(max(fit-content, 100vh));
 `;
 
 const ReviewListItem = styled.li`
@@ -123,6 +128,10 @@ const BookDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  > button {
+    border: 1px solid var(--main-color);
+    color: var(--text-color);
+  }
 `;
 
 const BookTitle = styled.div`
@@ -135,14 +144,15 @@ const BookPrice = styled.div`
   margin: 4px 0;
 `;
 
-const ShowDetailButton = styled.button`
-  cursor: pointer;
-  padding: 4px 8px;
-`;
-
 const GetNextPageButton = styled.button`
   padding: 12px;
-  width: 100%;
   border: 1px solid lightgray;
   cursor: pointer;
+  bottom: 0;
+  width: 100%;
+  color: var(--point-color1);
+  background-color: var(--main-color);
+  &:disabled {
+    color: var(--point-color2);
+  }
 `;

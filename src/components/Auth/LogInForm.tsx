@@ -10,6 +10,7 @@ import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
 import AuthInput from "../Custom/AuthInput";
 import { emailRegex, passwordRegex } from "@/share/utils";
+import CustomButton from "../Custom/CustomButton";
 
 interface ILoginData {
   email: string;
@@ -115,7 +116,7 @@ const LoginForm = () => {
         </FormProvider>
         <ToggleLink href="/register">회원가입</ToggleLink>
         <div>
-          <button onClick={() => googleLogin()}>구글로 로그인</button>
+          <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
         </div>
       </FormContainer>
     </Container>
@@ -153,6 +154,10 @@ export const FormContainer = styled.div`
   background-color: rgba(255, 255, 255, 0.3);
   padding: 40px;
   border-radius: 8px;
+  > div:last-of-type > button {
+    color: #db4437;
+    border: 2px solid #db4437;
+  }
 `;
 
 export const Form = styled.form`

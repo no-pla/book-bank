@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
-import { useQuery, useQueryClient } from "react-query";
+import styled from "@emotion/styled";
+import { useQuery } from "react-query";
 import useAuth from "../Hooks/useAuth";
-import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
 import { Title } from "../Auth/UpdateProfileForm";
-import styled from "@emotion/styled";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -44,11 +43,11 @@ const PreviousChart = () => {
     },
   ];
 
-  const { data, isFetched, refetch } = useQuery(
+  const { data, isFetched } = useQuery(
     ["getParticularData", targetYear],
     async () => {
       return await axios.get(
-        `${DB_LINK}/review?_uid=${currentUser?.uid}&createdYear=${targetYear}`
+        `${DB_LINK}/review?uid=${currentUser?.uid}&createdYear=${targetYear}`
       );
     },
     {
@@ -128,7 +127,7 @@ const PreviousChart = () => {
             bar: {
               borderRadius: 10,
               dataLabels: {
-                position: "top", // top, center, bottom
+                position: "top",
               },
             },
           },

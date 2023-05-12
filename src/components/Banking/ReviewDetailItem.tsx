@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useModal from "../Hooks/useModal";
-import ErrorModal from "../Custom/ErrorModal";
+import ConfirmModal from "../Custom/ConfirmModal";
 import { useDeleteBook } from "../Hooks/useBanking";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
@@ -24,12 +24,10 @@ const ReviewDetailItem = () => {
     toggle();
   };
 
-  console.log(targetMyBookData);
-
   return (
     <>
       {isShowing && (
-        <ErrorModal
+        <ConfirmModal
           title="정말로 삭제할까요?"
           content="이 작업은 되돌릴 수 없습니다!"
           toggle={toggle}
@@ -113,4 +111,8 @@ const BookDetailButtonContainer = styled.div`
 const Review = styled.div`
   border-top: 1px solid darkgrey;
   padding-top: 12px;
+  line-height: 20px;
+  font-size: 0.9rem;
+  word-break: break-all;
+  white-space: pre-wrap;
 `;
