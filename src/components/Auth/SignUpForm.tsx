@@ -47,6 +47,7 @@ const SignUpForm = () => {
               id: user.uid,
               nickname: user.displayName,
               email: user.email,
+              signUpDate: new Date().toLocaleDateString(),
             });
           });
         }
