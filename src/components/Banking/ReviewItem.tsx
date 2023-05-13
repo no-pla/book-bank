@@ -51,9 +51,6 @@ const ReviewItem = ({ currentUser }: any) => {
 
   return (
     <ReivewItemContainer>
-      <SearchInputContainer>
-        <Input placeholder="검색하고 싶은 책 제목을 입력해 주세요." />
-      </SearchInputContainer>
       <ReviewListItemContainer>
         {myBookReviews?.pages?.map((list: any) => {
           return list?.data.map((book: any, index: number) => {
@@ -78,6 +75,7 @@ const ReviewItem = ({ currentUser }: any) => {
           });
         })}
       </ReviewListItemContainer>
+
       <GetNextPageButton
         disabled={!hasNextPage}
         onClick={() => fetchNextPage()}
@@ -89,13 +87,6 @@ const ReviewItem = ({ currentUser }: any) => {
 };
 
 export default ReviewItem;
-
-const SearchInputContainer = styled.div`
-  position: sticky;
-  width: 100%;
-  top: 0;
-  left: 0;
-`;
 
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;
@@ -155,6 +146,7 @@ const GetNextPageButton = styled.button`
   color: var(--point-color1);
   background-color: var(--main-color);
   &:disabled {
+    background-color: lightgray;
     color: var(--point-color2);
   }
 `;

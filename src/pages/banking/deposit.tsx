@@ -30,7 +30,7 @@ const DepositContainer = styled.div`
   @media (max-width: 600px) {
     align-items: flex-end;
     > section {
-      height: 92vh;
+      height: 94vh;
     }
   }
 `;
