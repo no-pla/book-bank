@@ -26,15 +26,16 @@ export interface IBookData {
 }
 
 const Index = ({ currentUser }: any) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
-  const setMyBookData = useSetRecoilState(selectMyBookState);
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
+  const setMyBookData = useSetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
-  const router = useRouter();
 
   useEffect(() => {
     queryClient.resetQueries();
+    queryClient.invalidateQueries("getMyBookList");
     setMyBookData({});
     if (isEdit) {
       setIsEdit(!isEdit);
@@ -47,7 +48,6 @@ const Index = ({ currentUser }: any) => {
         <CustomButton value="뒤로" onClick={() => router.push("/")} />
         {userInfo
           ?.reduce((cur: number, acc: IBookData) => {
-            console.log(acc);
             return cur + acc.price;
           }, 0)
           .toLocaleString("ko-KR") || 0}
@@ -96,8 +96,8 @@ const UserInfoBox = styled.section`
   }
   @media (max-width: 600px) {
     width: 100vw;
-    height: calc(160px - 7vh);
-    margin-top: 8vh;
+    height: calc(160px - 5vh);
+    margin-top: 5vh;
   }
   > button {
     align-self: flex-start;
