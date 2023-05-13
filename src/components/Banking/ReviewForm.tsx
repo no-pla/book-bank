@@ -28,7 +28,10 @@ const ReviewForm = () => {
       publisher: targetBookData.publisher,
       price: targetBookData?.price || "금액 정보 없음",
       id: uuid_v4(),
-      authors: targetBookData?.authors || ["작가 정보 없음"],
+      authors:
+        targetBookData?.authors.length !== 0
+          ? targetBookData?.authors
+          : [" 정보 없음"],
       thumbnail: targetBookData?.thumbnail || "",
       review: ReviewAreaRef.current?.value,
       uid: currentUser.uid,
@@ -50,7 +53,10 @@ const ReviewForm = () => {
       {Object.keys(targetBookData).length > 0 && (
         <div>
           <BookInfo>
-            {targetBookData?.title} - {targetBookData.authors}
+            {targetBookData?.title} -&nbsp;
+            {targetBookData.authors.length === 0
+              ? "정보 없음"
+              : targetBookData.authors.join(", ")}
           </BookInfo>
           <FormContainer>
             <ReviewWriteForm onSubmit={(event) => onSubmitReview(event)}>

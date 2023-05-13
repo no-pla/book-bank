@@ -91,8 +91,9 @@ export const useUpdateBook = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: updateBook,
-    onSuccess: () => {
-      queryClient.invalidateQueries("getMyBookList");
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("getMyBookList");
+      await queryClient.invalidateQueries("getReadBookInfo");
     },
   });
 };
@@ -116,8 +117,9 @@ export const useDeleteBook = () => {
 
   return useMutation({
     mutationFn: deleteBook,
-    onSuccess: () => {
-      queryClient.invalidateQueries("getMyBookList");
+    onSuccess: async () => {
+      await queryClient.invalidateQueries("getReadBookInfo");
+      await queryClient.invalidateQueries("getMyBookList");
       resetList();
     },
   });

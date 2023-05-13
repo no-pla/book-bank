@@ -21,7 +21,7 @@ const Navigation = () => {
         <div>
           <NavTitle href="/">BOOK BANK</NavTitle>
           <MenuButton onClick={() => setOpenMenu((prev) => !prev)}>
-            열기
+            메뉴
           </MenuButton>
         </div>
         <NavItemContainer openMenu={openMenu}>
@@ -50,15 +50,14 @@ const NavContainer = styled.div`
     top: 0;
     left: 0;
     width: 100vw;
-    height: 10vh;
   }
 `;
 
 const MenuButton = styled.button`
   height: 100%;
-  background-color: var(--main-color);
+  background-color: transparent;
   padding: 12px;
-  border: 3px solid var(--point-color1);
+  border: 1px solid lightgray;
   @media (min-width: 600px) {
     display: none;
   }
@@ -73,10 +72,9 @@ const Nav = styled.nav`
   padding: 8px;
   width: 100%;
   box-sizing: border-box;
-  background-color: aliceblue;
   @media (max-width: 600px) {
     padding: 0;
-    height: 8vh;
+    height: 6vh;
   }
   > a:first-of-type {
     font-weight: 800;

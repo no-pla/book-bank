@@ -55,10 +55,12 @@ const DataInfo = styled.div`
   display: flex;
   gap: 12px;
   height: 100%;
-  max-height: 400px;
+  max-height: 200px;
   @media (max-width: 600px) {
     flex-direction: column;
-    padding-top: 16%;
+    padding-top: 10%;
+    height: 100%;
+    max-height: 400px;
   }
 `;
 
@@ -73,6 +75,7 @@ const InfoContainer = styled.section`
   justify-content: flex-start;
   @media (max-width: 600px) {
     flex-direction: column;
+    margin-top: 12px;
   }
 `;
 
@@ -80,15 +83,13 @@ const UserInfo = styled.section`
   background-color: var(--main-color);
   box-sizing: border-box;
   border-radius: 12px;
-  height: calc(min(36%, 300px));
+  height: calc(min(100%, 200px));
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   width: 40%;
-  height: 50%;
   @media (max-width: 600px) {
-    height: 50%;
     width: 100%;
   }
 `;
@@ -98,14 +99,13 @@ const BankingInfo = styled.section`
   background-color: var(--main-color);
   box-sizing: border-box;
   border-radius: 12px;
-  height: calc(min(50%, 300px));
+  height: calc(min(100%, 200px));
   display: flex;
   flex-direction: column;
   align-items: center;
   max-height: 600px;
   justify-content: space-around;
   @media (max-width: 600px) {
-    height: 50%;
     width: 100%;
   }
 `;
