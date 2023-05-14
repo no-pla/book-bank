@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { FormProvider, useForm } from "react-hook-form";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -17,6 +17,8 @@ import {
   ToggleLink,
 } from "./LogInForm";
 import AuthInput from "../Custom/AuthInput";
+import useModal from "../Hooks/useModal";
+import ErrorModal from "../Custom/ErrorModal";
 
 interface IUserData {
   email: string;
@@ -25,6 +27,8 @@ interface IUserData {
 }
 
 const SignUpForm = () => {
+  const { isShowing, toggle } = useModal();
+  const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -54,10 +58,19 @@ const SignUpForm = () => {
       );
     } catch ({ code }: any) {
       if (code === "auth/email-already-in-use") {
-        alert("이미 가입된 계정입니다."); // 추후 모달로 수정
+        setErrorMessage([
+          "이미 가입된 이메일입니다.",
+          "로그인 혹은 다른 이메일로 다시 시도해 주세요.",
+        ]);
+
+        toggle();
         return;
       } else {
-        alert("예기치 못한 오류로 회원가입을 실패했습니다."); // 추후 모달로 수정
+        setErrorMessage([
+          "오류가 발생했습니다.",
+          "예기치 못한 오류로 회원가입을 실패했습니다.",
+        ]);
+        toggle();
         return;
       }
     }
@@ -65,6 +78,13 @@ const SignUpForm = () => {
 
   return (
     <Container>
+      {isShowing && (
+        <ErrorModal
+          title={errorMessage[0]}
+          content={errorMessage[1]}
+          toggle={toggle}
+        />
+      )}
       <FormContainer>
         <TitleContainer>
           <Description>당신의 독서를 저금하세요.</Description>

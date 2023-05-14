@@ -22,7 +22,7 @@ const ConfirmModal = ({ title, content, toggle, onFunc }: any) => {
   );
 };
 
-const ModalContainer = styled.div`
+export const ModalContainer = styled.div`
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -34,7 +34,7 @@ const ModalContainer = styled.div`
   background: rgba(159, 159, 159, 0.6);
 `;
 
-const Modal = styled.div`
+export const Modal = styled.div`
   text-align: center;
   width: calc(min(60vw, 300px));
   background-color: #ffffff;
@@ -46,19 +46,19 @@ const Modal = styled.div`
   z-index: 10;
 `;
 
-const ModalTitle = styled.h3`
+export const ModalTitle = styled.h3`
   font-weight: 600;
   padding: 16px 0 0 0;
   color: var(--point-color2);
 `;
 
-const ModalContent = styled.p`
+export const ModalContent = styled.p`
   color: darkgray;
   font-size: 12px;
   line-height: 16px;
 `;
 
-const ModalButtonContainer = styled.div`
+export const ModalButtonContainer = styled.div`
   height: 32%;
   border-radius: 0 0 4px 4px;
   > button:first-of-type {
@@ -74,7 +74,7 @@ const ModalButtonContainer = styled.div`
   }
 `;
 
-const ModalButton = styled.button`
+export const ModalButton = styled.button`
   height: 100%;
   width: 50%;
   border: 1px solid lightgray;

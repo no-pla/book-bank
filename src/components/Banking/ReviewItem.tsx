@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { useInfiniteQuery } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
-import { Input } from "../Custom/AuthInput";
 import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
@@ -49,6 +48,9 @@ const ReviewItem = ({ currentUser }: any) => {
     }
   };
 
+  useEffect(() => {
+    console.log(myBookReviews?.pages);
+  });
   return (
     <ReivewItemContainer>
       <ReviewListItemContainer>
