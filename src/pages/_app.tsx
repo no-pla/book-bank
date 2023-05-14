@@ -1,6 +1,5 @@
 import { RecoilRoot } from "recoil";
 import type { AppProps } from "next/app";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "@/components/Layout/Layout";
 import useAuth from "@/components/Hooks/useAuth";
@@ -24,7 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
           <Layout>
             <Component {...pageProps} currentUser={currentUser} />
           </Layout>
-          <ReactQueryDevtools />
         </QueryClientProvider>
       </RecoilRoot>
     </>
