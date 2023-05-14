@@ -1,7 +1,13 @@
 import React from "react";
+import SignUpForm from "@/components/Auth/SignUpForm";
+import FormLayout from "@/components/Layout/LandingLayout";
 
 const Register = () => {
-  return <div>Register</div>;
+  return (
+    <FormLayout>
+      <SignUpForm />
+    </FormLayout>
+  );
 };
 
 export default Register;
