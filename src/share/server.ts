@@ -1,1 +1,1 @@
-export const DB_LINK = "https://glitch.com/edit/#!/pickle-jumpy-kettledrum";
+export const DB_LINK = "https://pickle-jumpy-kettledrum.glitch.me";

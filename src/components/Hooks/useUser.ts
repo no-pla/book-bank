@@ -1,6 +1,6 @@
-import { DB_LINK } from "@/share/server";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { DB_LINK } from "@/share/server";
 
 const useUser = (uid: string) => {
   const { data: userInfo } = useQuery(
