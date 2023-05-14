@@ -1,1 +1,1 @@
-export const DB_LINK = "http://localhost:3001";
+export const DB_LINK = "https://tinted-temporal-play.glitch.me";
