@@ -105,7 +105,6 @@ const deleteBook = async (targetId: string) => {
   try {
     await axios.delete(`${DB_LINK}/review/${targetId}`);
   } catch (error) {
-    alert("삭제를 실패했습니다.");
     console.log(error);
   }
   // 유저 데이터 책 개수 빼기

@@ -7,10 +7,13 @@ import useAuth from "../Hooks/useAuth";
 import { selectBookState } from "@/share/atom";
 import { useAddBook } from "../Hooks/useBanking";
 import CustomButton from "../Custom/CustomButton";
+import ErrorModal from "../Custom/ErrorModal";
+import useModal from "../Hooks/useModal";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
   const router = useRouter();
+  const { isShowing, toggle } = useModal();
   const targetBookData = useRecoilValue<any>(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
@@ -50,6 +53,13 @@ const ReviewForm = () => {
 
   return (
     <ReviewFormContainer>
+      {isShowing && (
+        <ErrorModal
+          title="리뷰 작성 중 에러가 발생했습니다."
+          content="다시 시도해 주세요."
+          toggle={toggle}
+        />
+      )}
       {Object.keys(targetBookData).length > 0 && (
         <div>
           <BookInfo>

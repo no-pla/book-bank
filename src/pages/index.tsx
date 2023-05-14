@@ -3,8 +3,8 @@ import Image from "next/image";
 import { useEffect } from "react";
 import styled from "@emotion/styled";
 import { useQueryClient } from "react-query";
-import useUser from "@/components/Hooks/useUser";
 import Chart from "@/components/Banking/Chart";
+import useUser from "@/components/Hooks/useUser";
 
 export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();

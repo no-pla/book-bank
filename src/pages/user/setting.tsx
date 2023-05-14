@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { deleteUser } from "firebase/auth";
@@ -8,10 +8,13 @@ import useModal from "@/components/Hooks/useModal";
 import ConfirmModal from "@/components/Custom/ConfirmModal";
 import PreviousChart from "@/components/Banking/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
+import ErrorModal from "@/components/Custom/ErrorModal";
 
 const Setting = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
+  const [openError, setOpenError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
 
   const deleteUserBookReview = async (uid: string) => {
     // 유저가 작성한 게시글 전체 가져옴
@@ -47,14 +50,34 @@ const Setting = () => {
         deleteUserProfile(currentUser?.uid);
       });
     } catch ({ code }: any) {
+      toggle();
       if (code === "auth/requires-recent-login") {
-        alert("회원 탈퇴를 하고 싶으시면 재로그인 후 시도해 주세요.");
+        setErrorMessage([
+          "오류가 발생했습니다.",
+          "회원 탈퇴를 하고 싶으시면 재로그인 후 시도해 주세요.",
+        ]);
+        setOpenError((prev) => !prev);
+        return;
+      } else {
+        setErrorMessage([
+          "예상치 못한 오류가 발생했습니다.",
+          "다시 시도해 주세요.",
+        ]);
+        setOpenError((prev) => !prev);
+        return;
       }
     }
   };
 
   return (
     <SettingPage>
+      {openError && (
+        <ErrorModal
+          title={errorMessage[0]}
+          content={errorMessage[1]}
+          toggle={() => setOpenError((prev) => !prev)}
+        />
+      )}
       {isShowing && (
         <ConfirmModal
           title="정말로 탈퇴할까요?"
@@ -67,7 +90,7 @@ const Setting = () => {
         <UpdateProfileForm />
         <PreviousChart />
       </div>
-      <WithdrawalButton onClick={() => toggle()}>회원탈퇴</WithdrawalButton>
+      <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
     </SettingPage>
   );
 };
@@ -79,7 +102,6 @@ const SettingPage = styled.section`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   @media (max-width: 600px) {
     padding-top: 12%;
     height: 100%;

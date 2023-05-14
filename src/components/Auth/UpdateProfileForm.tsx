@@ -9,11 +9,13 @@ import CustomButton from "../Custom/CustomButton";
 import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
+import ErrorModal from "../Custom/ErrorModal";
 
 const UpdateProfileForm = () => {
   const router = useRouter();
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
+  const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<any>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
   const UpdateNicknameInputRef = useRef<HTMLInputElement>(null);
@@ -42,8 +44,8 @@ const UpdateProfileForm = () => {
       });
       router.push("/");
     } catch (error) {
-      alert("프로필 수정 중에 오류가 발생했습니다.");
       console.log(error);
+      toggle();
     }
   };
 
@@ -57,7 +59,14 @@ const UpdateProfileForm = () => {
   return (
     <ProfileContainer>
       <Title>프로필 변경</Title>
-      {isShowing ? (
+      {isShowing && (
+        <ErrorModal
+          title="오류가 발생했습니다."
+          content="프로필 수정 중에 오류가 발생했습니다. 다시 시도해 주세요"
+          toggle={() => toggle}
+        />
+      )}
+      {openProfile ? (
         <Profile>
           <Form onSubmit={(event) => onUpdateProfile(event)}>
             <div>
@@ -81,7 +90,11 @@ const UpdateProfileForm = () => {
             <div>
               <UpdateNicknameInput />
               <ButtonContainer>
-                <CustomButton value="취소" type="button" onClick={toggle} />
+                <CustomButton
+                  value="취소"
+                  type="button"
+                  onClick={() => setOpenProfile((prev) => !prev)}
+                />
                 <CustomButton type="submit" value="수정하기" />
               </ButtonContainer>
             </div>
@@ -100,7 +113,10 @@ const UpdateProfileForm = () => {
           </div>
           <div>
             <h1>{currentUser?.displayName}</h1>
-            <CustomButton onClick={toggle} value="닉네임 변경하기" />
+            <CustomButton
+              onClick={() => setOpenProfile((prev) => !prev)}
+              value="닉네임 변경하기"
+            />
           </div>
         </Profile>
       )}

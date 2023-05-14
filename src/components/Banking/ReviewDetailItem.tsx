@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useModal from "../Hooks/useModal";
@@ -13,14 +13,24 @@ const ReviewDetailItem = () => {
   const setIsEdit = useSetRecoilState(isFormEdit);
   const { mutate: deleteReview } = useDeleteBook();
   const { isShowing, toggle } = useModal();
+  const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
 
   const toggleEdit = () => {
     setIsEdit(!isEdit);
   };
 
   const onDelete = async () => {
-    await deleteReview(targetMyBookData?.id);
+    try {
+      await deleteReview(targetMyBookData?.id);
+    } catch (error) {
+      setErrorMessage(["에러가 발생했습니다.", "다시 삭제를 시도해 주세요."]);
+    }
     setMyBookData({});
+    toggle();
+  };
+
+  const toggleDelete = () => {
+    setErrorMessage(["정말로 삭제할까요?", "이 작업은 되돌릴 수 없습니다."]);
     toggle();
   };
 
@@ -29,7 +39,7 @@ const ReviewDetailItem = () => {
       {isShowing && (
         <ConfirmModal
           title="정말로 삭제할까요?"
-          content="이 작업은 되돌릴 수 없습니다!"
+          content="이 작업은 되돌릴 수 없습니다."
           toggle={toggle}
           onFunc={onDelete}
         />
@@ -45,7 +55,7 @@ const ReviewDetailItem = () => {
             <span>{targetMyBookData.publisher || "정보 없음"}</span>
           </BookDetailInfo>
           <BookDetailButtonContainer>
-            <button onClick={toggle}>삭제</button>
+            <button onClick={toggleDelete}>삭제</button>
             <button onClick={toggleEdit}>수정</button>
           </BookDetailButtonContainer>
           <Review>

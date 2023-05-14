@@ -3,20 +3,31 @@ import Link from "next/link";
 import styled from "@emotion/styled";
 import { signOut } from "firebase/auth";
 import { auth } from "@/share/firebase";
+import ErrorModal from "../Custom/ErrorModal";
+import useModal from "../Hooks/useModal";
 
 const Navigation = () => {
+  const { isShowing, toggle } = useModal();
   const [openMenu, setOpenMenu] = useState(false);
+
   const onSignOut = async () => {
     try {
       await signOut(auth);
     } catch (error) {
       console.log(error);
-      alert("로그아웃 실패했습니다.");
+      toggle();
     }
   };
 
   return (
     <NavContainer>
+      {isShowing && (
+        <ErrorModal
+          title="에러가 발생했습니다."
+          content="로그아웃을 실패했습니다."
+          toggle={toggle}
+        />
+      )}
       <Nav>
         <div>
           <NavTitle href="/">BOOK BANK</NavTitle>

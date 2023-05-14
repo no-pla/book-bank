@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
@@ -11,6 +11,8 @@ import { DB_LINK } from "@/share/server";
 import AuthInput from "../Custom/AuthInput";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import CustomButton from "../Custom/CustomButton";
+import ErrorModal from "../Custom/ErrorModal";
+import useModal from "../Hooks/useModal";
 
 interface ILoginData {
   email: string;
@@ -19,6 +21,8 @@ interface ILoginData {
 
 const LoginForm = () => {
   const router = useRouter();
+  const { isShowing, toggle } = useModal();
+  const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
   const provider = new GoogleAuthProvider();
   const methods = useForm({
     defaultValues: {
@@ -33,13 +37,19 @@ const LoginForm = () => {
         router.push("/");
       });
     } catch ({ code }: any) {
-      console.log(code);
       if (code === "auth/wrong-password" || code === "auth/user-not-found") {
+        setErrorMessage([
+          "다시 시도해 주세요.",
+          "이메일 혹은 비밀번호가 올바르지 않습니다.",
+        ]);
         // 비밀번호나 이메일 가입 여부를 세세하게 알려주면 해킹의 위험성 증대
-        alert("이메일 혹은 비밀번호가 올바르지 않습니다."); // 추후 모달로 수정 예정
       } else {
-        alert("예기치 못한 에러가 발생했습니다."); // 추후 모달로 수정 예정
+        setErrorMessage([
+          "다시 시도해 주세요.",
+          "예기치 못한 에러가 발생했습니다.",
+        ]);
       }
+      toggle();
     }
   };
 
@@ -48,9 +58,7 @@ const LoginForm = () => {
       .then(async (result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         if (!credential) return;
-        const token = credential.accessToken;
         const user = result.user;
-        console.log(token, user);
         await axios.post(`${DB_LINK}/users`, {
           id: user.uid,
           nickname: user.displayName,
@@ -59,19 +67,25 @@ const LoginForm = () => {
         });
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(errorCode, errorMessage, email, credential);
-        // ...
+        console.log(errorMessage);
+        setErrorMessage([
+          "다시 시도해 주세요.",
+          "예기치 못한 에러가 발생했습니다.",
+        ]);
+        toggle();
       });
   };
 
   return (
     <Container>
+      {isShowing && (
+        <ErrorModal
+          title={errorMessage[0]}
+          content={errorMessage[1]}
+          toggle={toggle}
+        />
+      )}
       <FormContainer>
         <TitleContainer>
           <Description>당신의 독서를 저금하세요.</Description>
