@@ -1,15 +1,35 @@
 import React, { useRef, useState } from "react";
+import Image from "next/image";
+import { useSetRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import BookItem from "./BookItem";
 import { Input } from "../Custom/AuthInput";
 import CustomButton from "../Custom/CustomButton";
 import { useGetSearchBookList } from "../Hooks/useBanking";
+import { selectBookState } from "@/share/atom";
+import { NO_IMAGE } from "@/share/server";
+
+interface IBook {
+  authors: string[];
+  contents: string;
+  datetime: string;
+  id: string;
+  isbn: string;
+  price: number;
+  publisher: string;
+  sale_price: number;
+  status: string;
+  thumbnail: string;
+  title: string;
+  translators: string[];
+  url: string;
+}
 
 const SearchForm = () => {
   const [page, setPage] = useState<number>(1);
   const [searchBookName, setSearchBookName] = useState("");
   const SearchInputRef = useRef<HTMLInputElement>(null);
   const { data: bookList } = useGetSearchBookList(searchBookName, page);
+  const setSelectBook = useSetRecoilState(selectBookState);
 
   const SearchInput = () => {
     return (
@@ -32,21 +52,38 @@ const SearchForm = () => {
       <form onSubmit={(event) => onSearchSubmit(event)}>
         <SearchInput />
       </form>
-      <BookListContainer>
-        {bookList?.documents.map((book: any) => {
-          return <BookItem key={book.id} book={book} />;
+      <BookListItemContainer>
+        {bookList?.documents.map((book: IBook) => {
+          return (
+            <BookListItem key={book.id} onClick={() => setSelectBook(book)}>
+              <Image
+                src={book.thumbnail || NO_IMAGE}
+                height={80}
+                width={60}
+                alt={`${book.title}의 책표지입니다. `}
+              />
+              <BookDescription>
+                <BookTitle>{book.title}</BookTitle>
+                <div>
+                  {book.authors[0] || "정보 없음"}
+                  {book.authors.length > 1 && "외"}
+                  &nbsp;|&nbsp;{book.publisher}
+                </div>
+                <BookPrice>{book.price.toLocaleString()}</BookPrice>
+              </BookDescription>
+            </BookListItem>
+          );
         })}
-      </BookListContainer>
+      </BookListItemContainer>
       <SearchButtonContainer>
         <CustomButton
           value="이전"
-          disabled={page === 1}
+          disabled={page === 1 || !bookList}
           onClick={() => setPage((prev) => prev - 1)}
         />
-
         <CustomButton
           value="이후"
-          disabled={bookList?.meta.is_end === true || bookList === undefined}
+          disabled={bookList?.meta?.is_end || !bookList}
           onClick={() => setPage((prev) => prev + 1)}
         />
       </SearchButtonContainer>
@@ -54,31 +91,65 @@ const SearchForm = () => {
   );
 };
 
-const Container = styled.section`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: flex-start;
+const Container = styled.div`
+  height: 100%;
+  > button {
+    border: 1px solid lightgrey;
+    width: 50%;
+    cursor: pointer;
+    padding: 4px 0;
+  }
 `;
 
-const BookListContainer = styled.ul`
-  height: 100%;
-  padding: 12px;
-  overflow-y: scroll;
+const BookListItemContainer = styled.ul`
+  margin: 20px 0;
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  overflow-y: scroll;
+  height: 88%;
+`;
+
+export const BookListItem = styled.li`
+  background-color: white;
+  display: flex;
+  gap: 12px;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  align-items: flex-end;
+`;
+
+export const BookTitle = styled.div`
+  font-weight: 700;
+  margin-bottom: 8px;
+`;
+
+export const BookPrice = styled.div`
+  &::after {
+    content: "원";
+  }
+`;
+
+export const BookDescription = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 12px;
 `;
 
 const SearchButtonContainer = styled.div`
   > button {
     width: 50%;
-    color: var(--point-color1);
-    border: 1px solid var(--point-color1);
-  }
-  > button:disabled {
     color: var(--main-color);
     border: 1px solid var(--main-color);
+  }
+
+  > button:disabled {
+    color: darkgray;
+    background-color: lightgray;
+    border: 1px solid darkgray;
   }
 `;
 
