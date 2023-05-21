@@ -79,7 +79,7 @@ const Index = ({ currentUser }: any) => {
                 return cur + acc.price;
               }, 0)
               .toLocaleString("ko-KR") || 0}
-            &nbsp;원 ({userInfo?.length || 0}&nbsp;권)
+            원&nbsp;({userInfo?.length || 0}권)
           </BankBookInfo>
           <BankBookInfoButtonContainer>
             <button>공유</button>
@@ -96,7 +96,6 @@ const Index = ({ currentUser }: any) => {
 };
 
 // 통장 정보란
-
 const BankBookData = styled.div`
   background-color: #bfb0d1;
   border-radius: 12px;

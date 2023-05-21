@@ -90,7 +90,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 100px;
-
   @media (max-width: 600px) {
     gap: 60px;
   }
@@ -118,6 +117,7 @@ const UserInfo = styled.section`
   > img {
     border-radius: 50%;
     margin: 20px 0;
+    object-fit: cover;
   }
   a {
     font-size: 0.9rem;
@@ -190,9 +190,7 @@ const RankingTitle = styled.div`
 `;
 
 const RankingList = styled.ul`
-  background-color: #faf9fb;
   margin-top: 4px;
-  height: 84%;
   border-radius: 12px;
   padding: 12px;
   box-sizing: border-box;

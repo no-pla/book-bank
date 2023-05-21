@@ -63,7 +63,7 @@ const UpdateProfileForm = () => {
         <ErrorModal
           title="오류가 발생했습니다."
           content="프로필 수정 중에 오류가 발생했습니다. 다시 시도해 주세요"
-          toggle={() => toggle}
+          toggle={toggle}
         />
       )}
       {openProfile ? (
@@ -72,7 +72,11 @@ const UpdateProfileForm = () => {
             <div>
               <Image
                 id="preview-image"
-                src={imageURL ? imageURL : currentUser?.photoURL}
+                src={
+                  imageURL
+                    ? imageURL
+                    : "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
+                }
                 height={100}
                 width={100}
                 style={{ borderRadius: "50%", objectFit: "cover" }}

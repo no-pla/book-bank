@@ -86,11 +86,7 @@ const SignUpForm = () => {
         />
       )}
       <FormContainer>
-        <TitleContainer>
-          <Description>당신의 독서를 저금하세요.</Description>
-          <Title>북 뱅크</Title>
-          <Icon>📚</Icon>
-        </TitleContainer>
+        <h1>회원가입</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <AuthInput
