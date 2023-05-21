@@ -4,19 +4,20 @@ import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import useAuth from "../Hooks/useAuth";
-import { selectBookState } from "@/share/atom";
+import { selectBookState, userDirectFormState } from "@/share/atom";
 import { useAddBook } from "../Hooks/useBanking";
-import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
 import Image from "next/image";
+import { NO_IMAGE } from "@/share/server";
+import UserDirectForm from "./UserDirectForm";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
   const router = useRouter();
-  const { isShowing, toggle } = useModal();
   const targetBookData = useRecoilValue<any>(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
+  const userDirectFormData = useRecoilValue(userDirectFormState);
 
   const ReviewArea = () => {
     return (
@@ -38,8 +39,8 @@ const ReviewForm = () => {
       authors:
         targetBookData?.authors.length !== 0
           ? targetBookData?.authors
-          : [" 정보 없음"],
-      thumbnail: targetBookData?.thumbnail || "",
+          : ["정보 없음"],
+      thumbnail: targetBookData?.thumbnail || NO_IMAGE,
       review: ReviewAreaRef.current?.value,
       uid: currentUser.uid,
       createdAt: Date.now(),
@@ -58,12 +59,13 @@ const ReviewForm = () => {
   return (
     <div>
       <ReviewFormContainer>
+        {userDirectFormData && <UserDirectForm />}
         {Object.keys(targetBookData).length > 0 && (
           <form onSubmit={(event) => onSubmitReview(event)}>
             <BookTitle>{targetBookData?.title}</BookTitle>
             <BookDescriptionConatiner>
               <Image
-                src={targetBookData.thumbnail}
+                src={targetBookData.thumbnail || NO_IMAGE}
                 height={150}
                 width={100}
                 alt={`${targetBookData.title}의 책표지입니다. `}
@@ -111,7 +113,7 @@ const TextArea = styled.textarea`
   border-radius: 4px;
   box-sizing: border-box;
   width: 100%;
-  height: 300px;
+  height: 260px;
   padding: 12px;
   margin: 20px 0;
 `;

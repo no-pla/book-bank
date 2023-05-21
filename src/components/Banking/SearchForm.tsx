@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { useSetRecoilState } from "recoil";
+import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import { Input } from "../Custom/AuthInput";
 import CustomButton from "../Custom/CustomButton";
 import { useGetSearchBookList } from "../Hooks/useBanking";
-import { selectBookState } from "@/share/atom";
+import { selectBookState, userDirectFormState } from "@/share/atom";
 import { NO_IMAGE } from "@/share/server";
 
 interface IBook {
@@ -30,7 +30,8 @@ const SearchForm = () => {
   const SearchInputRef = useRef<HTMLInputElement>(null);
   const { data: bookList } = useGetSearchBookList(searchBookName, page);
   const setSelectBook = useSetRecoilState(selectBookState);
-
+  const resetSelectBook = useResetRecoilState(selectBookState);
+  const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
   const SearchInput = () => {
     return (
       <Input ref={SearchInputRef} placeholder="검색할 책을 입력해주세요." />
@@ -47,33 +48,49 @@ const SearchForm = () => {
     }
   };
 
+  const onClick = (book: any) => {
+    setSelectBook(book);
+    setToggleDirectFormState(false);
+  };
+  const onClickDirectForm = () => {
+    resetSelectBook();
+    setToggleDirectFormState(true);
+  };
+
   return (
     <Container>
       <form onSubmit={(event) => onSearchSubmit(event)}>
         <SearchInput />
       </form>
       <BookListItemContainer>
-        {bookList?.documents.map((book: IBook) => {
-          return (
-            <BookListItem key={book.id} onClick={() => setSelectBook(book)}>
-              <Image
-                src={book.thumbnail || NO_IMAGE}
-                height={80}
-                width={60}
-                alt={`${book.title}의 책표지입니다. `}
-              />
-              <BookDescription>
-                <BookTitle>{book.title}</BookTitle>
-                <div>
-                  {book.authors[0] || "정보 없음"}
-                  {book.authors.length > 1 && "외"}
-                  &nbsp;|&nbsp;{book.publisher}
-                </div>
-                <BookPrice>{book.price.toLocaleString()}</BookPrice>
-              </BookDescription>
-            </BookListItem>
-          );
-        })}
+        {bookList?.documents?.length !== 0 ? (
+          bookList?.documents.map((book: IBook) => {
+            return (
+              <BookListItem key={book.id} onClick={() => onClick(book)}>
+                <Image
+                  src={book.thumbnail || NO_IMAGE}
+                  height={80}
+                  width={60}
+                  alt={`${book.title}의 책표지입니다. `}
+                />
+                <BookDescription>
+                  <BookTitle>{book.title}</BookTitle>
+                  <div>
+                    {book.authors[0] || "정보 없음"}
+                    {book.authors.length > 1 && "외"}
+                    &nbsp;|&nbsp;{book.publisher}
+                  </div>
+                  <BookPrice>{book.price.toLocaleString()}</BookPrice>
+                </BookDescription>
+              </BookListItem>
+            );
+          })
+        ) : (
+          <NoResult>
+            <h2>검색 결과가 없습니다.</h2>
+            <button onClick={onClickDirectForm}>직접 입력하기</button>
+          </NoResult>
+        )}
       </BookListItemContainer>
       <SearchButtonContainer>
         <CustomButton
@@ -91,6 +108,22 @@ const SearchForm = () => {
   );
 };
 
+const NoResult = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+  > button {
+    padding: 12px 32px;
+    background-color: whitesmoke;
+    border-radius: 12px;
+    border: 1px solid lightgray;
+    cursor: pointer;
+  }
+`;
+
 const Container = styled.div`
   height: 100%;
   > button {
@@ -102,12 +135,13 @@ const Container = styled.div`
 `;
 
 const BookListItemContainer = styled.ul`
-  margin: 20px 0;
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
   overflow-y: scroll;
   height: 88%;
+  box-sizing: border-box;
 `;
 
 export const BookListItem = styled.li`

@@ -69,6 +69,7 @@ const ReviewDetailItem = () => {
                     height={150}
                     width={110}
                     alt={`${targetMyBookData.title}의 책표지입니다. `}
+                    style={{ objectFit: "cover" }}
                   />
                   <BookInfo>
                     <div>
@@ -94,13 +95,6 @@ const ReviewDetailItem = () => {
 };
 
 export default ReviewDetailItem;
-
-// 수정 폼
-// const EditForm = styled.form`
-//   background-color: rebeccapurple;
-// `;
-
-// 리뷰 디테일
 
 const BookSetting = styled.div`
   display: flex;
@@ -183,61 +177,3 @@ const BookInfo = styled.div`
     content: "가격: ";
   }
 `;
-
-const BookDetailContainer = styled.div`
-  padding: 12px;
-  margin: 12px;
-  border-radius: 8px;
-  text-align: center;
-  overflow-y: scroll;
-  background-color: whitesmoke;
-`;
-
-const BookDetailTitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: 800;
-  margin-top: 12px;
-  margin-bottom: 20px;
-`;
-
-const BookDetailCreatedAt = styled.div`
-  color: darkgrey;
-`;
-
-const BookDetailInfo = styled.div`
-  margin: 12px 0;
-  > span:first-of-type::before {
-    content: "작가: ";
-  }
-  > span:first-of-type::after {
-    content: " | ";
-  }
-  > span:nth-of-type(2)::before {
-    content: "출판사: ";
-  }
-`;
-
-const BookDetailButtonContainer = styled.div`
-  text-align: right;
-  > button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  > button:first-of-type {
-    color: var(--point-color2);
-  }
-  > button:last-of-type {
-    color: var(--point-color1);
-  }
-  margin-bottom: 12px;
-`;
-
-// const Review = styled.div`
-//   border-top: 1px solid darkgrey;
-//   padding-top: 12px;
-//   line-height: 20px;
-//   font-size: 0.9rem;
-//   word-break: break-all;
-//   white-space: pre-wrap;
-// `;

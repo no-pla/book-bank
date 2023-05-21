@@ -171,7 +171,7 @@ const Profile = styled.div`
   }
 `;
 
-const FileInput = styled.input`
+export const FileInput = styled.input`
   &::file-selector-button {
     padding: 8px 16px;
     background-color: white;

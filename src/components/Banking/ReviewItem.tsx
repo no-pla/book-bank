@@ -49,14 +49,11 @@ const ReviewItem = ({ currentUser }: any) => {
     }
   };
 
-  useEffect(() => {
-    console.log(myBookReviews?.pages);
-  });
   return (
     <BookListContainer>
       <ul>
         {myBookReviews?.pages?.map((list: any) => {
-          return list?.data.map((book: any, index: number) => {
+          return list?.data.map((book: any) => {
             return (
               <BookListItem
                 key={book.id}
@@ -68,7 +65,7 @@ const ReviewItem = ({ currentUser }: any) => {
                     <BookDesc>
                       <div>
                         {book.authors[0] || "정보 없음"}
-                        {book.authors.length > 1 && "외"}
+                        {book.authors.length > 1 && " 외"}
                         &nbsp;|&nbsp;{book.publisher}
                       </div>
                       <BookPrice>{book.price.toLocaleString()}</BookPrice>
@@ -120,35 +117,6 @@ const BookListContainer = styled.div`
   gap: 12px;
 `;
 
-const ReivewItemContainer = styled.div`
-  overflow-y: scroll;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const ReviewListItemContainer = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  height: fit-content;
-`;
-
-const ReviewListItem = styled.li`
-  background-color: whitesmoke;
-  display: flex;
-  padding: 8px;
-  border-radius: 8px;
-  > img {
-    margin-right: 12px;
-  }
-  > div {
-    margin-top: 4px;
-  }
-`;
-
 const BookDescription = styled.div`
   width: 100%;
   display: flex;
@@ -168,17 +136,4 @@ const BookTitle = styled.div`
 
 const BookPrice = styled.div`
   margin: 4px 0;
-`;
-
-const GetNextPageButton = styled.button`
-  padding: 12px;
-  border: 1px solid lightgray;
-  cursor: pointer;
-  width: 100%;
-  color: var(--point-color1);
-  background-color: var(--main-color);
-  &:disabled {
-    background-color: lightgray;
-    color: var(--point-color2);
-  }
 `;

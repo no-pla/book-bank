@@ -147,9 +147,7 @@ export const Container = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 62px;
-  /* width: 100%; */
   color: var(--text-color);
-  /* height: 100vh; */
 `;
 
 export const FormContainer = styled.div`

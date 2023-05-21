@@ -8,12 +8,8 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import {
   Button,
   Container,
-  Description,
   Form,
   FormContainer,
-  Icon,
-  Title,
-  TitleContainer,
   ToggleLink,
 } from "./LogInForm";
 import AuthInput from "../Custom/AuthInput";
