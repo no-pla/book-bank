@@ -5,8 +5,9 @@ import { useInfiniteQuery } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
-import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import { BookDesc } from "./ReviewForm";
+import { BookListItem } from "./SearchForm";
 
 const ReviewItem = ({ currentUser }: any) => {
   const userInfo = useUser(currentUser?.uid);
@@ -52,43 +53,72 @@ const ReviewItem = ({ currentUser }: any) => {
     console.log(myBookReviews?.pages);
   });
   return (
-    <ReivewItemContainer>
-      <ReviewListItemContainer>
+    <BookListContainer>
+      <ul>
         {myBookReviews?.pages?.map((list: any) => {
           return list?.data.map((book: any, index: number) => {
             return (
-              <ReviewListItem key={book.id}>
+              <BookListItem
+                key={book.id}
+                onClick={() => showDetailReview(book)}
+              >
                 <BookDescription>
-                  <BookTitle>{book?.title}</BookTitle>
-                  <div>
-                    {book?.authors[0]}&nbsp;
-                    {book.authors.length > 1 && "외"}
-                  </div>
-                  <BookPrice>
-                    {book?.price?.toLocaleString("ko-KR")}원
-                  </BookPrice>
-                  <CustomButton
-                    value="상세보기"
-                    onClick={() => showDetailReview(list.data[index])}
-                  />
+                  <BookTitle>{book.title}</BookTitle>
+                  <BookDescription>
+                    <BookDesc>
+                      <div>
+                        {book.authors[0] || "정보 없음"}
+                        {book.authors.length > 1 && "외"}
+                        &nbsp;|&nbsp;{book.publisher}
+                      </div>
+                      <BookPrice>{book.price.toLocaleString()}</BookPrice>
+                    </BookDesc>
+                  </BookDescription>
                 </BookDescription>
-              </ReviewListItem>
+              </BookListItem>
             );
           });
         })}
-      </ReviewListItemContainer>
-
-      <GetNextPageButton
-        disabled={!hasNextPage}
-        onClick={() => fetchNextPage()}
-      >
+      </ul>
+      <NextButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
         더보기
-      </GetNextPageButton>
-    </ReivewItemContainer>
+      </NextButton>
+    </BookListContainer>
   );
 };
 
 export default ReviewItem;
+
+const NextButton = styled.button`
+  padding: 8px 12px;
+  background-color: whitesmoke;
+  border-radius: 12px;
+  border: 1px solid lightgray;
+  cursor: pointer;
+`;
+
+const BookListContainer = styled.div`
+  height: calc(100% - 160px);
+  background-color: #bfb0d1;
+  padding: 32px 20px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: scroll;
+  gap: 12px;
+`;
 
 const ReivewItemContainer = styled.div`
   overflow-y: scroll;

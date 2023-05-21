@@ -111,7 +111,7 @@ const UpdateProfileForm = () => {
               height={100}
               width={100}
               alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
-              style={{ borderRadius: "50%" }}
+              style={{ borderRadius: "50%", objectFit: "cover" }}
             />
           </div>
           <div>

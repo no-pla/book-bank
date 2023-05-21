@@ -90,21 +90,25 @@ const Setting = () => {
         <UpdateProfileForm />
         <PreviousChart />
       </div>
-      <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
+      <WithdrawalContainer>
+        <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
+      </WithdrawalContainer>
     </SettingPage>
   );
 };
 
 export default Setting;
 
+const WithdrawalContainer = styled.section``;
+
 const SettingPage = styled.section`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 40px;
+  justify-content: spb;
   @media (max-width: 600px) {
-    padding-top: 12%;
-    height: 100%;
   }
 `;
 

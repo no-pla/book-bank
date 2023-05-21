@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import Link from "next/link";
 import styled from "@emotion/styled";
-import { signOut } from "firebase/auth";
+import Link from "next/link";
+import React, { useState } from "react";
 import { auth } from "@/share/firebase";
-import ErrorModal from "../Custom/ErrorModal";
+import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
 
 const Navigation = () => {
@@ -18,109 +17,55 @@ const Navigation = () => {
       toggle();
     }
   };
-
   return (
-    <NavContainer>
-      {isShowing && (
-        <ErrorModal
-          title="에러가 발생했습니다."
-          content="로그아웃을 실패했습니다."
-          toggle={toggle}
-        />
-      )}
-      <Nav>
-        <div>
-          <NavTitle href="/">BOOK BANK</NavTitle>
-          <MenuButton onClick={() => setOpenMenu((prev) => !prev)}>
-            메뉴
-          </MenuButton>
-        </div>
-        <NavItemContainer openMenu={openMenu}>
-          <NavItem href="/banking">입금 내역</NavItem>
-          <NavItem href="/banking/deposit">입금하기</NavItem>
-          <NavItem href="/login" onClick={onSignOut}>
-            로그아웃
-          </NavItem>
-        </NavItemContainer>
-      </Nav>
-    </NavContainer>
+    <Header>
+      <HomeButton>
+        <Link href="/">📚&nbsp;Book Bank</Link>
+      </HomeButton>
+      <MenuList>
+        <Link href="/banking">내역</Link>
+        <Link href="/banking/deposit">입금</Link>
+        <Link href="/user/setting">설정</Link>
+        <button onClick={onSignOut}>로그아웃</button>
+      </MenuList>
+    </Header>
   );
 };
 
 export default Navigation;
 
-const NavTitle = styled(Link)`
-  padding: 12px;
-  font-weight: 700;
-`;
-
-const NavContainer = styled.div`
-  width: calc(min(22%, 150px));
-  @media (max-width: 600px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-  }
-`;
-
-const MenuButton = styled.button`
-  height: 100%;
-  background-color: transparent;
-  padding: 12px;
-  border: 1px solid lightgray;
-  @media (min-width: 600px) {
-    display: none;
-  }
-`;
-
-const Nav = styled.nav`
-  background-color: var(--main-color);
-  height: 100vh;
+const Header = styled.header`
+  background-color: #8067a9;
+  position: fixed;
+  top: 0;
+  width: calc(min(100%, 1960px));
+  height: 60px;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  width: 100%;
+  padding: 0 40px;
   box-sizing: border-box;
-  @media (max-width: 600px) {
-    padding: 0;
-    height: 6vh;
-  }
-  > a:first-of-type {
-    font-weight: 800;
-  }
-  & button {
-    align-self: flex-start;
-  }
-  > div:first-of-type {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    @media (max-width: 600px) {
-      flex-direction: row;
-    }
+  box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+  -webkit-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+  -moz-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+`;
+
+const HomeButton = styled.div`
+  > a {
+    font-size: 1.2rem;
   }
 `;
 
-const NavItemContainer = styled.div<{ openMenu: boolean }>`
+const MenuList = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  @media (max-width: 600px) {
-    display: ${(props) => (props.openMenu ? "flex" : "none")};
-    background-color: var(--bg-color);
-    border: 2px solid var(--main-color);
-    margin: 0;
-    padding: 8px;
+  gap: 12px;
+  align-items: center;
+  font-size: 1rem;
+  > button {
+    text-align: center;
+    font-size: 0.9rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
-`;
-
-const NavItem = styled(Link)`
-  text-decoration: none;
-  color: var(--text-color);
-  padding: 4px;
-  cursor: pointer;
 `;

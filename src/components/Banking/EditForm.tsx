@@ -160,6 +160,7 @@ const Form = styled.form`
   border-radius: 4px;
   padding: 12px;
   box-sizing: border-box;
+  height: 100%;
   display: flex;
   flex-direction: column;
   > button:first-of-type {
@@ -178,6 +179,7 @@ export const TextArea = styled.textarea`
   resize: none;
   border-radius: 4px;
   height: 100%;
+  padding: 12px;
 `;
 
 const Label = styled.label`
