@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import AuthInput from "../Custom/AuthInput";
+import Input from "../Custom/Input";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import CustomButton from "../Custom/CustomButton";
 import ErrorModal from "../Custom/ErrorModal";
@@ -90,7 +90,7 @@ const LoginForm = () => {
         <h1>로그인</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -105,7 +105,7 @@ const LoginForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,

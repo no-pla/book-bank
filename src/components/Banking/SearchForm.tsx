@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import { Input } from "../Custom/AuthInput";
+import { StyledInput } from "../Custom/Input";
 import CustomButton from "../Custom/CustomButton";
 import { useGetSearchBookList } from "../Hooks/useBanking";
 import { selectBookState, userDirectFormState } from "@/share/atom";
@@ -34,7 +34,10 @@ const SearchForm = () => {
   const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
   const SearchInput = () => {
     return (
-      <Input ref={SearchInputRef} placeholder="검색할 책을 입력해주세요." />
+      <StyledInput
+        ref={SearchInputRef}
+        placeholder="검색할 책을 입력해주세요."
+      />
     );
   };
 

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useFormContext } from "react-hook-form";
 
-const AuthInput = ({ placeholder, type, name, validation }: any) => {
+const Input = ({ placeholder, type, name, validation }: any) => {
   const {
     register,
     formState: { errors },
@@ -12,7 +12,7 @@ const AuthInput = ({ placeholder, type, name, validation }: any) => {
     <>
       <Label htmlFor={name}>{placeholder}</Label>
       {/* placeholder는 스크린 리더가 읽지 못할 수도 있기 때문에 label를 추가해주어야 한다. */}
-      <Input
+      <StyledInput
         placeholder={placeholder}
         type={type}
         {...register(name, validation)}
@@ -31,7 +31,7 @@ const Label = styled.label`
   width: 100%;
 `;
 
-export const Input = styled.input`
+export const StyledInput = styled.input`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid lightgray;
@@ -48,4 +48,4 @@ const ErrorMessage = styled.p`
   width: 100%;
 `;
 
-export default AuthInput;
+export default Input;

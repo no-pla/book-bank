@@ -12,7 +12,7 @@ import {
   FormContainer,
   ToggleLink,
 } from "./LogInForm";
-import AuthInput from "../Custom/AuthInput";
+import Input from "../Custom/Input";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
 
@@ -85,7 +85,7 @@ const SignUpForm = () => {
         <h1>회원가입</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -100,7 +100,7 @@ const SignUpForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,
@@ -116,7 +116,7 @@ const SignUpForm = () => {
               type="password"
               name="password"
             />
-            <AuthInput
+            <Input
               validation={{
                 validate: (value: string) =>
                   value === methods.watch("password") ||
@@ -130,7 +130,7 @@ const SignUpForm = () => {
               type="password"
               name="password_confirm"
             />
-            <AuthInput
+            <Input
               validation={{
                 minLength: {
                   value: 2,

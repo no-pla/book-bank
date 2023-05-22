@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
-import AuthInput from "../Custom/AuthInput";
+import { FormProvider, useForm } from "react-hook-form";
+import Input from "../Custom/Input";
 import Image from "next/image";
 import { NO_IMAGE } from "@/share/server";
 import { FileInput } from "../Auth/UpdateProfileForm";
@@ -81,7 +81,7 @@ const UserDirectForm = () => {
             setSelectImage(event.target.files[0]);
           }}
         />
-        <AuthInput
+        <Input
           validation={{
             required: {
               value: true,
@@ -92,7 +92,7 @@ const UserDirectForm = () => {
           type="text"
           name="title"
         />
-        <AuthInput
+        <Input
           validation={{
             required: {
               value: true,
@@ -103,7 +103,7 @@ const UserDirectForm = () => {
           type="text"
           name="authors"
         />
-        <AuthInput
+        <Input
           validation={{
             required: {
               value: true,
@@ -114,7 +114,7 @@ const UserDirectForm = () => {
           type="text"
           name="publisher"
         />
-        <AuthInput
+        <Input
           validation={{
             required: {
               value: true,

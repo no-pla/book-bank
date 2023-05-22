@@ -51,8 +51,6 @@ const ReviewItem = () => {
     }
   };
 
-  console.log(myBookReviews);
-
   return (
     <BookListContainer>
       <ul>
