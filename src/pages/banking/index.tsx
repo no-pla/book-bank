@@ -26,20 +26,20 @@ export interface IBookData {
 }
 
 const Index = ({ currentUser }: any) => {
-  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
   const router = useRouter();
   const queryClient = useQueryClient();
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
-  const MAX_BOOK = 10;
+  const totalBook = userInfo?.length || 0;
+  const totalAmount =
+    userInfo
+      ?.reduce((cur: number, acc: IBookData) => {
+        return cur + acc.price;
+      }, 0)
+      .toLocaleString("ko-KR") || 0;
 
-  const fetchMyBookReivewList = async (pageParam: number) => {
-    return await axios.get(
-      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&uid=${currentUser?.uid}`
-    );
-  };
   useEffect(() => {
     queryClient.resetQueries();
     queryClient.invalidateQueries("getMyBookList");
@@ -49,20 +49,27 @@ const Index = ({ currentUser }: any) => {
     }
   }, []);
 
+  const onShare = async () => {
+    await window.Kakao.Share.sendDefault({
+      objectType: "text",
+      text: `${currentUser?.displayName} 님은 총 ${totalAmount}권(${totalAmount}원)을 읽었습니다.`,
+      link: {
+        // [내 애플리케이션] > [플랫폼] 에서 등록한 사이트 도메인과 일치해야 함
+        mobileWebUrl: "https://developers.kakao.com",
+        webUrl: "https://developers.kakao.com",
+      },
+    });
+  };
+
   return (
     <Section>
       <DataItemContainer>
         <BankBookData>
           <BankBookInfo>
-            {userInfo
-              ?.reduce((cur: number, acc: IBookData) => {
-                return cur + acc.price;
-              }, 0)
-              .toLocaleString("ko-KR") || 0}
-            원&nbsp;({userInfo?.length || 0}권)
+            {totalAmount}원&nbsp;({totalBook}권)
           </BankBookInfo>
           <BankBookInfoButtonContainer>
-            <button>공유</button>
+            <button onClick={onShare}>공유</button>
             <button onClick={() => router.push("/banking/deposit")}>
               입금하기
             </button>
