@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { useInfiniteQuery } from "react-query";
@@ -8,8 +8,10 @@ import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { BookDesc } from "./ReviewForm";
 import { BookListItem } from "./SearchForm";
+import useAuth from "../Hooks/useAuth";
 
-const ReviewItem = ({ currentUser }: any) => {
+const ReviewItem = () => {
+  const currentUser = useAuth();
   const userInfo = useUser(currentUser?.uid);
   const MAX_BOOK = 10;
   const setMyBookData = useSetRecoilState(selectMyBookState);
@@ -48,6 +50,8 @@ const ReviewItem = ({ currentUser }: any) => {
       setIsEdit(!isEdit);
     }
   };
+
+  console.log(myBookReviews);
 
   return (
     <BookListContainer>

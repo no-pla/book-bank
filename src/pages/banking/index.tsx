@@ -34,26 +34,6 @@ const Index = ({ currentUser }: any) => {
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
   const MAX_BOOK = 10;
-  const {
-    data: myBookReviews,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(
-    "getMyBookList",
-    ({ pageParam = 1 }) => fetchMyBookReivewList(pageParam),
-    {
-      enabled: !!currentUser?.uid,
-      notifyOnChangeProps: "tracked",
-      getNextPageParam: (_lastPage, pages) => {
-        if (pages.length < Math.ceil(userInfo?.length / MAX_BOOK)) {
-          return pages.length + 1;
-        } else {
-          return undefined;
-        }
-      },
-    }
-  );
-  console.log(targetMyBookData);
 
   const fetchMyBookReivewList = async (pageParam: number) => {
     return await axios.get(
