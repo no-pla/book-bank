@@ -50,13 +50,13 @@ const Index = ({ currentUser }: any) => {
   }, []);
 
   const onShare = async () => {
-    await window.Kakao.Share.sendDefault({
-      objectType: "text",
-      text: `${currentUser?.displayName} 님은 총 ${totalAmount}권(${totalAmount}원)을 읽었습니다.`,
-      link: {
-        // [내 애플리케이션] > [플랫폼] 에서 등록한 사이트 도메인과 일치해야 함
-        mobileWebUrl: "https://developers.kakao.com",
-        webUrl: "https://developers.kakao.com",
+    await window.Kakao.Share.sendCustom({
+      templateId: 94039,
+      templateArgs: {
+        totalBook,
+        totalAmount,
+        userProfile: currentUser?.photoURL,
+        userName: currentUser?.displayName,
       },
     });
   };
