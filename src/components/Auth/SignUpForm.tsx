@@ -8,15 +8,11 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import {
   Button,
   Container,
-  Description,
   Form,
   FormContainer,
-  Icon,
-  Title,
-  TitleContainer,
   ToggleLink,
 } from "./LogInForm";
-import AuthInput from "../Custom/AuthInput";
+import Input from "../Custom/Input";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
 
@@ -86,14 +82,10 @@ const SignUpForm = () => {
         />
       )}
       <FormContainer>
-        <TitleContainer>
-          <Description>당신의 독서를 저금하세요.</Description>
-          <Title>북 뱅크</Title>
-          <Icon>📚</Icon>
-        </TitleContainer>
+        <h1>회원가입</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -108,7 +100,7 @@ const SignUpForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,
@@ -124,7 +116,7 @@ const SignUpForm = () => {
               type="password"
               name="password"
             />
-            <AuthInput
+            <Input
               validation={{
                 validate: (value: string) =>
                   value === methods.watch("password") ||
@@ -138,7 +130,7 @@ const SignUpForm = () => {
               type="password"
               name="password_confirm"
             />
-            <AuthInput
+            <Input
               validation={{
                 minLength: {
                   value: 2,

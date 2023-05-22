@@ -4,23 +4,28 @@ import styled from "@emotion/styled";
 import { useRecoilValue } from "recoil";
 import { useRouter } from "next/router";
 import useAuth from "../Hooks/useAuth";
-import { selectBookState } from "@/share/atom";
+import { selectBookState, userDirectFormState } from "@/share/atom";
 import { useAddBook } from "../Hooks/useBanking";
-import CustomButton from "../Custom/CustomButton";
-import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
+import Image from "next/image";
+import { NO_IMAGE } from "@/share/server";
+import UserDirectForm from "./UserDirectForm";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
   const router = useRouter();
-  const { isShowing, toggle } = useModal();
   const targetBookData = useRecoilValue<any>(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
+  const userDirectFormData = useRecoilValue(userDirectFormState);
 
   const ReviewArea = () => {
     return (
-      <TextArea ref={ReviewAreaRef} placeholder="후기를 적어주세요. (선택)" />
+      <TextArea
+        ref={ReviewAreaRef}
+        placeholder="후기를 적어주세요. (선택)"
+        id="review"
+      />
     );
   };
 
@@ -29,13 +34,13 @@ const ReviewForm = () => {
     const newBookReview = {
       title: targetBookData.title,
       publisher: targetBookData.publisher,
-      price: targetBookData?.price || "금액 정보 없음",
+      price: targetBookData?.price || 0,
       id: uuid_v4(),
       authors:
         targetBookData?.authors.length !== 0
           ? targetBookData?.authors
-          : [" 정보 없음"],
-      thumbnail: targetBookData?.thumbnail || "",
+          : ["정보 없음"],
+      thumbnail: targetBookData?.thumbnail || NO_IMAGE,
       review: ReviewAreaRef.current?.value,
       uid: currentUser.uid,
       createdAt: Date.now(),
@@ -52,79 +57,100 @@ const ReviewForm = () => {
   };
 
   return (
-    <ReviewFormContainer>
-      {isShowing && (
-        <ErrorModal
-          title="리뷰 작성 중 에러가 발생했습니다."
-          content="다시 시도해 주세요."
-          toggle={toggle}
-        />
-      )}
-      {Object.keys(targetBookData).length > 0 && (
-        <div>
-          <BookInfo>
-            {targetBookData?.title} -&nbsp;
-            {targetBookData.authors.length === 0
-              ? "정보 없음"
-              : targetBookData.authors.join(", ")}
-          </BookInfo>
-          <FormContainer>
-            <ReviewWriteForm onSubmit={(event) => onSubmitReview(event)}>
-              <ReviewArea />
-              <CustomButton value="책 저금하기" type="submit" />
-            </ReviewWriteForm>
-          </FormContainer>
-        </div>
-      )}
-    </ReviewFormContainer>
+    <div>
+      <ReviewFormContainer>
+        {userDirectFormData && <UserDirectForm />}
+        {Object.keys(targetBookData).length > 0 && (
+          <form onSubmit={(event) => onSubmitReview(event)}>
+            <BookTitle>{targetBookData?.title}</BookTitle>
+            <BookDescriptionConatiner>
+              <Image
+                src={targetBookData.thumbnail || NO_IMAGE}
+                height={150}
+                width={100}
+                alt={`${targetBookData.title}의 책표지입니다. `}
+              />
+              <BookDesc>
+                <div>
+                  {targetBookData.authors.length === 0
+                    ? "정보 없음"
+                    : targetBookData.authors.join(", ")}
+                </div>
+                <div>{targetBookData.publisher}</div>
+                <div>{targetBookData.price.toLocaleString()}</div>
+              </BookDesc>
+            </BookDescriptionConatiner>
+            <TextAreaLabel htmlFor="review">후기</TextAreaLabel>
+            <ReviewArea />
+            <SubmitButton>기록 남기기</SubmitButton>
+          </form>
+        )}
+      </ReviewFormContainer>
+    </div>
   );
 };
 
 export default ReviewForm;
 
-const BookInfo = styled.div`
-  padding: 16px;
-  font-weight: 700;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+export const BookTitle = styled.div`
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin-bottom: 24px;
 `;
 
-const ReviewFormContainer = styled.section`
-  height: calc(100vh - 16px);
-  background-color: var(--bg-color);
-  > div {
-    margin: 8px;
-    border-radius: 12px;
-    box-sizing: border-box;
-    background-color: whitesmoke;
-    text-align: center;
-    height: 100%;
-  }
-`;
-
-const ReviewWriteForm = styled.form`
-  border-radius: 4px;
+const ReviewFormContainer = styled.div`
+  width: 100%;
+  background-color: whitesmoke;
   height: 100%;
-  padding: 12px;
+  border-radius: 12px;
+  padding: 20px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  > button {
-    color: var(--point-color1);
-    border: 1px solid var(--point-color1);
-  }
 `;
 
 const TextArea = styled.textarea`
   border: none;
   resize: none;
   border-radius: 4px;
-  height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+  height: 260px;
   padding: 12px;
+  margin: 20px 0;
 `;
 
-const FormContainer = styled.div`
-  height: calc(100% - 72px);
+const TextAreaLabel = styled.label`
+  font-weight: 800;
+  font-size: 1.2rem;
+`;
+
+const BookDescriptionConatiner = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+`;
+
+export const BookDesc = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  line-height: normal;
+  > div:nth-of-type(1)::before {
+    content: "작가: ";
+  }
+  > div:nth-of-type(2)::before {
+    content: "출판사: ";
+  }
+  > div:nth-of-type(3)::before {
+    content: "가격: ";
+  }
+`;
+
+const SubmitButton = styled.button`
+  background-color: var(--sub-main-color);
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--main-color);
+  border-radius: 8px;
+  cursor: pointer;
 `;

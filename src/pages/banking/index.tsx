@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import styled from "@emotion/styled";
+import axios from "axios";
 import { useRouter } from "next/router";
-import { useQueryClient } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useInfiniteQuery, useQueryClient } from "react-query";
+import styled from "@emotion/styled";
 import useUser from "@/components/Hooks/useUser";
-import EditForm from "@/components/Banking/EditForm";
 import ReviewItem from "@/components/Banking/ReviewItem";
-import CustomButton from "@/components/Custom/CustomButton";
-import { isFormEdit, selectMyBookState } from "@/share/atom";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
+import { DB_LINK } from "@/share/server";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 export interface IBookData {
   id: string;
@@ -32,6 +32,13 @@ const Index = ({ currentUser }: any) => {
   const setIsEdit = useSetRecoilState(isFormEdit);
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const userInfo = useUser(currentUser?.uid);
+  const totalBook = userInfo?.length || 0;
+  const totalAmount =
+    userInfo
+      ?.reduce((cur: number, acc: IBookData) => {
+        return cur + acc.price;
+      }, 0)
+      .toLocaleString("ko-KR") || 0;
 
   useEffect(() => {
     queryClient.resetQueries();
@@ -42,87 +49,86 @@ const Index = ({ currentUser }: any) => {
     }
   }, []);
 
+  const onShare = async () => {
+    await window.Kakao.Share.sendCustom({
+      templateId: 94039,
+      templateArgs: {
+        totalBook,
+        totalAmount,
+        userProfile: currentUser?.photoURL,
+        userName: currentUser?.displayName,
+      },
+    });
+  };
+
   return (
     <Section>
-      <UserInfoBox>
-        <CustomButton value="뒤로" onClick={() => router.push("/")} />
-        {userInfo
-          ?.reduce((cur: number, acc: IBookData) => {
-            return cur + acc.price;
-          }, 0)
-          .toLocaleString("ko-KR") || 0}
-        원&nbsp;(총 {userInfo?.length}권)
-        <ButtonContainer>
-          <CustomButton
-            value="입금하러 가기"
-            onClick={() => router.push("/banking/deposit")}
-          />
-          <CustomButton value="공유하기" />
-        </ButtonContainer>
-      </UserInfoBox>
-      <Conatiner>
-        {/* 전체 리스트 */}
-        <ReviewItem currentUser={currentUser} />
-        {/* 상세 정보 */}
-        {!isEdit ? (
-          <ReviewDetailItem />
-        ) : (
-          // 수정용 폼
-          <EditForm />
-        )}
-      </Conatiner>
+      <DataItemContainer>
+        <BankBookData>
+          <BankBookInfo>
+            {totalAmount}원&nbsp;({totalBook}권)
+          </BankBookInfo>
+          <BankBookInfoButtonContainer>
+            <button onClick={onShare}>공유</button>
+            <button onClick={() => router.push("/banking/deposit")}>
+              입금하기
+            </button>
+          </BankBookInfoButtonContainer>
+        </BankBookData>
+        <ReviewItem />
+      </DataItemContainer>
+      <ReviewDetailItem />
     </Section>
   );
 };
 
-const Section = styled.section`
-  height: 100vh;
-  width: 100vw;
-`;
-
-const UserInfoBox = styled.section`
+// 통장 정보란
+const BankBookData = styled.div`
+  background-color: #bfb0d1;
+  border-radius: 12px;
   height: 160px;
-  background-color: var(--point-color1);
+  padding: 20px 24px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
-  font-size: 1.3rem;
-  font-weight: 800;
-  width: 100%;
+  justify-content: flex-end;
   flex-direction: column;
-  gap: 12px;
   align-items: center;
-  > button {
-    display: none;
-  }
-  @media (max-width: 600px) {
-    width: 100vw;
-    height: calc(160px - 5vh);
-    margin-top: 5vh;
-  }
-  > button {
-    align-self: flex-start;
-    margin-left: 20px;
-    border: 1px solid var(--main-color);
-  }
 `;
 
-const Conatiner = styled.section`
-  height: calc(100vh - 160px);
-  overflow-y: scroll;
-  display: flex;
-  > * {
+const BankBookInfo = styled.div`
+  font-weight: 800;
+  font-size: 1.4rem;
+  transform: translateY(-150%);
+`;
+
+const BankBookInfoButtonContainer = styled.div`
+  width: 100%;
+  > button {
     width: 50%;
-  }
-`;
-
-const ButtonContainer = styled.div`
-  > button {
-    color: var(--text-color);
-    border: 1px solid var(--main-color);
+    padding: 2px 4px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
   }
   > button:first-of-type {
-    margin-right: 8px;
+    border-right: 1px solid lightgray;
   }
+`;
+
+const Section = styled.section`
+  height: 100%;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  gap: 20px;
+`;
+
+// 리뷰 인피티니 스크롤
+const DataItemContainer = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 export default Index;

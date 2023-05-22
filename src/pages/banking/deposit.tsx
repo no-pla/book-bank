@@ -22,10 +22,16 @@ const Deposit = () => {
 
 const DepositContainer = styled.div`
   display: flex;
-  width: 100vw;
-  height: 100vh;
-  > * {
+  height: 100%;
+  gap: 20px;
+  > div {
     width: 50%;
+    background-color: #bfb0d1;
+    border-radius: 12px;
+    padding: 20px;
+    box-sizing: border-box;
+
+    height: 100%;
   }
   @media (max-width: 600px) {
     align-items: flex-end;

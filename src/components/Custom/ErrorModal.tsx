@@ -11,7 +11,7 @@ import {
 
 const ErrorModal = ({ title, content, toggle }: any) => {
   return (
-    <div>
+    <>
       {createPortal(
         <ModalContainer>
           <Modal>
@@ -24,7 +24,7 @@ const ErrorModal = ({ title, content, toggle }: any) => {
         </ModalContainer>,
         document.getElementById("portal")!
       )}
-    </div>
+    </>
   );
 };
 

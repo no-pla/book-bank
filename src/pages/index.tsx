@@ -1,8 +1,9 @@
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
 import styled from "@emotion/styled";
-import { useQueryClient } from "react-query";
 import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
 
@@ -10,13 +11,32 @@ export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();
   const userInfo = useUser(currentUser?.uid);
 
+  // API 1일 500회 제한이므로 잠시 주석처리함
+  // const { data: keywords } = useQuery(
+  //   "getMonthlyKeyword",
+  //   async () => {
+  //     return await axios.get(
+  //       `http://data4library.kr/api/monthlyKeywords?authKey=${
+  //         process.env.NEXT_PUBLIC_BIG_DATA_KEY
+  //       }&month=${
+  //         new Date().getFullYear() +
+  //         "-" +
+  //         String(new Date().getMonth()).padStart(2, "0")
+  //       }&format=json`
+  //     );
+  //   },
+  //   {
+  //     select: (data) => data?.data.response.keywords.slice(0, 5),
+  //   }
+  // );
+
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
   }, []);
 
   return (
-    <InfoContainer>
-      <DataInfo>
+    <Container>
+      <InfoContainer>
         <UserInfo>
           <Image
             src={
@@ -26,107 +46,156 @@ export default function Home({ currentUser }: any) {
             height={100}
             width={100}
             alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
-            style={{ borderRadius: "50%" }}
           />
-          <div>{currentUser?.displayName || "닉네임 없음"}</div>
-          <Link href="/user/setting">⚙️ 프로필 설정</Link>
+          <UserName>{currentUser?.displayName || "닉네임 없음"}</UserName>
+          <Link href="/user/setting">프로필 설정</Link>
         </UserInfo>
         <BankingInfo>
-          <BankingName>
+          <BankName>
             {currentUser?.displayName || "닉네임 없음"}&nbsp;님의 독서 통장
-          </BankingName>
-          <TotalAmount>
+          </BankName>
+          <BankAmount>
             {userInfo
               ?.reduce((cur: number, acc: any) => {
                 return cur + acc.price;
               }, 0)
               .toLocaleString("ko-KR") || 0}
-            원
-          </TotalAmount>
-          <BankingType>
+          </BankAmount>
+          <BankPage>
             <Link href="/banking">내역 보기</Link>
             <Link href="/banking/deposit">입금하기</Link>
-          </BankingType>
+          </BankPage>
         </BankingInfo>
-      </DataInfo>
+        {/* API 횟수 제한으로 임시 주석 처리 */}
+        <RankingInfo>
+          <RankingTitle>최근 인기 도서 키워드</RankingTitle>
+          <RankingList>
+            {/* {keywords?.map(({ keyword }: any, index: number) => {
+              return (
+                <li key={index}>
+                  {index + 1}.&nbsp;{keyword?.word}
+                </li>
+              );
+            })} */}
+          </RankingList>
+        </RankingInfo>
+      </InfoContainer>
       <Chart currentUser={currentUser} />
-    </InfoContainer>
+    </Container>
   );
 }
 
-const DataInfo = styled.div`
+const Container = styled.div`
+  width: 100%;
   display: flex;
-  gap: 12px;
-  height: 100%;
-  max-height: 200px;
+  flex-direction: column;
+  gap: 100px;
   @media (max-width: 600px) {
-    flex-direction: column;
-    padding-top: 10%;
-    height: 100%;
-    max-height: 400px;
+    gap: 60px;
   }
 `;
 
 const InfoContainer = styled.section`
   display: flex;
-  flex-direction: column;
-  padding: 20px 12px 4px 12px;
-  gap: 12px;
-  box-sizing: border-box;
-  width: 100vw;
-  height: 100vh;
-  justify-content: flex-start;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
   @media (max-width: 600px) {
     flex-direction: column;
-    margin-top: 12px;
   }
 `;
 
 const UserInfo = styled.section`
-  background-color: var(--main-color);
-  box-sizing: border-box;
-  border-radius: 12px;
-  height: calc(min(100%, 200px));
+  width: 20vw;
+  background-color: var(--sub-main-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
-  width: 40%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  height: 200px;
+  > img {
+    border-radius: 50%;
+    margin: 20px 0;
+    object-fit: cover;
+  }
+  a {
+    font-size: 0.9rem;
+  }
   @media (max-width: 600px) {
     width: 100%;
   }
+`;
+
+const UserName = styled.div`
+  margin-bottom: 16px;
+  font-weight: 800;
 `;
 
 const BankingInfo = styled.section`
-  width: 60%;
-  background-color: var(--main-color);
+  width: 60vw;
+  background-color: var(--sub-main-color);
   box-sizing: border-box;
   border-radius: 12px;
-  height: calc(min(100%, 200px));
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 600px;
   justify-content: space-around;
   @media (max-width: 600px) {
     width: 100%;
+    height: 200px;
   }
 `;
 
-const BankingType = styled.div`
-  display: flex;
+const BankName = styled.div`
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  font-weight: 700;
+`;
+
+const BankAmount = styled.span`
+  font-weight: 800;
+  font-size: 1.6rem;
+  &::after {
+    content: "원";
+  }
+`;
+
+const BankPage = styled.div`
+  > a {
+    cursor: pointer;
+  }
   > a:first-of-type::after {
     content: "|";
     padding: 0 12px;
   }
 `;
 
-export const TotalAmount = styled.span`
-  font-weight: 800;
-  font-size: 2rem;
+const RankingInfo = styled.section`
+  width: 20vw;
+  background-color: var(--sub-main-color);
+  border-radius: 20px;
+  padding: 12px;
+  box-sizing: border-box;
+  text-align: center;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
-const BankingName = styled.div`
+const RankingTitle = styled.div`
+  font-weight: 800;
+  margin: 8px 0;
+`;
+
+const RankingList = styled.ul`
+  margin-top: 4px;
+  border-radius: 12px;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   text-align: left;
-  width: 90%;
 `;

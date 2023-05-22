@@ -8,7 +8,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import AuthInput from "../Custom/AuthInput";
+import Input from "../Custom/Input";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import CustomButton from "../Custom/CustomButton";
 import ErrorModal from "../Custom/ErrorModal";
@@ -87,14 +87,10 @@ const LoginForm = () => {
         />
       )}
       <FormContainer>
-        <TitleContainer>
-          <Description>당신의 독서를 저금하세요.</Description>
-          <Title>북 뱅크</Title>
-          <Icon>📚</Icon>
-        </TitleContainer>
+        <h1>로그인</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -109,7 +105,7 @@ const LoginForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,
@@ -140,7 +136,7 @@ const LoginForm = () => {
 export default LoginForm;
 
 export const ToggleLink = styled(Link)`
-  color: var(--text-color);
+  color: whitesmoke;
   text-decoration: none;
   margin: 20px 0;
 `;
@@ -151,23 +147,22 @@ export const Container = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 62px;
-  width: 100%;
   color: var(--text-color);
-  height: 100vh;
-`;
-
-export const Icon = styled.div`
-  font-size: 4rem;
 `;
 
 export const FormContainer = styled.div`
+  color: whitesmoke;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: min(60%, 600px);
-  background-color: rgba(255, 255, 255, 0.3);
   padding: 40px;
   border-radius: 8px;
+  > h1 {
+    margin-bottom: 40px;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
   > div:last-of-type > button {
     color: #db4437;
     border: 2px solid #db4437;
@@ -197,14 +192,4 @@ export const TitleContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-bottom: 60px;
-`;
-
-export const Description = styled.p`
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-`;
-
-export const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 20px;
 `;

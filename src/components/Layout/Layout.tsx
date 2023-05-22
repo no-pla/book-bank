@@ -5,19 +5,28 @@ import { useRouter } from "next/router";
 
 const Layout = ({ children }: any) => {
   const router = useRouter();
+
   return (
-    <LayoutContainer>
-      {router.pathname !== "/login" && router.pathname !== "/register" && (
-        <Navigation />
+    <>
+      {router.pathname !== "/login" && router.pathname !== "/register" ? (
+        <LayoutContainer>
+          <Navigation />
+          <div>{children}</div>
+        </LayoutContainer>
+      ) : (
+        <div>{children}</div>
       )}
-      {children}
-    </LayoutContainer>
+    </>
   );
 };
 
 export default Layout;
 
 const LayoutContainer = styled.div`
-  display: flex;
-  width: 100vw;
+  max-width: 1960px;
+  margin: 60px auto 40px;
+  > div {
+    padding: 20px 24px 0;
+    height: calc(100vh - 120px);
+  }
 `;

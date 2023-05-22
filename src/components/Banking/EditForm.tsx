@@ -6,7 +6,7 @@ import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../Hooks/useBanking";
 import CustomButton from "../Custom/CustomButton";
 import ConfirmModal from "../Custom/ConfirmModal";
-import { Input } from "../Custom/AuthInput";
+import { StyledInput } from "../Custom/Input";
 import useModal from "../Hooks/useModal";
 
 interface IEditData {
@@ -70,7 +70,7 @@ const EditForm = () => {
       )}
       <Form onSubmit={handleSubmit((data) => onEdit(data))}>
         <Label htmlFor="title">책 제목</Label>
-        <Input
+        <StyledInput
           {...register("title", {
             required: {
               value: true,
@@ -85,7 +85,7 @@ const EditForm = () => {
             errors.title.message?.toString()}
         </p>
         <Label htmlFor="authors">작가</Label>
-        <Input
+        <StyledInput
           {...register("authors", {
             required: {
               value: true,
@@ -100,7 +100,7 @@ const EditForm = () => {
             errors.authors.message?.toString()}
         </p>
         <Label htmlFor="publisher">출판사</Label>
-        <Input
+        <StyledInput
           {...register("publisher", {
             required: {
               value: true,
@@ -115,7 +115,7 @@ const EditForm = () => {
             errors.publisher.message?.toString()}
         </p>
         <Label htmlFor="price">가격</Label>
-        <Input
+        <StyledInput
           {...register("price", {
             pattern: {
               value: /^\d+$/,
@@ -160,6 +160,7 @@ const Form = styled.form`
   border-radius: 4px;
   padding: 12px;
   box-sizing: border-box;
+  height: 100%;
   display: flex;
   flex-direction: column;
   > button:first-of-type {
@@ -178,6 +179,7 @@ export const TextArea = styled.textarea`
   resize: none;
   border-radius: 4px;
   height: 100%;
+  padding: 12px;
 `;
 
 const Label = styled.label`

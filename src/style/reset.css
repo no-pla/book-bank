@@ -1,7 +1,8 @@
 :root {
   --bg-color: #eaebe7;
-  --text-color: #2c2d31;
-  --main-color: #d1d1e0;
+  --text-color: #161223;
+  --main-color: #8067a9;
+  --sub-main-color: #bfb0d1;
   --point-color1: #30e0a1;
   --point-color2: #eb7050;
 }
@@ -114,6 +115,8 @@ section {
 }
 body {
   line-height: 1;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 ol,
 ul {
@@ -133,11 +136,6 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
-}
-
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
 }
 
 a {

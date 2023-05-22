@@ -15,7 +15,7 @@ export const isFormEdit = atom<boolean>({
   default: false,
 });
 
-export const showDetailBookReview = atom<boolean>({
-  key: "showDetailBookReview",
+export const userDirectFormState = atom<boolean>({
+  key: "userDirectFormState",
   default: false,
 });
