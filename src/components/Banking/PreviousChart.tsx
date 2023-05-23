@@ -71,8 +71,8 @@ const PreviousChart = () => {
     <Section>
       <Title>연간 독서량</Title>
       <div>
-        <span>연도 선택:&nbsp;</span>
-        <select
+        <SelectYear>연도 선택:&nbsp;</SelectYear>
+        <Select
           onChange={(event) => {
             setTargetYser(+event?.currentTarget?.value);
           }}
@@ -84,7 +84,7 @@ const PreviousChart = () => {
               </option>
             );
           })}
-        </select>
+        </Select>
       </div>
       <DynamicChart
         series={isFetched ? data : defaultData}
@@ -93,7 +93,11 @@ const PreviousChart = () => {
         options={{
           chart: {
             type: "bar",
-            height: 350,
+            height: 450,
+            fontFamily: "Dongle",
+          },
+          fill: {
+            colors: ["#8067a9"],
           },
           xaxis: {
             categories: [
@@ -119,7 +123,7 @@ const PreviousChart = () => {
             },
             offsetY: -20,
             style: {
-              fontSize: "12px",
+              fontSize: "1rem",
               colors: ["#304758"],
             },
           },
@@ -141,4 +145,12 @@ export default PreviousChart;
 
 const Section = styled.section`
   margin: 12px;
+`;
+
+const SelectYear = styled.span`
+  font-size: 1.3rem;
+`;
+
+const Select = styled.select`
+  font-size: 1rem;
 `;

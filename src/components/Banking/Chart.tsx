@@ -79,7 +79,9 @@ const Chart = ({ currentUser }: any) => {
           options={{
             chart: {
               type: "heatmap",
+              fontFamily: "Dongle",
             },
+
             xaxis: {
               type: "category",
               categories: [

@@ -72,11 +72,7 @@ const UpdateProfileForm = () => {
             <div>
               <Image
                 id="preview-image"
-                src={
-                  imageURL
-                    ? imageURL
-                    : "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
-                }
+                src={imageURL ? imageURL : currentUser?.photoURL}
                 height={100}
                 width={100}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
@@ -143,7 +139,7 @@ const Input = styled.input`
 
 export const Title = styled.h2`
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.4em;
   margin-bottom: 20px;
 `;
 

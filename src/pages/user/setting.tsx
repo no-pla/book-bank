@@ -121,4 +121,5 @@ const WithdrawalButton = styled.button`
   display: flex;
   justify-content: flex-end;
   margin: 8px;
+  font-size: 0.8rem;
 `;

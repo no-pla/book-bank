@@ -6,29 +6,29 @@ import Image from "next/image";
 import styled from "@emotion/styled";
 import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
+import { FiSettings } from "react-icons/fi";
 
 export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();
   const userInfo = useUser(currentUser?.uid);
 
-  // API 1일 500회 제한이므로 잠시 주석처리함
-  // const { data: keywords } = useQuery(
-  //   "getMonthlyKeyword",
-  //   async () => {
-  //     return await axios.get(
-  //       `http://data4library.kr/api/monthlyKeywords?authKey=${
-  //         process.env.NEXT_PUBLIC_BIG_DATA_KEY
-  //       }&month=${
-  //         new Date().getFullYear() +
-  //         "-" +
-  //         String(new Date().getMonth()).padStart(2, "0")
-  //       }&format=json`
-  //     );
-  //   },
-  //   {
-  //     select: (data) => data?.data.response.keywords.slice(0, 5),
-  //   }
-  // );
+  const { data: keywords } = useQuery(
+    "getMonthlyKeyword",
+    async () => {
+      return await axios.get(
+        `http://data4library.kr/api/monthlyKeywords?authKey=${
+          process.env.NEXT_PUBLIC_BIG_DATA_KEY
+        }&month=${
+          new Date().getFullYear() +
+          "-" +
+          String(new Date().getMonth()).padStart(2, "0")
+        }&format=json`
+      );
+    },
+    {
+      select: (data) => data?.data.response.keywords.slice(0, 10),
+    }
+  );
 
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
@@ -48,7 +48,12 @@ export default function Home({ currentUser }: any) {
             alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
           />
           <UserName>{currentUser?.displayName || "닉네임 없음"}</UserName>
-          <Link href="/user/setting">프로필 설정</Link>
+          <Link href="/user/setting">
+            <span>
+              <FiSettings />
+              프로필 설정
+            </span>
+          </Link>
         </UserInfo>
         <BankingInfo>
           <BankName>
@@ -66,17 +71,16 @@ export default function Home({ currentUser }: any) {
             <Link href="/banking/deposit">입금하기</Link>
           </BankPage>
         </BankingInfo>
-        {/* API 횟수 제한으로 임시 주석 처리 */}
         <RankingInfo>
           <RankingTitle>최근 인기 도서 키워드</RankingTitle>
           <RankingList>
-            {/* {keywords?.map(({ keyword }: any, index: number) => {
+            {keywords?.map(({ keyword }: any, index: number) => {
               return (
                 <li key={index}>
                   {index + 1}.&nbsp;{keyword?.word}
                 </li>
               );
-            })} */}
+            })}
           </RankingList>
         </RankingInfo>
       </InfoContainer>
@@ -90,6 +94,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 100px;
+  @media (max-width: 768px) {
+    gap: 250px;
+  }
   @media (max-width: 600px) {
     gap: 60px;
   }
@@ -99,9 +106,13 @@ const InfoContainer = styled.section`
   display: flex;
   gap: 20px;
   width: 100%;
-  height: 100%;
+  height: 200px;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
   @media (max-width: 600px) {
     flex-direction: column;
+    height: 100%;
   }
 `;
 
@@ -113,23 +124,33 @@ const UserInfo = styled.section`
   align-items: center;
   box-sizing: border-box;
   border-radius: 12px;
-  height: 200px;
+  box-sizing: border-box;
   > img {
     border-radius: 50%;
-    margin: 20px 0;
+    margin: 12px 0;
     object-fit: cover;
   }
-  a {
-    font-size: 0.9rem;
+  @media (max-width: 768px) {
+    order: -1;
+    width: 48%;
   }
   @media (max-width: 600px) {
     width: 100%;
+    padding: 20px 0;
+    box-sizing: border-box;
+  }
+  > a > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
   }
 `;
 
 const UserName = styled.div`
   margin-bottom: 16px;
   font-weight: 800;
+  font-size: 1.4rem;
 `;
 
 const BankingInfo = styled.section`
@@ -141,7 +162,13 @@ const BankingInfo = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  @media (max-width: 768px) {
+    order: 1;
+    width: 100%;
+    height: 100%;
+  }
   @media (max-width: 600px) {
+    order: 0;
     width: 100%;
     height: 200px;
   }
@@ -151,12 +178,13 @@ const BankName = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 1.4rem;
 `;
 
 const BankAmount = styled.span`
   font-weight: 800;
-  font-size: 1.6rem;
+  font-size: 2rem;
   &::after {
     content: "원";
   }
@@ -179,6 +207,11 @@ const RankingInfo = styled.section`
   padding: 12px;
   box-sizing: border-box;
   text-align: center;
+  height: 100%;
+  overflow-y: scroll;
+  @media (max-width: 768px) {
+    width: 48%;
+  }
   @media (max-width: 600px) {
     width: 100%;
   }
@@ -187,11 +220,13 @@ const RankingInfo = styled.section`
 const RankingTitle = styled.div`
   font-weight: 800;
   margin: 8px 0;
+  font-size: 1.4rem;
 `;
 
 const RankingList = styled.ul`
   margin-top: 4px;
   border-radius: 12px;
+  overflow-y: scroll;
   padding: 12px;
   box-sizing: border-box;
   display: flex;
