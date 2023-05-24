@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { auth } from "@/share/firebase";
 import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiHamburgerMenu, GiOpenBook } from "react-icons/gi";
 
 const Navigation = () => {
   const { isShowing, toggle } = useModal();
@@ -21,7 +21,10 @@ const Navigation = () => {
   return (
     <Header>
       <HomeButton>
-        <Link href="/">📚&nbsp;Book Bank</Link>
+        <Link href="/">
+          <GiOpenBook />
+          <div>Book Bank</div>
+        </Link>
       </HomeButton>
       <ToggleMenuButton>
         <GiHamburgerMenu onClick={() => setToggleMenu((prev) => !prev)} />
@@ -50,6 +53,8 @@ const Header = styled.header`
   align-items: center;
   padding: 0 40px;
   box-sizing: border-box;
+  font-size: 1.3rem;
+  z-index: 100;
   box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
   -webkit-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
   -moz-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
@@ -60,7 +65,11 @@ const Header = styled.header`
 
 const HomeButton = styled.div`
   > a {
-    font-size: 1.2rem;
+    font-size: 1.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 `;
 
@@ -68,10 +77,10 @@ const MenuList = styled.div<{ toggleMenu: boolean }>`
   display: flex;
   gap: 12px;
   align-items: center;
-  font-size: 1rem;
   > button {
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 1.3rem;
+    font-weight: 100;
     background-color: transparent;
     border: none;
     cursor: pointer;
@@ -102,7 +111,6 @@ const ToggleMenuButton = styled.button`
   background-color: transparent;
   color: whitesmoke;
   border: none;
-  font-size: 1.1rem;
   padding: 0;
   height: fit-content;
   @media (max-width: 380px) {

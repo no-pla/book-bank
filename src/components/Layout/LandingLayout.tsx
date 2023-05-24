@@ -21,16 +21,23 @@ export default FormLayout;
 
 export const Icon = styled.div`
   font-size: 4rem;
+  @media (max-width: 375px) {
+    display: none;
+  }
 `;
 
 export const Description = styled.p`
-  font-size: 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 200;
   margin-bottom: 12px;
 `;
 
 export const Title = styled.h1`
   font-size: 2rem;
   margin-bottom: 20px;
+  @media (max-width: 375px) {
+    margin-bottom: 0;
+  }
 `;
 
 const Banner = styled.div`
@@ -49,6 +56,14 @@ const BannerContainer = styled.div`
     flex: 1;
     padding: 20px;
   }
+  @media (max-width: 768px) {
+    height: fit-content;
+    flex-direction: column;
+    height: min-content;
+    > div {
+      padding: 8px;
+    }
+  }
 `;
 
 const LayoutContainer = styled.div<{ LandingImage: any }>`
@@ -61,5 +76,6 @@ const LayoutContainer = styled.div<{ LandingImage: any }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow-y: scroll;
   color: whitesmoke;
 `;
