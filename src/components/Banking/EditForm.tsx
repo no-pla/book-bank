@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../Hooks/useBanking";
 import CustomButton from "../Custom/CustomButton";
 import ConfirmModal from "../Custom/ConfirmModal";
-import { StyledInput } from "../Custom/Input";
+import Input, { ErrorMessage, StyledInput } from "../Custom/Input";
 import useModal from "../Hooks/useModal";
+import Image from "next/image";
+import { NO_IMAGE } from "@/share/server";
+import { FileInput } from "../Auth/UpdateProfileForm";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { v4 as uuid_v4 } from "uuid";
+import { storage } from "@/share/firebase";
 
 interface IEditData {
   authors: string | string[];
@@ -24,12 +30,10 @@ const EditForm = () => {
   const setIsEdit = useSetRecoilState(isFormEdit);
   const targetMyBookData = useRecoilValue<any>(selectMyBookState);
   const setDetail = useSetRecoilState<any>(selectMyBookState);
+  const [selectImage, setSelectImage] = useState<any>(null);
+  const [imageURL, setImageURL] = useState<any>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const methods = useForm({
     defaultValues: {
       title: targetMyBookData?.title,
       price: targetMyBookData?.price,
@@ -45,18 +49,35 @@ const EditForm = () => {
       authors = authors.split(",").map((author: string) => author.trim());
     }
 
-    const editReview = {
-      ...targetMyBookData,
-      authors,
-      price: +data.price,
-      publisher: data.publisher,
-      review: data?.review,
-      title: data.title,
-    };
-    await updateReview(editReview);
-    setDetail(editReview);
-    setIsEdit(!isEdit);
+    try {
+      const storageRef = ref(storage, uuid_v4());
+      const snapshot = await uploadBytes(storageRef, selectImage);
+      const thumbnail = await getDownloadURL(snapshot.ref);
+
+      const editReview = {
+        ...targetMyBookData,
+        authors,
+        price: +data.price,
+        publisher: data.publisher,
+        review: data?.review,
+        title: data.title,
+        thumbnail: thumbnail ? thumbnail : targetMyBookData.thumbnail,
+      };
+
+      await updateReview(editReview);
+      setDetail(editReview);
+      setIsEdit(!isEdit);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    if (!selectImage) return;
+    const objectUrl = window.URL.createObjectURL(selectImage);
+    setImageURL(objectUrl);
+    return () => window.URL.revokeObjectURL(selectImage);
+  }, [selectImage]);
 
   return (
     <>
@@ -68,86 +89,92 @@ const EditForm = () => {
           onFunc={() => setIsEdit(!isEdit)}
         />
       )}
-      <Form onSubmit={handleSubmit((data) => onEdit(data))}>
-        <Label htmlFor="title">책 제목</Label>
-        <StyledInput
-          {...register("title", {
-            required: {
-              value: true,
-              message: "필수 입력값입니다.",
-            },
-          })}
-          placeholder="제목 (필수)"
-          id="title"
-        />
-        <p>
-          {errors.title?.type === "required" &&
-            errors.title.message?.toString()}
-        </p>
-        <Label htmlFor="authors">작가</Label>
-        <StyledInput
-          {...register("authors", {
-            required: {
-              value: true,
-              message: "필수 입력값입니다.",
-            },
-          })}
-          placeholder="작가 (필수)"
-          id="authors"
-        />
-        <p>
-          {errors.authors?.type === "required" &&
-            errors.authors.message?.toString()}
-        </p>
-        <Label htmlFor="publisher">출판사</Label>
-        <StyledInput
-          {...register("publisher", {
-            required: {
-              value: true,
-              message: "필수 입력값입니다.",
-            },
-          })}
-          placeholder="출판사 (필수)"
-          id="publisher"
-        />
-        <p>
-          {errors.publisher?.type === "required" &&
-            errors.publisher.message?.toString()}
-        </p>
-        <Label htmlFor="price">가격</Label>
-        <StyledInput
-          {...register("price", {
-            pattern: {
-              value: /^\d+$/,
-              message: "금액은 쉼표 없이 숫자만 입력해 주세요",
-            },
-            required: {
-              value: true,
-              message: "필수 입력값입니다.",
-            },
-          })}
-          placeholder="금액 (필수)"
-          id="price"
-        />
-        <p>
-          {(errors.price?.type === "required" &&
-            errors.price.message?.toString()) ||
-            (errors.price?.type === "pattern" &&
-              errors.price.message?.toString())}
-        </p>
-        <Label htmlFor="review">리뷰</Label>
-        <TextArea
-          {...register("review")}
-          placeholder="리뷰 (선택) 최대 500글자"
-          id="review"
-        />
-        <p>
-          {errors.review?.type === "maxLength" &&
-            errors.review.message?.toString()}
-        </p>
-        <CustomButton value="수정" type="submit" />
-        <CustomButton value="수정 취소" type="button" onClick={toggle} />
-      </Form>
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit((data) => onEdit(data))}>
+          <div>
+            <Image
+              id="preview-image"
+              src={imageURL ? imageURL : targetMyBookData?.thumbnail}
+              height={120}
+              width={80}
+              style={{ objectFit: "cover" }}
+              alt={"책표지 프리뷰입니다"}
+            />
+
+            <FileInput
+              type="file"
+              accept="image/*"
+              name="preview-image"
+              onChange={(event: any) => {
+                setSelectImage(event.target.files[0]);
+              }}
+            />
+          </div>
+          <Input
+            validation={{
+              required: {
+                value: true,
+                message: "필수 입력값입니다.",
+              },
+            }}
+            placeholder="책 제목"
+            type="text"
+            name="title"
+          />
+          <Input
+            validation={{
+              required: {
+                value: true,
+                message: "필수 입력값입니다.",
+              },
+            }}
+            placeholder="작가"
+            type="text"
+            name="authors"
+          />
+          {/* <p>작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.</p> */}
+          <Input
+            validation={{
+              required: {
+                value: true,
+                message: "필수 입력값입니다.",
+              },
+            }}
+            placeholder="출판사"
+            type="text"
+            name="publisher"
+          />
+          <Input
+            validation={{
+              required: {
+                value: true,
+                message: "필수 입력값입니다.",
+              },
+              pattern: {
+                value: /^\d+$/,
+                message: "금액은 쉼표 없이 숫자만 입력해 주세요",
+              },
+            }}
+            placeholder="가격"
+            type="text"
+            name="price"
+          />
+          <TextArea
+            {...methods.register("review", {
+              maxLength: {
+                value: 500,
+                message: "최대 500자까지 입력 가능합니다,",
+              },
+            })}
+          />
+          <ErrorMessage>
+            {methods.formState.errors.review?.type === "maxLength" &&
+              methods.formState.errors.review.message?.toString()}
+          </ErrorMessage>
+          <CustomButton value="수정" type="submit" />
+          <CustomButton value="수정 취소" type="button" onClick={toggle} />
+        </Form>
+      </FormProvider>
     </>
   );
 };
@@ -160,9 +187,10 @@ const Form = styled.form`
   border-radius: 4px;
   padding: 12px;
   box-sizing: border-box;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
   > button:first-of-type {
     color: var(--point-color1);
     border: 1px solid var(--point-color1);
@@ -172,14 +200,18 @@ const Form = styled.form`
     color: var(--point-color2);
     border: 1px solid var(--point-color2);
   }
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export const TextArea = styled.textarea`
   border: none;
   resize: none;
   border-radius: 4px;
-  height: 100%;
   padding: 12px;
+  height: 120px;
 `;
 
 const Label = styled.label`

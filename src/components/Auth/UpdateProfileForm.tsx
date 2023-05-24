@@ -165,6 +165,12 @@ const Profile = styled.div`
     border: 1px solid var(--point-color1);
     color: var(--point-color1);
   }
+  @media (max-width: 280px) {
+    img {
+      width: 80px;
+      height: 80px;
+    }
+  }
 `;
 
 export const FileInput = styled.input`
@@ -174,7 +180,6 @@ export const FileInput = styled.input`
     border-radius: 8px;
     border: 1px solid lightgray;
     margin-top: 8px;
-    margin-right: 8px;
     cursor: pointer;
   }
 `;

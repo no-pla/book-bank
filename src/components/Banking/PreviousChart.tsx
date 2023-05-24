@@ -144,6 +144,8 @@ const PreviousChart = () => {
 export default PreviousChart;
 
 const Section = styled.section`
+  z-index: -1;
+  position: relative;
   margin: 12px;
 `;
 

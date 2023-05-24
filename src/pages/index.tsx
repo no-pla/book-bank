@@ -94,6 +94,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 100px;
+  /* z-index: 0; */
   @media (max-width: 768px) {
     gap: 250px;
   }

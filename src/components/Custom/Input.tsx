@@ -38,9 +38,11 @@ export const StyledInput = styled.input`
   width: 100%;
   color: var(--text-color);
   box-sizing: border-box;
+  font-size: 1.2rem;
+  font-weight: 200;
 `;
 
-const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p`
   color: var(--point-color2);
   text-align: left;
   padding: 2px 0 4px 12px;

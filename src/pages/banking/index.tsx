@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useInfiniteQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import styled from "@emotion/styled";
 import useUser from "@/components/Hooks/useUser";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
-import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 export interface IBookData {
@@ -97,8 +95,8 @@ const BankBookData = styled.div`
 
 const BankBookInfo = styled.div`
   font-weight: 800;
-  font-size: 1.4rem;
-  transform: translateY(-150%);
+  font-size: 1.8rem;
+  transform: translateY(-80%);
 `;
 
 const BankBookInfoButtonContainer = styled.div`
@@ -109,6 +107,8 @@ const BankBookInfoButtonContainer = styled.div`
     border: none;
     background-color: transparent;
     cursor: pointer;
+    font-weight: 300;
+    font-size: 1rem;
   }
   > button:first-of-type {
     border-right: 1px solid lightgray;
@@ -121,6 +121,8 @@ const Section = styled.section`
   width: 100%;
   justify-content: space-between;
   gap: 20px;
+  position: relative;
+  z-index: -1;
 `;
 
 // 리뷰 인피티니 스크롤
@@ -129,6 +131,9 @@ const DataItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export default Index;

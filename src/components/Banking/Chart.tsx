@@ -3,6 +3,7 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
+import styled from "@emotion/styled";
 
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   /* next.js는 pre-rendering을 하는데 서버 사이드에서 코드를 실행할 때는
@@ -73,7 +74,7 @@ const Chart = ({ currentUser }: any) => {
   );
 
   return (
-    <>
+    <ChartContainer>
       {series && (
         <DynamicChart
           options={{
@@ -121,8 +122,13 @@ const Chart = ({ currentUser }: any) => {
           height={240}
         />
       )}
-    </>
+    </ChartContainer>
   );
 };
 
 export default Chart;
+
+const ChartContainer = styled.div`
+  position: relative;
+  z-index: -1;
+`;
