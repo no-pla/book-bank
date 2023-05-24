@@ -8,6 +8,7 @@ import {
   ModalContent,
   ModalTitle,
 } from "./ConfirmModal";
+import styled from "@emotion/styled";
 
 const ErrorModal = ({ title, content, toggle }: any) => {
   return (
@@ -18,7 +19,7 @@ const ErrorModal = ({ title, content, toggle }: any) => {
             <ModalTitle>{title}</ModalTitle>
             <ModalContent>{content}</ModalContent>
             <ModalButtonContainer>
-              <ModalButton onClick={toggle}>닫기</ModalButton>
+              <ErrorModalButton onClick={toggle}>닫기</ErrorModalButton>
             </ModalButtonContainer>
           </Modal>
         </ModalContainer>,
@@ -29,3 +30,13 @@ const ErrorModal = ({ title, content, toggle }: any) => {
 };
 
 export default ErrorModal;
+
+const ErrorModalButton = styled.button`
+  height: 100%;
+  width: 100%;
+  border: none;
+  border-top: 1px solid lightgray;
+  cursor: pointer;
+  background-color: transparent;
+  font-size: 1.2rem;
+`;

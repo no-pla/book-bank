@@ -74,13 +74,17 @@ export default function Home({ currentUser }: any) {
         <RankingInfo>
           <RankingTitle>최근 인기 도서 키워드</RankingTitle>
           <RankingList>
-            {keywords?.map(({ keyword }: any, index: number) => {
-              return (
-                <li key={index}>
-                  {index + 1}.&nbsp;{keyword?.word}
-                </li>
-              );
-            })}
+            {keywords ? (
+              keywords?.map(({ keyword }: any, index: number) => {
+                return (
+                  <li key={index}>
+                    {index + 1}.&nbsp;{keyword?.word}
+                  </li>
+                );
+              })
+            ) : (
+              <Message>최근 인기 키워드 데어터가 없습니다.</Message>
+            )}
           </RankingList>
         </RankingInfo>
       </InfoContainer>
@@ -236,4 +240,8 @@ const RankingList = styled.ul`
   text-align: left;
   font-weight: 300;
   font-size: 1.2rem;
+`;
+
+const Message = styled.p`
+  text-align: center;
 `;

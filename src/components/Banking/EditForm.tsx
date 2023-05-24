@@ -236,6 +236,7 @@ export const TextArea = styled.textarea`
 `;
 
 export const Message = styled.p`
-  font-weight: 100;
-  font-size: 0.9rem;
+  font-weight: 400;
+  font-size: 1rem;
+  width: 100%;
 `;

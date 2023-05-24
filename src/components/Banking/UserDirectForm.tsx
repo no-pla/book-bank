@@ -20,7 +20,6 @@ import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
 
 const UserDirectForm = () => {
-  const router = useRouter();
   const { isShowing, toggle } = useModal();
   const userDirectFormData = useSetRecoilState(userDirectFormState);
   const currentUser = useAuth();
@@ -65,6 +64,7 @@ const UserDirectForm = () => {
     try {
       await addNewBookReview(newBookReview);
     } catch (error) {
+      toggle();
       console.log(error);
     }
   };
