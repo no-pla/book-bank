@@ -6,10 +6,9 @@ import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../Hooks/useBanking";
 import CustomButton from "../Custom/CustomButton";
 import ConfirmModal from "../Custom/ConfirmModal";
-import Input, { ErrorMessage, StyledInput } from "../Custom/Input";
+import Input, { ErrorMessage } from "../Custom/Input";
 import useModal from "../Hooks/useModal";
 import Image from "next/image";
-import { NO_IMAGE } from "@/share/server";
 import { FileInput } from "../Auth/UpdateProfileForm";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
@@ -32,6 +31,7 @@ const EditForm = () => {
   const setDetail = useSetRecoilState<any>(selectMyBookState);
   const [selectImage, setSelectImage] = useState<any>(null);
   const [imageURL, setImageURL] = useState<any>(null);
+  const [errorMessage, setErrorMessage] = useState<string[]>([]);
 
   const methods = useForm({
     defaultValues: {
@@ -61,13 +61,18 @@ const EditForm = () => {
         publisher: data.publisher,
         review: data?.review,
         title: data.title,
-        thumbnail: thumbnail ? thumbnail : targetMyBookData.thumbnail,
+        thumbnail: selectImage ? thumbnail : targetMyBookData.thumbnail,
       };
 
       await updateReview(editReview);
       setDetail(editReview);
       setIsEdit(!isEdit);
     } catch (error) {
+      setErrorMessage([
+        "예기치 못한 오류가 발생했습니다!",
+        "다시 시도해 주세요.",
+      ]);
+      toggle();
       console.log(error);
     }
   };
@@ -79,12 +84,20 @@ const EditForm = () => {
     return () => window.URL.revokeObjectURL(selectImage);
   }, [selectImage]);
 
+  const onClickClose = () => {
+    setErrorMessage([
+      "정말로 수정을 취소할까요?",
+      "이 작업은 되돌릴 수 없습니다!",
+    ]);
+    toggle();
+  };
+
   return (
     <>
-      {isShowing === true && (
+      {isShowing && (
         <ConfirmModal
-          title="정말로 수정을 취소할까요?"
-          content="이 작업은 되돌릴 수 없습니다!"
+          title={errorMessage[0]}
+          content={errorMessage[1]}
           toggle={toggle}
           onFunc={() => setIsEdit(!isEdit)}
         />
@@ -132,7 +145,9 @@ const EditForm = () => {
             type="text"
             name="authors"
           />
-          {/* <p>작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.</p> */}
+          <Message>
+            작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
+          </Message>
           <Input
             validation={{
               required: {
@@ -172,7 +187,11 @@ const EditForm = () => {
               methods.formState.errors.review.message?.toString()}
           </ErrorMessage>
           <CustomButton value="수정" type="submit" />
-          <CustomButton value="수정 취소" type="button" onClick={toggle} />
+          <CustomButton
+            value="수정 취소"
+            type="button"
+            onClick={onClickClose}
+          />
         </Form>
       </FormProvider>
     </>
@@ -212,8 +231,11 @@ export const TextArea = styled.textarea`
   border-radius: 4px;
   padding: 12px;
   height: 120px;
+  font-size: 1.2rem;
+  font-weight: 100;
 `;
 
-const Label = styled.label`
-  margin: 8px 0;
+export const Message = styled.p`
+  font-weight: 100;
+  font-size: 0.9rem;
 `;

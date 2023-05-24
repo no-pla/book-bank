@@ -5,6 +5,7 @@ import { auth } from "@/share/firebase";
 import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
 import { GiHamburgerMenu, GiOpenBook } from "react-icons/gi";
+import ErrorModal from "../Custom/ErrorModal";
 
 const Navigation = () => {
   const { isShowing, toggle } = useModal();
@@ -19,23 +20,32 @@ const Navigation = () => {
   };
 
   return (
-    <Header>
-      <HomeButton>
-        <Link href="/">
-          <GiOpenBook />
-          <div>Book Bank</div>
-        </Link>
-      </HomeButton>
-      <ToggleMenuButton>
-        <GiHamburgerMenu onClick={() => setToggleMenu((prev) => !prev)} />
-      </ToggleMenuButton>
-      <MenuList toggleMenu={toggleMenu}>
-        <Link href="/banking">내역</Link>
-        <Link href="/banking/deposit">입금</Link>
-        <Link href="/user/setting">설정</Link>
-        <button onClick={onSignOut}>로그아웃</button>
-      </MenuList>
-    </Header>
+    <>
+      {isShowing && (
+        <ErrorModal
+          title="로그아웃을 실패했습니다!"
+          content="다시 시도해 주세요."
+          toggle={() => toggle()}
+        />
+      )}
+      <Header>
+        <HomeButton>
+          <Link href="/">
+            <GiOpenBook />
+            <div>Book Bank</div>
+          </Link>
+        </HomeButton>
+        <ToggleMenuButton>
+          <GiHamburgerMenu onClick={() => setToggleMenu((prev) => !prev)} />
+        </ToggleMenuButton>
+        <MenuList toggleMenu={toggleMenu}>
+          <Link href="/banking">내역</Link>
+          <Link href="/banking/deposit">입금</Link>
+          <Link href="/user/setting">설정</Link>
+          <button onClick={onSignOut}>로그아웃</button>
+        </MenuList>
+      </Header>
+    </>
   );
 };
 

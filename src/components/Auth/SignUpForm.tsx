@@ -48,6 +48,8 @@ const SignUpForm = () => {
               nickname: user.displayName,
               email: user.email,
               signUpDate: new Date().toLocaleDateString(),
+              photoURL:
+                "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039",
             });
           });
         }

@@ -4,10 +4,10 @@ import styled from "@emotion/styled";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
 import EditForm from "./EditForm";
 import useModal from "../Hooks/useModal";
-import ConfirmModal from "../Custom/ConfirmModal";
 import { useDeleteBook } from "../Hooks/useBanking";
-import { isFormEdit, selectMyBookState } from "@/share/atom";
+import ConfirmModal from "../Custom/ConfirmModal";
 import CustomButton from "../Custom/CustomButton";
+import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewDetailItem = () => {
   const targetMyBookData = useRecoilValue<any>(selectMyBookState);

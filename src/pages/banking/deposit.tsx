@@ -1,17 +1,19 @@
 import React, { useEffect } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { selectBookState, userDirectFormState } from "@/share/atom";
 import styled from "@emotion/styled";
 import SearchForm from "@/components/Banking/SearchForm";
 import ReviewForm from "@/components/Banking/ReviewForm";
+import { selectBookState, userDirectFormState } from "@/share/atom";
 
 const Deposit = () => {
   const resetList = useResetRecoilState(selectBookState);
+  const resetDirectList = useResetRecoilState(userDirectFormState);
   const targetBookData = useRecoilValue<any>(selectBookState);
   const userDirectFormData = useRecoilValue(userDirectFormState);
 
   useEffect(() => {
     resetList();
+    resetDirectList();
   }, []);
 
   return (
@@ -33,7 +35,6 @@ const DepositContainer = styled.div<{ show: string }>`
   height: 100%;
   gap: 20px;
   position: relative;
-  z-index: -1;
   > div {
     width: 50%;
     background-color: #bfb0d1;

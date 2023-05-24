@@ -122,7 +122,6 @@ const Section = styled.section`
   justify-content: space-between;
   gap: 20px;
   position: relative;
-  z-index: -1;
 `;
 
 // 리뷰 인피티니 스크롤

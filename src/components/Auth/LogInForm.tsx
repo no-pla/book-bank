@@ -3,15 +3,15 @@ import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import Input from "../Custom/Input";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import CustomButton from "../Custom/CustomButton";
+import Input from "../Custom/Input";
 import ErrorModal from "../Custom/ErrorModal";
+import CustomButton from "../Custom/CustomButton";
 import useModal from "../Hooks/useModal";
 
 interface ILoginData {

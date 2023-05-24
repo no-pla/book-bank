@@ -46,8 +46,9 @@ export const ErrorMessage = styled.p`
   color: var(--point-color2);
   text-align: left;
   padding: 2px 0 4px 12px;
-  font-size: 0.8rem;
+  font-size: 1rem;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 export default Input;

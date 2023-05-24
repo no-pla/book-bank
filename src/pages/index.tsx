@@ -4,9 +4,9 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
 import { FiSettings } from "react-icons/fi";
+import Chart from "@/components/Banking/Chart";
 
 export default function Home({ currentUser }: any) {
   const queryClient = useQueryClient();
@@ -94,7 +94,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 100px;
-  /* z-index: 0; */
   @media (max-width: 768px) {
     gap: 250px;
   }
@@ -145,6 +144,7 @@ const UserInfo = styled.section`
     align-items: center;
     justify-content: center;
     gap: 4px;
+    font-weight: 100;
   }
 `;
 
@@ -179,7 +179,7 @@ const BankName = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;
-  font-weight: 800;
+  font-weight: 400;
   font-size: 1.4rem;
 `;
 
@@ -221,7 +221,7 @@ const RankingInfo = styled.section`
 const RankingTitle = styled.div`
   font-weight: 800;
   margin: 8px 0;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 `;
 
 const RankingList = styled.ul`
@@ -234,4 +234,6 @@ const RankingList = styled.ul`
   flex-direction: column;
   gap: 12px;
   text-align: left;
+  font-weight: 300;
+  font-size: 1.2rem;
 `;
