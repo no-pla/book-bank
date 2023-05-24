@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
+import { Helmet } from "react-helmet";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
@@ -36,6 +37,13 @@ export default function Home({ currentUser }: any) {
 
   return (
     <Container>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank</title>
+      </Helmet>
       <InfoContainer>
         <UserInfo>
           <Image
@@ -242,6 +250,6 @@ const RankingList = styled.ul`
   font-size: 1.2rem;
 `;
 
-const Message = styled.p`
+const Message = styled.li`
   text-align: center;
 `;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
+import { Helmet } from "react-helmet";
 import { deleteUser } from "firebase/auth";
 import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
@@ -71,6 +72,13 @@ const Setting = () => {
 
   return (
     <SettingPage>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank / 설정</title>
+      </Helmet>
       {openError && (
         <ErrorModal
           title={errorMessage[0]}
