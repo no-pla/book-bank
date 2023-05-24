@@ -3,15 +3,15 @@ import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import AuthInput from "../Custom/AuthInput";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import CustomButton from "../Custom/CustomButton";
+import Input from "../Custom/Input";
 import ErrorModal from "../Custom/ErrorModal";
+import CustomButton from "../Custom/CustomButton";
 import useModal from "../Hooks/useModal";
 
 interface ILoginData {
@@ -87,14 +87,10 @@ const LoginForm = () => {
         />
       )}
       <FormContainer>
-        <TitleContainer>
-          <Description>당신의 독서를 저금하세요.</Description>
-          <Title>북 뱅크</Title>
-          <Icon>📚</Icon>
-        </TitleContainer>
+        <h1>로그인</h1>
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -109,7 +105,7 @@ const LoginForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,
@@ -125,13 +121,13 @@ const LoginForm = () => {
               type="password"
               name="password"
             />
-            <Button>로그인</Button>
+            <CustomButton value="로그인" />
           </Form>
         </FormProvider>
         <ToggleLink href="/register">회원가입</ToggleLink>
-        <div>
+        <OAuth>
           <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
-        </div>
+        </OAuth>
       </FormContainer>
     </Container>
   );
@@ -140,7 +136,7 @@ const LoginForm = () => {
 export default LoginForm;
 
 export const ToggleLink = styled(Link)`
-  color: var(--text-color);
+  color: whitesmoke;
   text-decoration: none;
   margin: 20px 0;
 `;
@@ -151,26 +147,32 @@ export const Container = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 62px;
-  width: 100%;
   color: var(--text-color);
-  height: 100vh;
-`;
-
-export const Icon = styled.div`
-  font-size: 4rem;
+  overflow-y: scroll;
 `;
 
 export const FormContainer = styled.div`
+  color: whitesmoke;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: min(60%, 600px);
-  background-color: rgba(255, 255, 255, 0.3);
   padding: 40px;
   border-radius: 8px;
+  > h1 {
+    margin-bottom: 40px;
+    font-size: 2rem;
+    font-weight: 800;
+  }
   > div:last-of-type > button {
     color: #db4437;
     border: 2px solid #db4437;
+  }
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    > h1 {
+      margin-bottom: 12px;
+    }
   }
 `;
 
@@ -181,6 +183,12 @@ export const Form = styled.form`
   justify-content: center;
   width: 100%;
   gap: 4px;
+  > button {
+    width: 100%;
+    border: 1px solid var(--point-color1);
+    color: var(--point-color1);
+    font-size: 1.2rem;
+  }
 `;
 
 export const Button = styled.button`
@@ -199,12 +207,9 @@ export const TitleContainer = styled.div`
   margin-bottom: 60px;
 `;
 
-export const Description = styled.p`
-  font-size: 0.9rem;
-  margin-bottom: 4px;
-`;
-
-export const Title = styled.h1`
-  font-size: 2rem;
-  margin-bottom: 20px;
+const OAuth = styled.div`
+  > button {
+    font-size: 1.2rem;
+    width: 100%;
+  }
 `;

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import Link from "next/link";
 import styled from "@emotion/styled";
-import { signOut } from "firebase/auth";
+import Link from "next/link";
+import React, { useState } from "react";
 import { auth } from "@/share/firebase";
-import ErrorModal from "../Custom/ErrorModal";
+import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
+import { GiHamburgerMenu, GiOpenBook } from "react-icons/gi";
+import ErrorModal from "../Custom/ErrorModal";
 
 const Navigation = () => {
   const { isShowing, toggle } = useModal();
-  const [openMenu, setOpenMenu] = useState(false);
-
+  const [toggleMenu, setToggleMenu] = useState(false);
   const onSignOut = async () => {
     try {
       await signOut(auth);
@@ -20,107 +20,111 @@ const Navigation = () => {
   };
 
   return (
-    <NavContainer>
+    <>
       {isShowing && (
         <ErrorModal
-          title="에러가 발생했습니다."
-          content="로그아웃을 실패했습니다."
-          toggle={toggle}
+          title="로그아웃을 실패했습니다!"
+          content="다시 시도해 주세요."
+          toggle={() => toggle()}
         />
       )}
-      <Nav>
-        <div>
-          <NavTitle href="/">BOOK BANK</NavTitle>
-          <MenuButton onClick={() => setOpenMenu((prev) => !prev)}>
-            메뉴
-          </MenuButton>
-        </div>
-        <NavItemContainer openMenu={openMenu}>
-          <NavItem href="/banking">입금 내역</NavItem>
-          <NavItem href="/banking/deposit">입금하기</NavItem>
-          <NavItem href="/login" onClick={onSignOut}>
-            로그아웃
-          </NavItem>
-        </NavItemContainer>
-      </Nav>
-    </NavContainer>
+      <Header>
+        <HomeButton>
+          <Link href="/">
+            <GiOpenBook />
+            <div>Book Bank</div>
+          </Link>
+        </HomeButton>
+        <ToggleMenuButton>
+          <GiHamburgerMenu onClick={() => setToggleMenu((prev) => !prev)} />
+        </ToggleMenuButton>
+        <MenuList toggleMenu={toggleMenu}>
+          <Link href="/banking">내역</Link>
+          <Link href="/banking/deposit">입금</Link>
+          <Link href="/user/setting">설정</Link>
+          <button onClick={onSignOut}>로그아웃</button>
+        </MenuList>
+      </Header>
+    </>
   );
 };
 
-export default Navigation;
+export default React.memo(Navigation);
 
-const NavTitle = styled(Link)`
-  padding: 12px;
-  font-weight: 700;
-`;
-
-const NavContainer = styled.div`
-  width: calc(min(22%, 150px));
-  @media (max-width: 600px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-  }
-`;
-
-const MenuButton = styled.button`
-  height: 100%;
-  background-color: transparent;
-  padding: 12px;
-  border: 1px solid lightgray;
-  @media (min-width: 600px) {
-    display: none;
-  }
-`;
-
-const Nav = styled.nav`
+const Header = styled.header`
   background-color: var(--main-color);
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(min(100%, 1960px));
+  height: 60px;
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  padding: 8px;
-  width: 100%;
+  align-items: center;
+  padding: 0 40px;
   box-sizing: border-box;
-  @media (max-width: 600px) {
-    padding: 0;
-    height: 6vh;
+  font-size: 1.3rem;
+  z-index: 100;
+  box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+  -webkit-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+  -moz-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
+  @media (max-width: 380px) {
+    padding: 0 20px;
   }
-  > a:first-of-type {
-    font-weight: 800;
-  }
-  & button {
-    align-self: flex-start;
-  }
-  > div:first-of-type {
+`;
+
+const HomeButton = styled.div`
+  > a {
+    font-size: 1.7rem;
     display: flex;
-    height: 100%;
     align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    @media (max-width: 600px) {
-      flex-direction: row;
-    }
+    justify-content: center;
+    gap: 8px;
   }
 `;
 
-const NavItemContainer = styled.div<{ openMenu: boolean }>`
+const MenuList = styled.div<{ toggleMenu: boolean }>`
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  @media (max-width: 600px) {
-    display: ${(props) => (props.openMenu ? "flex" : "none")};
-    background-color: var(--bg-color);
-    border: 2px solid var(--main-color);
-    margin: 0;
-    padding: 8px;
+  gap: 12px;
+  align-items: center;
+  > button {
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 100;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  @media (max-width: 380px) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: calc(100% - 60px);
+    background-color: var(--sub-main-color);
+    border-left: 2px solid var(--main-color);
+    display: ${(props) => (props.toggleMenu ? "flex" : "none")};
+    position: fixed;
+    flex-direction: column;
+    top: 60px;
+    right: 0;
+    width: 40%;
+    align-items: flex-end;
+    padding: 20px 24px;
+    gap: 20px;
   }
 `;
 
-const NavItem = styled(Link)`
-  text-decoration: none;
-  color: var(--text-color);
-  padding: 4px;
-  cursor: pointer;
+const ToggleMenuButton = styled.button`
+  display: none;
+  background-color: transparent;
+  color: whitesmoke;
+  border: none;
+  padding: 0;
+  height: fit-content;
+  @media (max-width: 380px) {
+    display: block;
+    height: 17px;
+  }
 `;

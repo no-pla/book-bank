@@ -5,10 +5,10 @@ import { deleteUser } from "firebase/auth";
 import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
+import ErrorModal from "@/components/Custom/ErrorModal";
 import ConfirmModal from "@/components/Custom/ConfirmModal";
 import PreviousChart from "@/components/Banking/PreviousChart";
-import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
-import ErrorModal from "@/components/Custom/ErrorModal";
+import { UpdateProfileForm } from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {
   const currentUser = useAuth();
@@ -90,7 +90,9 @@ const Setting = () => {
         <UpdateProfileForm />
         <PreviousChart />
       </div>
-      <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
+      <section>
+        <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
+      </section>
     </SettingPage>
   );
 };
@@ -98,13 +100,13 @@ const Setting = () => {
 export default Setting;
 
 const SettingPage = styled.section`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  gap: 40px;
+  justify-content: spb;
   @media (max-width: 600px) {
-    padding-top: 12%;
-    height: 100%;
   }
 `;
 
@@ -117,4 +119,5 @@ const WithdrawalButton = styled.button`
   display: flex;
   justify-content: flex-end;
   margin: 8px;
+  font-size: 0.8rem;
 `;

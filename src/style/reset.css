@@ -1,9 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&display=swap");
+
 :root {
+  --main-color: #8067a9;
+  --sub-main-color: #bfb0d1;
+  --point-color2: #ff0000;
+  --point-color1: #3fa876;
+  --text-color: #161223;
   --bg-color: #eaebe7;
-  --text-color: #2c2d31;
-  --main-color: #d1d1e0;
-  --point-color1: #30e0a1;
-  --point-color2: #eb7050;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ 
      v2.0 | 20110126
@@ -112,8 +115,15 @@ nav,
 section {
   display: block;
 }
+* {
+  font-family: "Dongle", sans-serif;
+}
 body {
+  font-size: 1.2rem;
   line-height: 1;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: "Dongle", sans-serif;
 }
 ol,
 ul {
@@ -135,12 +145,10 @@ table {
   border-spacing: 0;
 }
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
 a {
   text-decoration: none;
   color: var(--text-color);
+}
+button {
+  cursor: pointer;
 }

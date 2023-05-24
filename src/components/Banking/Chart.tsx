@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import styled from "@emotion/styled";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
 
@@ -73,13 +74,15 @@ const Chart = ({ currentUser }: any) => {
   );
 
   return (
-    <>
+    <ChartContainer>
       {series && (
         <DynamicChart
           options={{
             chart: {
               type: "heatmap",
+              fontFamily: "Dongle",
             },
+
             xaxis: {
               type: "category",
               categories: [
@@ -105,6 +108,13 @@ const Chart = ({ currentUser }: any) => {
             title: {
               text: `${new Date().getMonth() + 1}월 독서량`,
               align: "center",
+              margin: 10,
+              offsetY: 10,
+              floating: false,
+              style: {
+                fontWeight: "800",
+                fontSize: "1.5rem",
+              },
             },
             plotOptions: {
               heatmap: {
@@ -116,11 +126,16 @@ const Chart = ({ currentUser }: any) => {
           }}
           series={isFetched ? series : defaultData}
           type="heatmap"
-          height={240}
+          height={360}
         />
       )}
-    </>
+    </ChartContainer>
   );
 };
 
 export default Chart;
+
+const ChartContainer = styled.div`
+  position: relative;
+  z-index: 0;
+`;

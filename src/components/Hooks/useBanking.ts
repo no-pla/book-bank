@@ -6,8 +6,9 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { DB_LINK } from "@/share/server";
+import { useRouter } from "next/router";
 import { useResetRecoilState } from "recoil";
+import { DB_LINK } from "@/share/server";
 import { selectMyBookState } from "@/share/atom";
 
 const REST_API_KEY = process.env.NEXT_PUBLIC_LIBRARY_KEY;
@@ -52,11 +53,13 @@ const addBook = async (newBookReview: any) => {
 };
 
 export const useAddBook = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: addBook,
     onSuccess: () => {
       queryClient.invalidateQueries("getMyBookList");
+      router.push("/banking");
     },
   });
 };
