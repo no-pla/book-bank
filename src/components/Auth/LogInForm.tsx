@@ -3,15 +3,15 @@ import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import Input from "../Custom/Input";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import CustomButton from "../Custom/CustomButton";
+import Input from "../Custom/Input";
 import ErrorModal from "../Custom/ErrorModal";
+import CustomButton from "../Custom/CustomButton";
 import useModal from "../Hooks/useModal";
 
 interface ILoginData {
@@ -121,13 +121,13 @@ const LoginForm = () => {
               type="password"
               name="password"
             />
-            <Button>로그인</Button>
+            <CustomButton value="로그인" />
           </Form>
         </FormProvider>
         <ToggleLink href="/register">회원가입</ToggleLink>
-        <div>
+        <OAuth>
           <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
-        </div>
+        </OAuth>
       </FormContainer>
     </Container>
   );
@@ -148,6 +148,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 62px;
   color: var(--text-color);
+  overflow-y: scroll;
 `;
 
 export const FormContainer = styled.div`
@@ -160,12 +161,18 @@ export const FormContainer = styled.div`
   border-radius: 8px;
   > h1 {
     margin-bottom: 40px;
-    font-size: 1.2rem;
+    font-size: 2rem;
     font-weight: 800;
   }
   > div:last-of-type > button {
     color: #db4437;
     border: 2px solid #db4437;
+  }
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    > h1 {
+      margin-bottom: 12px;
+    }
   }
 `;
 
@@ -176,6 +183,12 @@ export const Form = styled.form`
   justify-content: center;
   width: 100%;
   gap: 4px;
+  > button {
+    width: 100%;
+    border: 1px solid var(--point-color1);
+    color: var(--point-color1);
+    font-size: 1.2rem;
+  }
 `;
 
 export const Button = styled.button`
@@ -192,4 +205,11 @@ export const TitleContainer = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-bottom: 60px;
+`;
+
+const OAuth = styled.div`
+  > button {
+    font-size: 1.2rem;
+    width: 100%;
+  }
 `;

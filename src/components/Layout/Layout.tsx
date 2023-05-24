@@ -9,6 +9,7 @@ const Layout = ({ children }: any) => {
   return (
     <>
       {router.pathname !== "/login" && router.pathname !== "/register" ? (
+        // 로그인이나 회원가입 페이지가 아닐 때면 헤더 show
         <LayoutContainer>
           <Navigation />
           <div>{children}</div>

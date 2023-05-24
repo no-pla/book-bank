@@ -5,6 +5,7 @@ import Layout from "@/components/Layout/Layout";
 import useAuth from "@/components/Hooks/useAuth";
 import "../style/reset.css";
 import Script from "next/script";
+import { ThemeProvider } from "@emotion/react";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,10 +25,10 @@ declare global {
 export default function App({ Component, pageProps }: AppProps) {
   const currentUser = useAuth();
 
-  function kakaoInit() {
+  const kakaoInit = () => {
     // 페이지가 로드되면 실행
     window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY);
-  }
+  };
 
   return (
     <>

@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
-import { useRouter } from "next/router";
-import styled from "@emotion/styled";
-import { v4 as uuid_v4 } from "uuid";
 import Image from "next/image";
-import CustomButton from "../Custom/CustomButton";
+import { useRouter } from "next/router";
+import { v4 as uuid_v4 } from "uuid";
+import styled from "@emotion/styled";
+import { updateProfile } from "firebase/auth";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "@/share/firebase";
-import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
+import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
+import CustomButton from "../Custom/CustomButton";
 
-const UpdateProfileForm = () => {
+export const UpdateProfileForm = () => {
   const router = useRouter();
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
@@ -19,6 +19,10 @@ const UpdateProfileForm = () => {
   const [imageURL, setImageURL] = useState<any>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
   const UpdateNicknameInputRef = useRef<HTMLInputElement>(null);
+  const preview =
+    currentUser?.photoURL ||
+    "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039";
+
   const UpdateNicknameInput = () => {
     return (
       <Input
@@ -72,11 +76,7 @@ const UpdateProfileForm = () => {
             <div>
               <Image
                 id="preview-image"
-                src={
-                  imageURL
-                    ? imageURL
-                    : "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
-                }
+                src={imageURL ? imageURL : preview}
                 height={100}
                 width={100}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
@@ -108,10 +108,7 @@ const UpdateProfileForm = () => {
         <Profile>
           <div>
             <Image
-              src={
-                currentUser?.photoURL ||
-                "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
-              }
+              src={preview}
               height={100}
               width={100}
               alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
@@ -130,7 +127,6 @@ const UpdateProfileForm = () => {
     </ProfileContainer>
   );
 };
-export default UpdateProfileForm;
 
 const Input = styled.input`
   padding: 8px;
@@ -138,12 +134,14 @@ const Input = styled.input`
   border: 1px solid lightgray;
   color: var(--text-color);
   box-sizing: border-box;
+  font-size: 1.1rem;
+  font-weight: 200;
   width: 144px;
 `;
 
 export const Title = styled.h2`
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.4em;
   margin-bottom: 20px;
 `;
 
@@ -164,10 +162,21 @@ const Profile = styled.div`
   }
   & button {
     cursor: pointer;
+    font-size: 1.1rem;
   }
   & button:first-of-type {
+    border: 1px solid var(--point-color2);
+    color: var(--point-color2);
+  }
+  & button:last-of-type {
     border: 1px solid var(--point-color1);
     color: var(--point-color1);
+  }
+  @media (max-width: 280px) {
+    img {
+      width: 80px;
+      height: 80px;
+    }
   }
 `;
 
@@ -178,7 +187,6 @@ export const FileInput = styled.input`
     border-radius: 8px;
     border: 1px solid lightgray;
     margin-top: 8px;
-    margin-right: 8px;
     cursor: pointer;
   }
 `;

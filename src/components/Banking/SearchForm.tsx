@@ -5,8 +5,8 @@ import styled from "@emotion/styled";
 import { StyledInput } from "../Custom/Input";
 import CustomButton from "../Custom/CustomButton";
 import { useGetSearchBookList } from "../Hooks/useBanking";
-import { selectBookState, userDirectFormState } from "@/share/atom";
 import { NO_IMAGE } from "@/share/server";
+import { selectBookState, userDirectFormState } from "@/share/atom";
 
 interface IBook {
   authors: string[];
@@ -62,39 +62,41 @@ const SearchForm = () => {
 
   return (
     <Container>
-      <form onSubmit={(event) => onSearchSubmit(event)}>
-        <SearchInput />
-      </form>
-      <BookListItemContainer>
-        {bookList?.documents?.length !== 0 ? (
-          bookList?.documents.map((book: IBook) => {
-            return (
-              <BookListItem key={book.id} onClick={() => onClick(book)}>
-                <Image
-                  src={book.thumbnail || NO_IMAGE}
-                  height={80}
-                  width={60}
-                  alt={`${book.title}의 책표지입니다. `}
-                />
-                <BookDescription>
-                  <BookTitle>{book.title}</BookTitle>
-                  <div>
-                    {book.authors[0] || "정보 없음"}
-                    {book.authors.length > 1 && "외"}
-                    &nbsp;|&nbsp;{book.publisher}
-                  </div>
-                  <BookPrice>{book.price.toLocaleString()}</BookPrice>
-                </BookDescription>
-              </BookListItem>
-            );
-          })
-        ) : (
-          <NoResult>
-            <h2>검색 결과가 없습니다.</h2>
-            <button onClick={onClickDirectForm}>직접 입력하기</button>
-          </NoResult>
-        )}
-      </BookListItemContainer>
+      <div>
+        <Form onSubmit={(event) => onSearchSubmit(event)}>
+          <SearchInput />
+        </Form>
+        <BookListItemContainer>
+          {bookList?.documents?.length !== 0 ? (
+            bookList?.documents.map((book: IBook) => {
+              return (
+                <BookListItem key={book.id} onClick={() => onClick(book)}>
+                  <Image
+                    src={book.thumbnail || NO_IMAGE}
+                    height={80}
+                    width={60}
+                    alt={`${book.title}의 책표지입니다. `}
+                  />
+                  <BookDescription>
+                    <BookTitle>{book.title}</BookTitle>
+                    <div>
+                      {book.authors[0] || "정보 없음"}
+                      {book.authors.length > 1 && "외"}
+                      &nbsp;|&nbsp;{book.publisher}
+                    </div>
+                    <BookPrice>{book.price.toLocaleString()}</BookPrice>
+                  </BookDescription>
+                </BookListItem>
+              );
+            })
+          ) : (
+            <NoResult>
+              <h2>검색 결과가 없습니다.</h2>
+              <button onClick={onClickDirectForm}>직접 입력하기</button>
+            </NoResult>
+          )}
+        </BookListItemContainer>
+      </div>
       <SearchButtonContainer>
         <CustomButton
           value="이전"
@@ -110,6 +112,14 @@ const SearchForm = () => {
     </Container>
   );
 };
+
+const Form = styled.form`
+  position: sticky;
+  top: -20px;
+  background-color: var(--sub-main-color);
+  padding: 20px 0 12px 0;
+  box-sizing: border-box;
+`;
 
 const NoResult = styled.div`
   height: 100%;
@@ -128,12 +138,16 @@ const NoResult = styled.div`
 `;
 
 const Container = styled.div`
-  height: 100%;
+  display: flex;
   > button {
     border: 1px solid lightgrey;
     width: 50%;
     cursor: pointer;
     padding: 4px 0;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -143,7 +157,6 @@ const BookListItemContainer = styled.ul`
   flex-direction: column;
   gap: 12px;
   overflow-y: scroll;
-  height: 88%;
   box-sizing: border-box;
 `;
 
@@ -155,6 +168,11 @@ export const BookListItem = styled.li`
   padding: 16px;
   cursor: pointer;
   align-items: flex-end;
+  @media (max-width: 600px) {
+    > img {
+      display: none;
+    }
+  }
 `;
 
 export const BookTitle = styled.div`
