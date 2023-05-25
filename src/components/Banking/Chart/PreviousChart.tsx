@@ -94,7 +94,7 @@ const PreviousChart = () => {
           chart: {
             type: "bar",
             height: 450,
-            fontFamily: "Dongle",
+            fontFamily: "inherit",
           },
           fill: {
             colors: ["#8067a9"],

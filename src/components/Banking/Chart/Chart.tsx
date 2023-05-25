@@ -81,9 +81,8 @@ const Chart = () => {
           options={{
             chart: {
               type: "heatmap",
-              fontFamily: "Dongle",
+              fontFamily: "inherit",
             },
-
             xaxis: {
               type: "category",
               categories: [
@@ -116,7 +115,6 @@ const Chart = () => {
               style: {
                 fontWeight: "800",
                 fontSize: "1.5rem",
-                fontFamily: "inherit",
               },
             },
             plotOptions: {
