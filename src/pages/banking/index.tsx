@@ -7,6 +7,7 @@ import { useQueryClient } from "react-query";
 import useUser from "@/components/Hooks/useUser";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
+import BankBook from "@/components/Banking/BankBook";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 export interface IBookData {
@@ -71,15 +72,13 @@ const Index = ({ currentUser }: any) => {
       </Helmet>
       <DataItemContainer>
         <BankBookData>
-          <BankBookInfo>
-            {totalAmount}원&nbsp;({totalBook}권)
-          </BankBookInfo>
-          <BankBookInfoButtonContainer>
-            <button onClick={onShare}>공유</button>
-            <button onClick={() => router.push("/banking/deposit")}>
-              입금하기
-            </button>
-          </BankBookInfoButtonContainer>
+          <BankBook
+            onClick={() => onShare()}
+            text="공유하기"
+            secondOnClick={() => router.push("/banking/deposit")}
+            secondText="입금하기"
+            transform="-80%"
+          />
         </BankBookData>
         <ReviewItem />
       </DataItemContainer>
@@ -93,7 +92,7 @@ const BankBookData = styled.div`
   background-color: #bfb0d1;
   border-radius: 12px;
   height: 160px;
-  padding: 20px 24px;
+  padding: 20px 0px;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-end;
