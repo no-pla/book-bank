@@ -116,6 +116,7 @@ const Chart = () => {
               style: {
                 fontWeight: "800",
                 fontSize: "1.5rem",
+                fontFamily: "inherit",
               },
             },
             plotOptions: {

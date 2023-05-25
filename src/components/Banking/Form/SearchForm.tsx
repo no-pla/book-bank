@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import { StyledInput } from "../Custom/Input";
-import CustomButton from "../Custom/CustomButton";
-import { useGetSearchBookList } from "../Hooks/useBanking";
+import { StyledInput } from "../../Custom/Input";
+import CustomButton from "../../Custom/CustomButton";
+import { useGetSearchBookList } from "../../Hooks/useBanking";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
 

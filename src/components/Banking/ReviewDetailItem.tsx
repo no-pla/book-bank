@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
-import EditForm from "./EditForm";
+import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
 import ConfirmModal from "../Custom/ConfirmModal";

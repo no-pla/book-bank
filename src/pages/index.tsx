@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useQueryClient } from "react-query";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
-import Chart from "@/components/Banking/Chart";
 import { auth } from "@/share/firebase";
 import Ranking from "@/components/Banking/Ranking";
 import BankBook from "@/components/Banking/BankBook";
 import { useRouter } from "next/router";
 import UserProfile from "@/components/Auth/UserProfile";
+import Chart from "@/components/Banking/Chart/Chart";
 
 export default function Home() {
   const queryClient = useQueryClient();

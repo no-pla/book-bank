@@ -8,7 +8,7 @@ import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
 import ErrorModal from "@/components/Custom/ErrorModal";
 import ConfirmModal from "@/components/Custom/ConfirmModal";
-import PreviousChart from "@/components/Banking/PreviousChart";
+import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import { UpdateProfileForm } from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {

@@ -3,17 +3,17 @@ import styled from "@emotion/styled";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import { useUpdateBook } from "../Hooks/useBanking";
-import CustomButton from "../Custom/CustomButton";
-import ConfirmModal from "../Custom/ConfirmModal";
-import Input, { ErrorMessage } from "../Custom/Input";
-import useModal from "../Hooks/useModal";
+import { useUpdateBook } from "../../Hooks/useBanking";
+import CustomButton from "../../Custom/CustomButton";
+import ConfirmModal from "../../Custom/ConfirmModal";
+import Input, { ErrorMessage } from "../../Custom/Input";
+import useModal from "../../Hooks/useModal";
 import Image from "next/image";
-import { FileInput } from "../Auth/UpdateProfileForm";
+import { FileInput } from "../../Auth/UpdateProfileForm";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
-import useDisabled from "../Hooks/useDisabled";
+import useDisabled from "../../Hooks/useDisabled";
 
 interface IEditData {
   authors: string | string[];

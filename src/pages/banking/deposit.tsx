@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
-import SearchForm from "@/components/Banking/SearchForm";
-import ReviewForm from "@/components/Banking/ReviewForm";
+import SearchForm from "@/components/Banking/Form/SearchForm";
+import ReviewForm from "@/components/Banking/Form/ReviewForm";
 import { selectBookState, userDirectFormState } from "@/share/atom";
 
 const Deposit = () => {

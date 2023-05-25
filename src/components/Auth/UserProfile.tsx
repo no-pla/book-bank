@@ -59,7 +59,7 @@ const UserInfo = styled.section`
     align-items: center;
     justify-content: center;
     gap: 4px;
-    font-weight: 100;
+    font-weight: 300;
   }
 `;
 
