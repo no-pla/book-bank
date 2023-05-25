@@ -2,9 +2,9 @@ import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import { StyledInput } from "../Custom/Input";
-import CustomButton from "../Custom/CustomButton";
-import { useGetSearchBookList } from "../Hooks/useBanking";
+import { StyledInput } from "../../Custom/Input";
+import CustomButton from "../../Custom/CustomButton";
+import { useGetSearchBookList } from "../../Hooks/useBanking";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
 
@@ -74,6 +74,7 @@ const SearchForm = () => {
                   <Image
                     src={book.thumbnail || NO_IMAGE}
                     height={80}
+                    loading="eager"
                     width={60}
                     alt={`${book.title}의 책표지입니다. `}
                   />
@@ -161,7 +162,7 @@ const BookListItemContainer = styled.ul`
 `;
 
 export const BookListItem = styled.li`
-  background-color: white;
+  background-color: whitesmoke;
   display: flex;
   gap: 12px;
   border-radius: 12px;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
-import EditForm from "./EditForm";
+import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
 import ConfirmModal from "../Custom/ConfirmModal";
@@ -74,6 +74,7 @@ const ReviewDetailItem = () => {
                     width={110}
                     alt={`${targetMyBookData.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
+                    loading="eager"
                   />
                   <BookInfo>
                     <div>

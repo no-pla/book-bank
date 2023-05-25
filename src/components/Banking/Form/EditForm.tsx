@@ -3,16 +3,17 @@ import styled from "@emotion/styled";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import { useUpdateBook } from "../Hooks/useBanking";
-import CustomButton from "../Custom/CustomButton";
-import ConfirmModal from "../Custom/ConfirmModal";
-import Input, { ErrorMessage } from "../Custom/Input";
-import useModal from "../Hooks/useModal";
+import { useUpdateBook } from "../../Hooks/useBanking";
+import CustomButton from "../../Custom/CustomButton";
+import ConfirmModal from "../../Custom/ConfirmModal";
+import Input, { ErrorMessage } from "../../Custom/Input";
+import useModal from "../../Hooks/useModal";
 import Image from "next/image";
-import { FileInput } from "../Auth/UpdateProfileForm";
+import { FileInput } from "../../Auth/UpdateProfileForm";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
+import useDisabled from "../../Hooks/useDisabled";
 
 interface IEditData {
   authors: string | string[];
@@ -24,6 +25,7 @@ interface IEditData {
 
 const EditForm = () => {
   const { isShowing, toggle } = useModal();
+  const { isDisabled, toggleDisabled } = useDisabled();
   const { mutate: updateReview } = useUpdateBook();
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
@@ -48,7 +50,7 @@ const EditForm = () => {
     if (typeof data.authors === "string") {
       authors = authors.split(",").map((author: string) => author.trim());
     }
-
+    toggleDisabled();
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
@@ -103,7 +105,11 @@ const EditForm = () => {
         />
       )}
       <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit((data) => onEdit(data))}>
+        <Form
+          onSubmit={methods.handleSubmit((data) => {
+            onEdit(data);
+          })}
+        >
           <div>
             <Image
               id="preview-image"
@@ -186,11 +192,12 @@ const EditForm = () => {
             {methods.formState.errors.review?.type === "maxLength" &&
               methods.formState.errors.review.message?.toString()}
           </ErrorMessage>
-          <CustomButton value="수정" type="submit" />
+          <CustomButton value="수정" type="submit" disabled={isDisabled} />
           <CustomButton
             value="수정 취소"
             type="button"
             onClick={onClickClose}
+            disabled={isDisabled}
           />
         </Form>
       </FormProvider>

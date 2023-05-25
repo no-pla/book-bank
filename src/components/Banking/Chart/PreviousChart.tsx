@@ -3,9 +3,9 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
-import useAuth from "../Hooks/useAuth";
+import useAuth from "../../Hooks/useAuth";
 import { DB_LINK } from "@/share/server";
-import { Title } from "../Auth/UpdateProfileForm";
+import { Title } from "../../Auth/UpdateProfileForm";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
