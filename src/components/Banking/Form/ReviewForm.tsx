@@ -155,7 +155,7 @@ const TextArea = styled.textarea`
   font-weight: 100;
   box-sizing: border-box;
   width: 100%;
-  height: 260px;
+  height: 200px;
   padding: 12px;
   margin: 20px 0;
   @media (max-width: 280px) {

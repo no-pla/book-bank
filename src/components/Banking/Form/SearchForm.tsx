@@ -1,12 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
+import axios from "axios";
 import styled from "@emotion/styled";
+import { v4 as uuid_v4 } from "uuid";
 import { StyledInput } from "../../Custom/Input";
 import CustomButton from "../../Custom/CustomButton";
-import { useGetSearchBookList } from "../../Hooks/useBanking";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import { useQuery, useQueryClient } from "react-query";
 
 interface IBook {
   authors: string[];
@@ -24,11 +26,13 @@ interface IBook {
   url: string;
 }
 
+const REST_API_KEY = process.env.NEXT_PUBLIC_LIBRARY_KEY;
+
 const SearchForm = () => {
+  const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(1);
   const [searchBookName, setSearchBookName] = useState("");
   const SearchInputRef = useRef<HTMLInputElement>(null);
-  const { data: bookList } = useGetSearchBookList(searchBookName, page);
   const setSelectBook = useSetRecoilState(selectBookState);
   const resetSelectBook = useResetRecoilState(selectBookState);
   const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
@@ -41,6 +45,34 @@ const SearchForm = () => {
     );
   };
 
+  const fetchBookList = async () => {
+    return await axios.get(
+      `https://dapi.kakao.com/v3/search/book?sort=accuracy&page=${page}&size=20&query=${searchBookName}`,
+      {
+        headers: {
+          Authorization: `KakaoAK ${REST_API_KEY}`,
+        },
+      }
+    );
+  };
+
+  const { data: bookList } = useQuery<any>(
+    ["bookData", searchBookName, page],
+    fetchBookList,
+    {
+      keepPreviousData: true,
+      enabled: !!searchBookName,
+      select: (data) => {
+        // 불변성을 유지하기 위하여 id값을 추가하고 리턴
+        const modifiedData = data.data.documents.map((book: any) => {
+          // forEach는 리턴 값이 없으므로 사용하면 안된다.
+          return { ...book, id: uuid_v4() };
+        });
+        return { documents: modifiedData, meta: data.data.meta };
+      },
+    }
+  );
+
   const onSearchSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (SearchInputRef.current) {
@@ -50,6 +82,22 @@ const SearchForm = () => {
       setPage(1);
     }
   };
+
+  const prefetchNextPage = async () => {
+    setPage((prev) => (prev += 1));
+    await queryClient.prefetchQuery({
+      queryKey: ["bookData", searchBookName, page],
+
+      queryFn: fetchBookList,
+    });
+  };
+
+  useEffect(() => {
+    if (!bookList?.meta?.is_end && bookList) {
+      // 마지막 페이지가 아닐때만 prefetch
+      prefetchNextPage();
+    }
+  }, [page]);
 
   const onClick = (book: any) => {
     setSelectBook(book);
