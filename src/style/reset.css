@@ -115,16 +115,14 @@ nav,
 section {
   display: block;
 }
-* {
-  font-family: "Dongle", sans-serif;
-}
+
 body {
   font-size: 1.2rem;
   line-height: 1;
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: "Dongle", sans-serif;
 }
+
 ol,
 ul {
   list-style: none;
