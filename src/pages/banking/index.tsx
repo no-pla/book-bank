@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useQueryClient } from "react-query";
 import styled from "@emotion/styled";
+import { Helmet } from "react-helmet";
+import { useQueryClient } from "react-query";
 import useUser from "@/components/Hooks/useUser";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
+import BankBook from "@/components/Banking/BankBook";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 export interface IBookData {
@@ -61,17 +63,22 @@ const Index = ({ currentUser }: any) => {
 
   return (
     <Section>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank / 내역</title>
+      </Helmet>
       <DataItemContainer>
         <BankBookData>
-          <BankBookInfo>
-            {totalAmount}원&nbsp;({totalBook}권)
-          </BankBookInfo>
-          <BankBookInfoButtonContainer>
-            <button onClick={onShare}>공유</button>
-            <button onClick={() => router.push("/banking/deposit")}>
-              입금하기
-            </button>
-          </BankBookInfoButtonContainer>
+          <BankBook
+            onClick={() => onShare()}
+            text="공유하기"
+            secondOnClick={() => router.push("/banking/deposit")}
+            secondText="입금하기"
+            transform="-80%"
+          />
         </BankBookData>
         <ReviewItem />
       </DataItemContainer>
@@ -85,7 +92,7 @@ const BankBookData = styled.div`
   background-color: #bfb0d1;
   border-radius: 12px;
   height: 160px;
-  padding: 20px 24px;
+  padding: 20px 0px;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-end;

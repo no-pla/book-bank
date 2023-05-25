@@ -75,6 +75,7 @@ const Header = styled.header`
 
 const HomeButton = styled.div`
   > a {
+    color: whitesmoke;
     font-size: 1.7rem;
     display: flex;
     align-items: center;
@@ -88,6 +89,7 @@ const MenuList = styled.div<{ toggleMenu: boolean }>`
   gap: 12px;
   align-items: center;
   > button {
+    color: whitesmoke;
     text-align: center;
     font-size: 1.3rem;
     font-weight: 100;
@@ -96,7 +98,9 @@ const MenuList = styled.div<{ toggleMenu: boolean }>`
     cursor: pointer;
     padding: 0;
   }
-
+  > a {
+    color: whitesmoke;
+  }
   @media (max-width: 380px) {
     position: absolute;
     top: 0;

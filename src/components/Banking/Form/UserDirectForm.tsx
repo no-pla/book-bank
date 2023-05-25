@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import Input from "../Custom/Input";
+import Input from "../../Custom/Input";
 import Image from "next/image";
 import { NO_IMAGE } from "@/share/server";
-import { FileInput } from "../Auth/UpdateProfileForm";
+import { FileInput } from "../../Auth/UpdateProfileForm";
 import styled from "@emotion/styled";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
-import { useRouter } from "next/router";
-import useAuth from "../Hooks/useAuth";
-import { useAddBook } from "../Hooks/useBanking";
+import useAuth from "../../Hooks/useAuth";
+import { useAddBook } from "../../Hooks/useBanking";
 import { useSetRecoilState } from "recoil";
 import { userDirectFormState } from "@/share/atom";
-import CustomButton from "../Custom/CustomButton";
+import CustomButton from "../../Custom/CustomButton";
 import { ButtonContainer } from "./ReviewForm";
 import { Message } from "./EditForm";
-import ErrorModal from "../Custom/ErrorModal";
-import useModal from "../Hooks/useModal";
+import ErrorModal from "../../Custom/ErrorModal";
+import useModal from "../../Hooks/useModal";
+import useDisabled from "../../Hooks/useDisabled";
 
 const UserDirectForm = () => {
   const { isShowing, toggle } = useModal();
+  const { isDisabled, toggleDisabled } = useDisabled();
   const userDirectFormData = useSetRecoilState(userDirectFormState);
   const currentUser = useAuth();
   const [selectImage, setSelectImage] = useState<any>(null);
@@ -44,6 +45,7 @@ const UserDirectForm = () => {
     title,
     review,
   }: any) => {
+    toggleDisabled();
     const storageRef = ref(storage, uuid_v4());
     const snapshot = await uploadBytes(storageRef, selectImage);
     const photoURL = await getDownloadURL(snapshot.ref);
@@ -88,6 +90,7 @@ const UserDirectForm = () => {
               width={100}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
+              loading="eager"
             />
             <FileInput
               type="file"
@@ -149,12 +152,24 @@ const UserDirectForm = () => {
               name="price"
             />
             <TextAreaLabel>후기</TextAreaLabel>
-            <TextArea {...methods.register("review")} />
+            <TextArea
+              {...methods.register("review", {
+                maxLength: {
+                  value: 500,
+                  message: "최대 500자까지 입력 가능합니다,",
+                },
+              })}
+            />
             <ButtonContainer>
-              <CustomButton type="submit" value="기록하기" />
+              <CustomButton
+                type="submit"
+                value="기록하기"
+                disabled={isDisabled}
+              />
               <CustomButton
                 onClick={() => userDirectFormData(false)}
                 value="닫기"
+                disabled={isDisabled}
               />
             </ButtonContainer>
           </Form>
