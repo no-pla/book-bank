@@ -74,6 +74,7 @@ const ReviewDetailItem = () => {
                     width={110}
                     alt={`${targetMyBookData.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
+                    loading="eager"
                   />
                   <BookInfo>
                     <div>

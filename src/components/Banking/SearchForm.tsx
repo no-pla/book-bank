@@ -74,6 +74,7 @@ const SearchForm = () => {
                   <Image
                     src={book.thumbnail || NO_IMAGE}
                     height={80}
+                    loading="eager"
                     width={60}
                     alt={`${book.title}의 책표지입니다. `}
                   />

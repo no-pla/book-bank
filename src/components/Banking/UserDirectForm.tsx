@@ -88,6 +88,7 @@ const UserDirectForm = () => {
               width={100}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
+              loading="eager"
             />
             <FileInput
               type="file"

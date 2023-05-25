@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
+import { auth } from "@/share/firebase";
 
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   /* next.js는 pre-rendering을 하는데 서버 사이드에서 코드를 실행할 때는
@@ -13,7 +14,7 @@ const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const Chart = ({ currentUser }: any) => {
+const Chart = () => {
   const defaultData = [
     {
       name: "1주차",
@@ -38,13 +39,13 @@ const Chart = ({ currentUser }: any) => {
     async () =>
       await axios.get(
         `${DB_LINK}/review?uid=${
-          currentUser.uid
+          auth?.currentUser?.uid
         }&_sort=_createdDay&_order=desc&_createdYear=${new Date().getFullYear()}&_createdMonth=${
           new Date().getMonth() + 1
         }`
       ),
     {
-      enabled: !!currentUser,
+      enabled: !!auth.currentUser,
       select: ({ data }) => {
         const tempArray: number[] = new Array(31).fill(0);
         data.forEach((monthlyReview: any) => {
@@ -102,6 +103,7 @@ const Chart = ({ currentUser }: any) => {
               enabled: true,
               style: {
                 colors: ["#000"],
+                fontSize: "1rem",
               },
             },
             colors: ["#d1d1e0"],
