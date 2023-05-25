@@ -10,11 +10,15 @@ import useAuth from "../Hooks/useAuth";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
 import CustomButton from "../Custom/CustomButton";
+import useDisabled from "../Hooks/useDisabled";
+import Input from "../Custom/Input";
+import { FormProvider, useForm } from "react-hook-form";
 
 export const UpdateProfileForm = () => {
   const router = useRouter();
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
+  const { isDisabled, toggleDisabled } = useDisabled();
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<any>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
@@ -23,27 +27,23 @@ export const UpdateProfileForm = () => {
     currentUser?.photoURL ||
     "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039";
 
-  const UpdateNicknameInput = () => {
-    return (
-      <Input
-        ref={UpdateNicknameInputRef}
-        defaultValue={currentUser?.displayName}
-        placeholder="닉네임"
-      />
-    );
-  };
+  const methods = useForm({
+    defaultValues: {
+      newNickname:
+        currentUser?.displayName || UpdateNicknameInputRef.current?.value,
+    },
+  });
 
-  const onUpdateProfile = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = UpdateNicknameInputRef.current?.value;
-    if (UpdateNicknameInputRef.current?.value === "") return;
+  const onUpdateProfile = async ({ newDisplayName }: any) => {
+    toggleDisabled();
+
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
       const photoURL = await getDownloadURL(snapshot.ref);
 
       await updateProfile(currentUser, {
-        displayName: username ? username : currentUser?.displayName,
+        displayName: newDisplayName ? newDisplayName : currentUser?.displayName,
         photoURL: selectImage ? photoURL : currentUser?.photoURL,
       });
       router.push("/");
@@ -72,37 +72,62 @@ export const UpdateProfileForm = () => {
       )}
       {openProfile ? (
         <Profile>
-          <Form onSubmit={(event) => onUpdateProfile(event)}>
-            <div>
-              <Image
-                id="preview-image"
-                src={imageURL ? imageURL : preview}
-                height={100}
-                width={100}
-                style={{ borderRadius: "50%", objectFit: "cover" }}
-                alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
-              />
-              <FileInput
-                type="file"
-                accept="image/*"
-                name="preview-image"
-                onChange={(event: any) => {
-                  setSelectImage(event.target.files[0]);
-                }}
-              />
-            </div>
-            <div>
-              <UpdateNicknameInput />
-              <ButtonContainer>
-                <CustomButton
-                  value="취소"
-                  type="button"
-                  onClick={() => setOpenProfile((prev) => !prev)}
+          <FormProvider {...methods}>
+            <Form
+              onSubmit={methods.handleSubmit((data) => {
+                onUpdateProfile(data);
+              })}
+            >
+              <div>
+                <Image
+                  id="preview-image"
+                  src={imageURL ? imageURL : preview}
+                  height={100}
+                  width={100}
+                  style={{ borderRadius: "50%", objectFit: "cover" }}
+                  alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
                 />
-                <CustomButton type="submit" value="수정하기" />
-              </ButtonContainer>
-            </div>
-          </Form>
+                <FileInput
+                  type="file"
+                  accept="image/*"
+                  name="preview-image"
+                  onChange={(event: any) => {
+                    setSelectImage(event.target.files[0]);
+                  }}
+                />
+              </div>
+              <div>
+                <Input
+                  validation={{
+                    required: {
+                      value: true,
+                      message: "필수 입력값입니다.",
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "최대 10자까지 입력 가능합니다,",
+                    },
+                  }}
+                  placeholder="새로운 닉네임"
+                  type="text"
+                  name="newDisplayName"
+                />
+                <ButtonContainer>
+                  <CustomButton
+                    value="취소"
+                    type="button"
+                    onClick={() => setOpenProfile((prev) => !prev)}
+                    disabled={isDisabled}
+                  />
+                  <CustomButton
+                    type="submit"
+                    value="수정하기"
+                    disabled={isDisabled}
+                  />
+                </ButtonContainer>
+              </div>
+            </Form>
+          </FormProvider>
         </Profile>
       ) : (
         <Profile>
@@ -128,16 +153,16 @@ export const UpdateProfileForm = () => {
   );
 };
 
-const Input = styled.input`
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid lightgray;
-  color: var(--text-color);
-  box-sizing: border-box;
-  font-size: 1.1rem;
-  font-weight: 200;
-  width: 144px;
-`;
+// const Input = styled.input`
+//   padding: 8px;
+//   border-radius: 4px;
+//   border: 1px solid lightgray;
+//   color: var(--text-color);
+//   box-sizing: border-box;
+//   font-size: 1.1rem;
+//   font-weight: 200;
+//   width: 144px;
+// `;
 
 export const Title = styled.h2`
   font-weight: 700;
@@ -183,7 +208,7 @@ const Profile = styled.div`
 export const FileInput = styled.input`
   &::file-selector-button {
     padding: 8px 16px;
-    background-color: white;
+    background-color: whitesmoke;
     border-radius: 8px;
     border: 1px solid lightgray;
     margin-top: 8px;

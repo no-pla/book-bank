@@ -5,7 +5,7 @@ import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
 
 const BankBook = ({
-  onclick,
+  onClick,
   secondOnClick,
   text,
   secondText,
@@ -31,7 +31,7 @@ const BankBook = ({
         {totalAmount}원&nbsp;({totalBook}권)
       </BankBookInfo>
       <BankBookInfoButtonContainer>
-        <button onClick={onclick}>{text}</button>
+        <button onClick={onClick}>{text}</button>
         <button onClick={secondOnClick}>{secondText}</button>
       </BankBookInfoButtonContainer>
     </>

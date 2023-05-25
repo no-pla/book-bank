@@ -162,7 +162,7 @@ const BookListItemContainer = styled.ul`
 `;
 
 export const BookListItem = styled.li`
-  background-color: white;
+  background-color: whitesmoke;
   display: flex;
   gap: 12px;
   border-radius: 12px;

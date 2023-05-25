@@ -11,10 +11,12 @@ import ErrorModal from "../Custom/ErrorModal";
 import CustomButton from "../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import useDisabled from "../Hooks/useDisabled";
 
 const ReviewForm = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
+  const { isDisabled, toggleDisabled } = useDisabled();
   const targetBookData = useRecoilValue<any>(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
@@ -33,6 +35,7 @@ const ReviewForm = () => {
 
   const onSubmitReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    toggleDisabled();
     const newBookReview = {
       title: targetBookData.title,
       publisher: targetBookData.publisher,
@@ -97,8 +100,18 @@ const ReviewForm = () => {
               <TextAreaLabel htmlFor="review">후기</TextAreaLabel>
               <ReviewArea />
               <ButtonContainer>
-                <CustomButton type="submit" value="기록하기" />
-                <CustomButton type="button" value="닫기" onClick={onClose} />
+                <CustomButton
+                  type="submit"
+                  value="기록하기"
+                  disabled={isDisabled}
+                />
+
+                <CustomButton
+                  type="button"
+                  value="닫기"
+                  onClick={onClose}
+                  disabled={isDisabled}
+                />
               </ButtonContainer>
             </form>
           )}

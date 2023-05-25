@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
 import Chart from "@/components/Banking/Chart";
@@ -33,7 +33,7 @@ export default function Home() {
             {auth.currentUser?.displayName || "닉네임 없음"}&nbsp;님의 독서 통장
           </BankName>
           <BankBook
-            onclick={() => router.push("/banking")}
+            onClick={() => router.push("/banking")}
             text="내역 보기"
             secondOnClick={() => router.push("/banking/deposit")}
             secondText="입금하기"
