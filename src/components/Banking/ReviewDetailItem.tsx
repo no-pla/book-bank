@@ -161,7 +161,7 @@ const BankBookDetailDataContainer = styled.section<{ show: string }>`
 `;
 
 const BankBookDetailData = styled.div`
-  background-color: whitesmoke;
+  background-color: var(--bg-color);
   height: 100%;
   width: 100%;
   padding: 20px;
