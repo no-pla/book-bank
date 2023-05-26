@@ -10,7 +10,7 @@ import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewDetailItem = () => {
-  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
+  const targetMyBookData = useRecoilValue(selectMyBookState);
   const reset = useResetRecoilState(selectMyBookState);
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const isEdit = useRecoilValue(isFormEdit);
@@ -25,7 +25,7 @@ const ReviewDetailItem = () => {
 
   const onDelete = async () => {
     try {
-      await deleteReview(targetMyBookData?.id);
+      await deleteReview(targetMyBookData?.id!);
     } catch (error) {
       setErrorMessage(["에러가 발생했습니다.", "다시 삭제를 시도해 주세요."]);
     }
@@ -57,10 +57,10 @@ const ReviewDetailItem = () => {
           <>
             {Object.keys(targetMyBookData).length > 0 && (
               <div>
-                <BookTitle>{targetMyBookData.title}</BookTitle>
+                <BookTitle>{targetMyBookData?.title}</BookTitle>
                 <BookSetting>
                   <BookDate>
-                    {new Date(targetMyBookData?.createdAt).toLocaleString()}
+                    {new Date(targetMyBookData?.createdAt!).toLocaleString()}
                   </BookDate>
                   <SettingButton>
                     <button onClick={toggleEdit}>수정</button>
@@ -69,20 +69,20 @@ const ReviewDetailItem = () => {
                 </BookSetting>
                 <BookInfoContainer>
                   <Image
-                    src={targetMyBookData.thumbnail}
+                    src={targetMyBookData?.thumbnail!}
                     height={150}
                     width={110}
-                    alt={`${targetMyBookData.title}의 책표지입니다. `}
+                    alt={`${targetMyBookData?.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
                     loading="eager"
                   />
                   <BookInfo>
                     <div>
-                      {targetMyBookData.authors.join(", ") || "정보 없음"}
+                      {targetMyBookData?.authors!.join(", ") || "정보 없음"}
                     </div>
-                    <div>{targetMyBookData.publisher || "정보 없음"}</div>
+                    <div>{targetMyBookData?.publisher || "정보 없음"}</div>
                     <div>
-                      {targetMyBookData.price.toLocaleString() || "정보 없음"}
+                      {targetMyBookData?.price!.toLocaleString() || "정보 없음"}
                     </div>
                   </BookInfo>
                 </BookInfoContainer>
@@ -177,16 +177,18 @@ const BookInfoContainer = styled.div`
   display: flex;
   gap: 20px;
   margin-top: 20px;
-  @media (max-width: 280px) {
-    flex-direction: column;
+  @media (max-width: 320px) {
     img {
       display: none;
     }
   }
+  @media (max-width: 280px) {
+    flex-direction: column;
+  }
 `;
 
 const ReviewTitle = styled.div`
-  margin: 20px 0;
+  margin: 12px 0;
   font-weight: 800;
   font-size: 1.4rem;
 `;

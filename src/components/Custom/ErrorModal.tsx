@@ -2,7 +2,6 @@ import React from "react";
 import { createPortal } from "react-dom";
 import {
   Modal,
-  ModalButton,
   ModalButtonContainer,
   ModalContainer,
   ModalContent,

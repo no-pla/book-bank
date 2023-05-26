@@ -31,7 +31,7 @@ const REST_API_KEY = process.env.NEXT_PUBLIC_LIBRARY_KEY;
 const SearchForm = () => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(1);
-  const [searchBookName, setSearchBookName] = useState("");
+  const [searchBookName, setSearchBookName] = useState<string>("");
   const SearchInputRef = useRef<HTMLInputElement>(null);
   const setSelectBook = useSetRecoilState(selectBookState);
   const resetSelectBook = useResetRecoilState(selectBookState);
@@ -56,7 +56,7 @@ const SearchForm = () => {
     );
   };
 
-  const { data: bookList } = useQuery<any>(
+  const { data: bookList } = useQuery(
     ["bookData", searchBookName, page],
     fetchBookList,
     {
@@ -64,7 +64,7 @@ const SearchForm = () => {
       enabled: !!searchBookName,
       select: (data) => {
         // 불변성을 유지하기 위하여 id값을 추가하고 리턴
-        const modifiedData = data.data.documents.map((book: any) => {
+        const modifiedData = data.data.documents.map((book: IBook) => {
           // forEach는 리턴 값이 없으므로 사용하면 안된다.
           return { ...book, id: uuid_v4() };
         });
@@ -87,7 +87,6 @@ const SearchForm = () => {
     setPage((prev) => (prev += 1));
     await queryClient.prefetchQuery({
       queryKey: ["bookData", searchBookName, page],
-
       queryFn: fetchBookList,
     });
   };

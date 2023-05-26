@@ -13,11 +13,19 @@ import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
 import useDisabled from "../../Hooks/useDisabled";
 
+interface ItargetBookData {
+  title: string;
+  publisher: string;
+  thumbnail: string;
+  price: number;
+  authors: string | string[];
+}
+
 const ReviewForm = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
   const { isDisabled, toggleDisabled } = useDisabled();
-  const targetBookData = useRecoilValue<any>(selectBookState);
+  const targetBookData = useRecoilValue(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
   const userDirectFormData = useRecoilValue(userDirectFormState);
@@ -42,7 +50,7 @@ const ReviewForm = () => {
       price: targetBookData?.price || 0,
       id: uuid_v4(),
       authors:
-        targetBookData?.authors.length !== 0
+        targetBookData?.authors?.length !== 0
           ? targetBookData?.authors
           : ["정보 없음"],
       thumbnail: targetBookData?.thumbnail || NO_IMAGE,
@@ -88,13 +96,14 @@ const ReviewForm = () => {
                 />
                 <BookDesc>
                   <div>
-                    {targetBookData.authors.length === 0
+                    {targetBookData.authors?.length === 0
                       ? "정보 없음"
-                      : targetBookData.authors.slice(0, 3).join(", ")}
-                    {targetBookData.authors.length > 3 && " 외"}
+                      : typeof targetBookData.authors === "object" &&
+                        targetBookData.authors?.slice(0, 3).join(", ")}
+                    {targetBookData.authors?.length! > 3 && " 외"}
                   </div>
                   <div>{targetBookData.publisher}</div>
-                  <div>{targetBookData.price.toLocaleString()}</div>
+                  <div>{targetBookData.price?.toLocaleString()}</div>
                 </BookDesc>
               </BookDescriptionConatiner>
               <TextAreaLabel htmlFor="review">후기</TextAreaLabel>
