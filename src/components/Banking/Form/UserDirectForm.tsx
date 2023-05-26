@@ -6,6 +6,7 @@ import { NO_IMAGE } from "@/share/server";
 import { FileInput } from "../../Auth/UpdateProfileForm";
 import styled from "@emotion/styled";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
 import useAuth from "../../Hooks/useAuth";
@@ -30,13 +31,6 @@ const UserDirectForm = () => {
   const methods = useForm<any>({
     defaultValues: {},
   });
-
-  useEffect(() => {
-    if (!selectImage) return;
-    const objectUrl = window.URL.createObjectURL(selectImage);
-    setImageURL(objectUrl);
-    return () => window.URL.revokeObjectURL(selectImage);
-  }, [selectImage]);
 
   const onSubmit = async ({
     authors,
@@ -71,6 +65,42 @@ const UserDirectForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (!selectImage) return;
+    const objectUrl = window.URL.createObjectURL(selectImage);
+    setImageURL(objectUrl);
+    return () => window.URL.revokeObjectURL(selectImage);
+  }, [selectImage]);
+
+  const resizeFile = (file: Blob) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "WEBP",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "blob"
+      );
+    });
+
+  const onUploadPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    try {
+      const file = event.target.files[0];
+      const image = await resizeFile(file);
+      // blob 파일 생성
+      setSelectImage(image);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {isShowing && (
@@ -96,9 +126,7 @@ const UserDirectForm = () => {
               type="file"
               accept="image/*"
               name="preview-image"
-              onChange={(event: any) => {
-                setSelectImage(event.target.files[0]);
-              }}
+              onChange={(event) => onUploadPhoto(event)}
             />
             <Input
               validation={{

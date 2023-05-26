@@ -3,6 +3,13 @@ import axios from "axios";
 import React from "react";
 import { useQuery } from "react-query";
 
+interface IRanking {
+  keyword: {
+    weight: number;
+    word: string;
+  };
+}
+
 const Ranking = () => {
   const { data: keywords } = useQuery(
     "getMonthlyKeyword",
@@ -21,12 +28,13 @@ const Ranking = () => {
       select: (data) => data?.data.response.keywords.slice(0, 10),
     }
   );
+
   return (
     <RankingInfo>
       <RankingTitle>최근 인기 도서 키워드</RankingTitle>
       <RankingList>
         {keywords ? (
-          keywords?.map(({ keyword }: any, index: number) => {
+          keywords?.map(({ keyword }: IRanking, index: number) => {
             return (
               <li key={index}>
                 {index + 1}.&nbsp;{keyword?.word}
