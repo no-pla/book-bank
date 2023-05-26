@@ -9,6 +9,7 @@ import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 import BankBook from "@/components/Banking/BankBook";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import useAuth from "@/components/Hooks/useAuth";
 
 export interface IBookData {
   id: string;
@@ -25,12 +26,13 @@ export interface IBookData {
   createdDay: number;
 }
 
-const Index = ({ currentUser }: any) => {
+const Index = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
   const setMyBookData = useSetRecoilState(selectMyBookState);
+  const currentUser = useAuth();
   const userInfo = useUser(currentUser?.uid);
   const totalBook = userInfo?.length || 0;
   const totalAmount =

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useFormContext } from "react-hook-form";
 
-const Input = ({ placeholder, type, name, validation }: any) => {
+const Input = ({ placeholder, type, name, validation, defaultValue }: any) => {
   const {
     register,
     formState: { errors },
@@ -18,6 +18,7 @@ const Input = ({ placeholder, type, name, validation }: any) => {
         {...register(name, validation)}
         id={name}
         name={name}
+        defaultValue={defaultValue}
       />
       <ErrorMessage>
         {errors[name] && <>{errors[name]?.message?.toString()}</>}

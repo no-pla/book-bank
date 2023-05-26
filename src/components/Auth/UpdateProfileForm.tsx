@@ -5,6 +5,7 @@ import { v4 as uuid_v4 } from "uuid";
 import styled from "@emotion/styled";
 import { updateProfile } from "firebase/auth";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 import { storage } from "@/share/firebase";
 import useAuth from "../Hooks/useAuth";
 import useModal from "../Hooks/useModal";
@@ -36,12 +37,10 @@ export const UpdateProfileForm = () => {
 
   const onUpdateProfile = async ({ newDisplayName }: any) => {
     toggleDisabled();
-
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
       const photoURL = await getDownloadURL(snapshot.ref);
-
       await updateProfile(currentUser, {
         displayName: newDisplayName ? newDisplayName : currentUser?.displayName,
         photoURL: selectImage ? photoURL : currentUser?.photoURL,
@@ -54,11 +53,41 @@ export const UpdateProfileForm = () => {
   };
 
   useEffect(() => {
+    // 미리보기 용도
     if (!selectImage) return;
     const objectUrl = window.URL.createObjectURL(selectImage);
     setImageURL(objectUrl);
     return () => window.URL.revokeObjectURL(selectImage);
   }, [selectImage]);
+
+  const resizeFile = (file: Blob) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "WEBP",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "blob"
+      );
+    });
+
+  const onUploadPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    try {
+      const file = event.target.files[0];
+      const image = await resizeFile(file);
+      // blob 파일 생성
+      setSelectImage(image);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ProfileContainer>
@@ -91,9 +120,7 @@ export const UpdateProfileForm = () => {
                   type="file"
                   accept="image/*"
                   name="preview-image"
-                  onChange={(event: any) => {
-                    setSelectImage(event.target.files[0]);
-                  }}
+                  onChange={(event: any) => onUploadPhoto(event)}
                 />
               </div>
               <div>
@@ -111,6 +138,10 @@ export const UpdateProfileForm = () => {
                   placeholder="새로운 닉네임"
                   type="text"
                   name="newDisplayName"
+                  defaultValue={
+                    currentUser?.displayName ||
+                    UpdateNicknameInputRef.current?.value
+                  }
                 />
                 <ButtonContainer>
                   <CustomButton
@@ -152,17 +183,6 @@ export const UpdateProfileForm = () => {
     </ProfileContainer>
   );
 };
-
-// const Input = styled.input`
-//   padding: 8px;
-//   border-radius: 4px;
-//   border: 1px solid lightgray;
-//   color: var(--text-color);
-//   box-sizing: border-box;
-//   font-size: 1.1rem;
-//   font-weight: 200;
-//   width: 144px;
-// `;
 
 export const Title = styled.h2`
   font-weight: 700;

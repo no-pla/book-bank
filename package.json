@@ -28,7 +28,9 @@
     "react-helmet": "^6.1.0",
     "react-hook-form": "^7.43.9",
     "react-icons": "^4.8.0",
+    "react-image-file-resizer": "^0.4.8",
     "react-query": "^3.39.3",
+    "react-query-devtools": "^2.6.3",
     "recoil": "^0.7.7",
     "typescript": "5.0.4",
     "uuidv4": "^6.2.13"

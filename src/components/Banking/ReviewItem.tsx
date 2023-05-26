@@ -9,9 +9,26 @@ import useAuth from "../Hooks/useAuth";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import ConfirmModal from "../Custom/ConfirmModal";
+import useModal from "../Hooks/useModal";
+
+interface IMyBook {
+  title: string;
+  publisher: string;
+  price: number;
+  id: string;
+  authors: string[];
+  createdAt: number;
+  createdDay: number;
+  createdMonth: number;
+  createdYear: number;
+  review: string;
+  thumbnail: string;
+}
 
 const ReviewItem = () => {
   const currentUser = useAuth();
+  const { isShowing, toggle } = useModal();
   const userInfo = useUser(currentUser?.uid);
   const MAX_BOOK = 10;
   const setMyBookData = useSetRecoilState(selectMyBookState);
@@ -34,6 +51,14 @@ const ReviewItem = () => {
           return undefined;
         }
       },
+      select: (data) => {
+        // 불변성을 유지하기 위하여 id값을 추가하고 리턴
+        const modifiedData = data.pages.map((book: any) => {
+          // 필요 없는 데이터 제외 후 리턴
+          return book?.data;
+        });
+        return { pages: modifiedData, pageParams: data.pageParams };
+      },
     }
   );
 
@@ -43,19 +68,31 @@ const ReviewItem = () => {
     );
   };
 
-  const showDetailReview = (data: any) => {
-    setMyBookData(data);
+  const showDetailReview = (data: IMyBook) => {
     if (isEdit) {
+      toggle();
+      return;
       // 수정 폼이 열린 상태로 상세보기를 누르면 경고 모달 on
-      setIsEdit(!isEdit);
     }
+    setMyBookData(data);
   };
 
   return (
     <BookListContainer>
+      {isShowing && (
+        <ConfirmModal
+          title="정말로 수정을 취소할까요?"
+          content="이 작업은 되돌릴 수 없습니다!"
+          toggle={toggle}
+          onFunc={() => {
+            setIsEdit((prev) => !prev);
+            toggle();
+          }}
+        />
+      )}
       <ul>
-        {myBookReviews?.pages?.map((list: any) => {
-          return list?.data.map((book: any) => {
+        {myBookReviews?.pages?.map((list: IMyBook[]) => {
+          return list?.map((book: IMyBook) => {
             return (
               <BookListItem
                 key={book.id}

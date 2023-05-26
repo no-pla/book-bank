@@ -17,20 +17,20 @@ const DynamicChart = dynamic(() => import("react-apexcharts"), {
 const Chart = () => {
   const defaultData = [
     {
-      name: "1주차",
-      data: [0, 0, 0, 0, 0, 0, 0, 0],
+      name: "1일 ~ 10일",
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      name: "2주차",
-      data: [0, 0, 0, 0, 0, 0, 0, 0],
+      name: "11일 ~ 20일",
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      name: "3주차",
-      data: [0, 0, 0, 0, 0, 0, 0, 0],
+      name: "21일 ~ 30일",
+      data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     },
     {
-      name: "4주차",
-      data: [0, 0, 0, 0],
+      name: "31일",
+      data: [0],
     },
   ];
 
@@ -81,9 +81,8 @@ const Chart = () => {
           options={{
             chart: {
               type: "heatmap",
-              fontFamily: "Dongle",
+              fontFamily: "inherit",
             },
-
             xaxis: {
               type: "category",
               categories: [
@@ -116,7 +115,6 @@ const Chart = () => {
               style: {
                 fontWeight: "800",
                 fontSize: "1.5rem",
-                fontFamily: "inherit",
               },
             },
             plotOptions: {
@@ -140,5 +138,4 @@ export default Chart;
 
 const ChartContainer = styled.div`
   position: relative;
-  z-index: 0;
 `;

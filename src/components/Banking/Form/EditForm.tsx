@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import Resizer from "react-image-file-resizer";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../../Hooks/useBanking";
 import CustomButton from "../../Custom/CustomButton";
@@ -16,7 +17,7 @@ import { storage } from "@/share/firebase";
 import useDisabled from "../../Hooks/useDisabled";
 
 interface IEditData {
-  authors: string | string[];
+  authors: string;
   price: number;
   publisher: string;
   review: string;
@@ -45,21 +46,20 @@ const EditForm = () => {
     },
   });
 
-  const onEdit = async (data: any) => {
-    let authors = data.authors;
+  const onEdit = async (data: IEditData) => {
+    let authors: string[] | string = data.authors;
     if (typeof data.authors === "string") {
-      authors = authors.split(",").map((author: string) => author.trim());
+      authors = authors.split(",").map((author: any) => author.trim());
     }
     toggleDisabled();
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
       const thumbnail = await getDownloadURL(snapshot.ref);
-
       const editReview = {
         ...targetMyBookData,
         authors,
-        price: +data.price,
+        price: Number(data.price),
         publisher: data.publisher,
         review: data?.review,
         title: data.title,
@@ -94,6 +94,35 @@ const EditForm = () => {
     toggle();
   };
 
+  const resizeFile = (file: Blob) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        300,
+        300,
+        "WEBP",
+        100,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        "blob"
+      );
+    });
+
+  const onUploadPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files) return;
+
+    try {
+      const file = event.target.files[0];
+      const image = await resizeFile(file);
+      // blob 파일 생성
+      setSelectImage(image);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {isShowing && (
@@ -124,9 +153,7 @@ const EditForm = () => {
               type="file"
               accept="image/*"
               name="preview-image"
-              onChange={(event: any) => {
-                setSelectImage(event.target.files[0]);
-              }}
+              onChange={(event) => onUploadPhoto(event)}
             />
           </div>
           <Input

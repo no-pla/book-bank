@@ -33,7 +33,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const kakaoInit = () => {
     // 페이지가 로드되면 실행
-    window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY);
+    if (!window.Kakao.isInitialized())
+      window.Kakao.init(process.env.NEXT_PUBLIC_JAVASCRIPT_KEY);
   };
 
   return (

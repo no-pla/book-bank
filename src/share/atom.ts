@@ -1,11 +1,34 @@
 import { atom } from "recoil";
 
-export const selectBookState = atom({
+interface ItargetBookData {
+  title?: string;
+  publisher?: string;
+  thumbnail?: string;
+  price?: number;
+  authors?: string | string[];
+}
+
+interface IMyBook {
+  title?: string;
+  publisher?: string;
+  price?: number;
+  id?: string;
+  authors?: string[];
+  createdAt?: number;
+  createdDay?: number;
+  createdMonth?: number;
+  createdYear?: number;
+  review?: string;
+  thumbnail?: string;
+  uid?: string;
+}
+
+export const selectBookState = atom<ItargetBookData>({
   key: "selectBookState",
   default: {},
 });
 
-export const selectMyBookState = atom({
+export const selectMyBookState = atom<IMyBook>({
   key: "selectMyBookState",
   default: {},
 });
