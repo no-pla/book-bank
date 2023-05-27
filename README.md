@@ -1,6 +1,9 @@
 # Book Bank
 ![Logo](https://github.com/no-pla/book-bank/assets/88391843/010e17e4-9e3d-451f-837f-1eab885bdfb7)
 
+📚🏦 도서관에서 참여했던 독서 통장을 기억하시나요?
+Book Bank에서 당신의 독서를 저금하세요!
+Book Bank는 개인적인 독서 기록을 관리하고, 월별, 연도별 독서 기록을 차트로 볼 수 있는 사이트입니다.
 
 ## Authors
 - [@no-pla](https://www.github.com/no-pla)
