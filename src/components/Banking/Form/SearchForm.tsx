@@ -29,7 +29,6 @@ interface IBook {
 const REST_API_KEY = process.env.NEXT_PUBLIC_LIBRARY_KEY;
 
 const SearchForm = () => {
-  const queryClient = useQueryClient();
   const [page, setPage] = useState<number>(1);
   const [searchBookName, setSearchBookName] = useState<string>("");
   const SearchInputRef = useRef<HTMLInputElement>(null);
@@ -45,7 +44,7 @@ const SearchForm = () => {
     );
   };
 
-  const fetchBookList = async () => {
+  const fetchBookList = async (page: number) => {
     return await axios.get(
       `https://dapi.kakao.com/v3/search/book?sort=accuracy&page=${page}&size=20&query=${searchBookName}`,
       {
@@ -58,7 +57,7 @@ const SearchForm = () => {
 
   const { data: bookList } = useQuery(
     ["bookData", searchBookName, page],
-    fetchBookList,
+    () => fetchBookList(page),
     {
       keepPreviousData: true,
       enabled: !!searchBookName,
@@ -82,21 +81,6 @@ const SearchForm = () => {
       setPage(1);
     }
   };
-
-  const prefetchNextPage = async () => {
-    setPage((prev) => (prev += 1));
-    await queryClient.prefetchQuery({
-      queryKey: ["bookData", searchBookName, page],
-      queryFn: fetchBookList,
-    });
-  };
-
-  useEffect(() => {
-    if (!bookList?.meta?.is_end && bookList) {
-      // 마지막 페이지가 아닐때만 prefetch
-      prefetchNextPage();
-    }
-  }, [page]);
 
   const onClick = (book: any) => {
     setSelectBook(book);
