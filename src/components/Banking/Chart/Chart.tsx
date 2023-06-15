@@ -40,7 +40,7 @@ const Chart = () => {
       await axios.get(
         `${DB_LINK}/review?uid=${
           auth?.currentUser?.uid
-        }&_sort=_createdDay&_order=desc&_createdYear=${new Date().getFullYear()}&_createdMonth=${
+        }&_sort=_createdDay&_order=desc&createdYear=${new Date().getFullYear()}&createdMonth=${
           new Date().getMonth() + 1
         }`
       ),
@@ -73,6 +73,8 @@ const Chart = () => {
       },
     }
   );
+
+  // console.log(series);
 
   return (
     <ChartContainer>
