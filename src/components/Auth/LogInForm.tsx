@@ -13,7 +13,7 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import CustomButton from "../Custom/CustomButton";
 import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
-
+import { FcGoogle } from "react-icons/fc";
 interface ILoginData {
   email: string;
   password: string;
@@ -29,6 +29,7 @@ const LoginForm = () => {
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
 
   const onLogIn = async ({ email, password }: ILoginData) => {
@@ -87,8 +88,8 @@ const LoginForm = () => {
         />
       )}
       <FormContainer>
-        <h1>로그인</h1>
         <FormProvider {...methods}>
+          {/* 중첩된 컴포넌트에서 useForm을 사용하기 위하여 FormProvider와 useFormContext를 사용 */}
           <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
             <AuthInput
               validation={{
@@ -110,7 +111,7 @@ const LoginForm = () => {
                 pattern: {
                   value: passwordRegex,
                   message:
-                    "비밀번호는 알파벳 대소문자, 숫자, 특수문자(!@#$%^*+=-)를 모두 포함하고, 길이는 8자 이상 25자 이하여야 합니다.",
+                    "비밀번호는 최소 6자 이상, 숫자와 영문자를 모두 포함해야 합니다.",
                 },
                 required: {
                   value: true,
@@ -121,12 +122,15 @@ const LoginForm = () => {
               type="password"
               name="password"
             />
-            <Button>로그인</Button>
+            <Button type="submit">로그인</Button>
+            <ToggleLink href="/register">이메일로 시작하기</ToggleLink>
           </Form>
         </FormProvider>
-        <ToggleLink href="/register">회원가입</ToggleLink>
+        <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line>
         <div>
-          <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
+          <button onClick={() => googleLogin()}>
+            <FcGoogle size={24} />
+          </button>
         </div>
       </FormContainer>
     </Container>
@@ -135,63 +139,62 @@ const LoginForm = () => {
 
 export default LoginForm;
 
-export const ToggleLink = styled(Link)`
-  color: whitesmoke;
-  text-decoration: none;
-  margin: 20px 0;
+const Line = styled.div`
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  &::before {
+    content: "";
+    background-color: #c0c0c0;
+    flex-grow: 1;
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
+  &::after {
+    content: "";
+    background-color: #c0c0c0;
+    flex-grow: 1;
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
 `;
 
-export const Container = styled.div`
-  display: flex;
-  justify-content: center;
+export const ToggleLink = styled(Link)`
+  text-decoration: none;
+  display: inline-flex;
+  padding-top: 16px;
+  vertical-align: middle;
   align-items: center;
-  flex-direction: column;
-  gap: 62px;
-  /* width: 100%; */
-  color: var(--text-color);
-  /* height: 100vh; */
+  justify-content: center;
+  font-size: 0.9rem;
+  width: 100%;
 `;
+
+export const Container = styled.div``;
 
 export const FormContainer = styled.div`
-  color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(60%, 600px);
-  padding: 40px;
-  border-radius: 8px;
-  > h1 {
-    margin-bottom: 40px;
-    font-size: 1.2rem;
-    font-weight: 800;
+  > div:last-of-type {
+    text-align: center;
   }
   > div:last-of-type > button {
-    color: #db4437;
     border: 2px solid #db4437;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
   }
 `;
 
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 4px;
-`;
+export const Form = styled.form``;
 
 export const Button = styled.button`
   width: 100%;
   padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid lightgray;
-  cursor: pointer;
+  margin-top: 12px;
 `;
 
-export const TitleContainer = styled.div`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 60px;
-`;
+export const TitleContainer = styled.div``;

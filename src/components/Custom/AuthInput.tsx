@@ -2,11 +2,34 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useFormContext } from "react-hook-form";
 
-const AuthInput = ({ placeholder, type, name, validation }: any) => {
+type INickName = {
+  minLength?: {
+    value: number;
+    message: string;
+  };
+  maxLength: {
+    value: number;
+    message: string;
+  };
+  required: {
+    value: boolean;
+    message: string;
+  };
+};
+
+type IInputProps = {
+  placeholder: string;
+  type: string;
+  name: string;
+  validation: INickName;
+};
+
+const AuthInput = ({ placeholder, type, name, validation }: IInputProps) => {
   const {
     register,
     formState: { errors },
   } = useFormContext<any>();
+  const error = errors[name];
 
   return (
     <>
@@ -19,16 +42,14 @@ const AuthInput = ({ placeholder, type, name, validation }: any) => {
         id={name}
         name={name}
       />
-      <ErrorMessage>
-        {errors[name] && <>{errors[name]?.message?.toString()}</>}
-      </ErrorMessage>
+      <ErrorMessage>{error && error?.message?.toString()}</ErrorMessage>
     </>
   );
 };
 
 const Label = styled.label`
-  padding: 4px 0;
   width: 100%;
+  font-size: 0.9rem;
 `;
 
 export const Input = styled.input`
@@ -38,13 +59,14 @@ export const Input = styled.input`
   width: 100%;
   color: var(--text-color);
   box-sizing: border-box;
+  margin-top: 4px;
 `;
 
 const ErrorMessage = styled.p`
   color: var(--point-color2);
   text-align: left;
-  padding: 2px 0 4px 12px;
-  font-size: 0.8rem;
+  padding: 8px 0 8px 4px;
+  font-size: 0.7rem;
   width: 100%;
 `;
 

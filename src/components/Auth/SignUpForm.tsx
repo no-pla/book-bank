@@ -8,12 +8,8 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import {
   Button,
   Container,
-  Description,
   Form,
   FormContainer,
-  Icon,
-  Title,
-  TitleContainer,
   ToggleLink,
 } from "./LogInForm";
 import AuthInput from "../Custom/AuthInput";
@@ -36,6 +32,7 @@ const SignUpForm = () => {
       password_confirm: "",
       username: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async ({ email, password, username }: IUserData) => {
@@ -86,7 +83,7 @@ const SignUpForm = () => {
         />
       )}
       <FormContainer>
-        <h1>회원가입</h1>
+        {/* <h1>회원가입</h1> */}
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <AuthInput
@@ -109,7 +106,7 @@ const SignUpForm = () => {
                 pattern: {
                   value: passwordRegex,
                   message:
-                    "비밀번호는 알파벳 대소문자, 숫자, 특수문자(!@#$%^*+=-)를 모두 포함하고, 길이는 8자 이상 25자 이하여야 합니다.",
+                    "비밀번호는 최소 8자 이상, 숫자와 영문자를 모두 포함해야 합니다.",
                 },
                 required: {
                   value: true,
