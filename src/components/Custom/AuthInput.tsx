@@ -3,11 +3,11 @@ import styled from "@emotion/styled";
 import { useFormContext } from "react-hook-form";
 
 type INickName = {
-  minLength?: {
+  maxLength?: {
     value: number;
     message: string;
   };
-  maxLength: {
+  minLength?: {
     value: number;
     message: string;
   };
@@ -15,6 +15,11 @@ type INickName = {
     value: boolean;
     message: string;
   };
+  pattern?: {
+    value: any;
+    message: string;
+  };
+  validate?: any;
 };
 
 type IInputProps = {

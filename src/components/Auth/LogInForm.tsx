@@ -79,7 +79,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Container>
+    <>
       {isShowing && (
         <ErrorModal
           title={errorMessage[0]}
@@ -90,7 +90,7 @@ const LoginForm = () => {
       <FormContainer>
         <FormProvider {...methods}>
           {/* 중첩된 컴포넌트에서 useForm을 사용하기 위하여 FormProvider와 useFormContext를 사용 */}
-          <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
+          <form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
             <AuthInput
               validation={{
                 pattern: {
@@ -124,7 +124,7 @@ const LoginForm = () => {
             />
             <Button type="submit">로그인</Button>
             <ToggleLink href="/register">이메일로 시작하기</ToggleLink>
-          </Form>
+          </form>
         </FormProvider>
         <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line>
         <div>
@@ -133,7 +133,7 @@ const LoginForm = () => {
           </button>
         </div>
       </FormContainer>
-    </Container>
+    </>
   );
 };
 
@@ -173,8 +173,6 @@ export const ToggleLink = styled(Link)`
   width: 100%;
 `;
 
-export const Container = styled.div``;
-
 export const FormContainer = styled.div`
   > div:last-of-type {
     text-align: center;
@@ -187,8 +185,6 @@ export const FormContainer = styled.div`
   }
 `;
 
-export const Form = styled.form``;
-
 export const Button = styled.button`
   width: 100%;
   padding: 8px 12px;
@@ -196,5 +192,3 @@ export const Button = styled.button`
   border: 1px solid lightgray;
   margin-top: 12px;
 `;
-
-export const TitleContainer = styled.div``;

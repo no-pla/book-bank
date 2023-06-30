@@ -5,13 +5,7 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import {
-  Button,
-  Container,
-  Form,
-  FormContainer,
-  ToggleLink,
-} from "./LogInForm";
+import { Button, FormContainer, ToggleLink } from "./LogInForm";
 import AuthInput from "../Custom/AuthInput";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
@@ -43,14 +37,18 @@ const SignUpForm = () => {
           const user = userCredential.user;
           await updateProfile(user, {
             displayName: username,
-          }).then(async () => {
-            await axios.post(`${DB_LINK}/users`, {
-              id: user.uid,
-              nickname: user.displayName,
-              email: user.email,
-              signUpDate: new Date().toLocaleDateString(),
+          })
+            .then(async () => {
+              await axios.post(`${DB_LINK}/users`, {
+                id: user.uid,
+                nickname: user.displayName,
+                email: user.email,
+                signUpDate: new Date().toLocaleDateString(),
+              });
+            })
+            .catch((error) => {
+              console.log(error);
             });
-          });
         }
       );
     } catch ({ code }: any) {
@@ -59,7 +57,6 @@ const SignUpForm = () => {
           "이미 가입된 이메일입니다.",
           "로그인 혹은 다른 이메일로 다시 시도해 주세요.",
         ]);
-
         toggle();
         return;
       } else {
@@ -74,7 +71,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <Container>
+    <>
       {isShowing && (
         <ErrorModal
           title={errorMessage[0]}
@@ -83,9 +80,8 @@ const SignUpForm = () => {
         />
       )}
       <FormContainer>
-        {/* <h1>회원가입</h1> */}
         <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
+          <form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <AuthInput
               validation={{
                 pattern: {
@@ -151,11 +147,11 @@ const SignUpForm = () => {
               name="username"
             />
             <Button>회원가입</Button>
-          </Form>
+          </form>
         </FormProvider>
         <ToggleLink href="/login">로그인하기</ToggleLink>
       </FormContainer>
-    </Container>
+    </>
   );
 };
 
