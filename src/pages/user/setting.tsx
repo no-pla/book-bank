@@ -86,10 +86,10 @@ const Setting = () => {
           onFunc={onWithdrawal}
         />
       )}
-      <div>
+      <ContentContainer>
         <UpdateProfileForm />
         <PreviousChart />
-      </div>
+      </ContentContainer>
       <WithdrawalContainer>
         <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
       </WithdrawalContainer>
@@ -99,17 +99,22 @@ const Setting = () => {
 
 export default Setting;
 
-const WithdrawalContainer = styled.section``;
+const WithdrawalContainer = styled.section`
+  margin-top: 12px;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
 
 const SettingPage = styled.section`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  justify-content: spb;
-  @media (max-width: 600px) {
-  }
+  justify-content: space-between;
+  height: 100%;
 `;
 
 const WithdrawalButton = styled.button`
@@ -117,8 +122,6 @@ const WithdrawalButton = styled.button`
   border: none;
   color: var(--point-color2);
   float: right;
-  cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  margin: 8px;
 `;

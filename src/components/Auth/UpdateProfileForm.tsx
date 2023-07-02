@@ -16,7 +16,7 @@ const UpdateProfileForm = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
   const [openProfile, setOpenProfile] = useState<boolean>(false);
-  const [imageURL, setImageURL] = useState<any>(null);
+  const [imageURL, setImageURL] = useState<string | null>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
   const UpdateNicknameInputRef = useRef<HTMLInputElement>(null);
   const UpdateNicknameInput = () => {
@@ -72,11 +72,7 @@ const UpdateProfileForm = () => {
             <div>
               <Image
                 id="preview-image"
-                src={
-                  imageURL
-                    ? imageURL
-                    : "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
-                }
+                src={imageURL ? imageURL : currentUser?.photoURL}
                 height={100}
                 width={100}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
@@ -108,10 +104,7 @@ const UpdateProfileForm = () => {
         <Profile>
           <div>
             <Image
-              src={
-                currentUser?.photoURL ||
-                "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
-              }
+              src={currentUser?.photoURL}
               height={100}
               width={100}
               alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
@@ -142,13 +135,13 @@ const Input = styled.input`
 `;
 
 export const Title = styled.h2`
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
   margin-bottom: 20px;
 `;
 
 const ProfileContainer = styled.section`
-  padding: 20px;
+  padding-bottom: 20px;
   border-bottom: 1px solid lightgray;
 `;
 
@@ -172,6 +165,8 @@ const Profile = styled.div`
 `;
 
 const FileInput = styled.input`
+  cursor: pointer;
+  margin-top: 8px;
   &::file-selector-button {
     padding: 8px 16px;
     background-color: white;
@@ -179,13 +174,11 @@ const FileInput = styled.input`
     border: 1px solid lightgray;
     margin-top: 8px;
     margin-right: 8px;
-    cursor: pointer;
   }
 `;
 
 const ButtonContainer = styled.div`
   margin-top: 12px;
-
   & button:first-of-type {
     border: 1px solid var(--point-color2);
     color: var(--point-color2);
