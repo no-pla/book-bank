@@ -67,7 +67,7 @@ export const StyleInput = styled.input`
   margin-top: 4px;
 `;
 
-const ErrorMessage = styled.p`
+export const ErrorMessage = styled.p`
   color: var(--point-color2);
   text-align: left;
   padding: 8px 0 8px 4px;

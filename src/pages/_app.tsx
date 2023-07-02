@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Layout from "@/components/Layout/Layout";
 import "../style/reset.css";
 import Script from "next/script";
-import useAuth from "@/components/Hooks/useAuth";
 
 const queryClient = new QueryClient({
   defaultOptions: {

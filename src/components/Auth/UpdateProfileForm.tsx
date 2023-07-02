@@ -161,7 +161,7 @@ const Profile = styled.div`
   }
 `;
 
-const FileInput = styled.input`
+export const FileInput = styled.input`
   cursor: pointer;
   margin-top: 8px;
   &::file-selector-button {
