@@ -133,11 +133,11 @@ const SignUpForm = () => {
               validation={{
                 minLength: {
                   value: 2,
-                  message: "닉네임은 2글자 이상 10글자 이하로 설정해 주세요.",
+                  message: "닉네임은 2글자 이상 6글자 이하로 설정해 주세요.",
                 },
                 maxLength: {
-                  value: 10,
-                  message: "닉네임은 2글자 이상 10글자 이하로 설정해 주세요.",
+                  value: 6,
+                  message: "닉네임은 2글자 이상 6글자 이하로 설정해 주세요.",
                 },
                 required: {
                   value: true,

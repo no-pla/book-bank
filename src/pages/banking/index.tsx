@@ -73,56 +73,19 @@ const Index = () => {
         <title>Book Bank / 내역</title>
       </Helmet>
       <DataItemContainer>
-        <BankBookData>
-          <BankBook
-            onClick={() => onShare()}
-            text="공유하기"
-            secondOnClick={() => router.push("/banking/deposit")}
-            secondText="입금하기"
-            transform="-80%"
-          />
-        </BankBookData>
+        <BankBook
+          onClick={() => onShare()}
+          text="공유하기"
+          secondOnClick={() => router.push("/banking/deposit")}
+          secondText="입금하기"
+          transform="10%"
+        />
         <ReviewItem />
       </DataItemContainer>
       <ReviewDetailItem />
     </Section>
   );
 };
-
-// 통장 정보란
-const BankBookData = styled.div`
-  background-color: #bfb0d1;
-  border-radius: 12px;
-  height: 160px;
-  padding: 20px 0px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: flex-end;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const BankBookInfo = styled.div`
-  font-weight: 800;
-  font-size: 1.8rem;
-  transform: translateY(-80%);
-`;
-
-const BankBookInfoButtonContainer = styled.div`
-  width: 100%;
-  > button {
-    width: 50%;
-    padding: 2px 4px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    font-weight: 300;
-    font-size: 1rem;
-  }
-  > button:first-of-type {
-    border-right: 1px solid lightgray;
-  }
-`;
 
 const Section = styled.section`
   height: 100%;

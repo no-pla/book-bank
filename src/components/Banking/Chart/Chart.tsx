@@ -3,6 +3,7 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
+import styled from "@emotion/styled";
 
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   /*
@@ -74,7 +75,7 @@ const Chart = ({ currentUser }: any) => {
   );
 
   return (
-    <>
+    <Container>
       {series && (
         <DynamicChart
           options={{
@@ -114,14 +115,31 @@ const Chart = ({ currentUser }: any) => {
                 useFillColorAsStroke: true,
               },
             },
+            responsive: [
+              {
+                breakpoint: 500,
+                options: {
+                  chart: {
+                    width: 500,
+                  },
+                },
+              },
+            ],
           }}
           series={isFetched ? series : defaultData}
           type="heatmap"
           height={240}
         />
       )}
-    </>
+    </Container>
   );
 };
 
 export default Chart;
+
+const Container = styled.div`
+  @media (max-width: 500px) {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+`;
