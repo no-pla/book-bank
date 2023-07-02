@@ -1,10 +1,10 @@
 :root {
-  --bg-color: #eaebe7;
-  --text-color: #161223;
   --main-color: #8067a9;
   --sub-main-color: #bfb0d1;
-  --point-color1: #30e0a1;
-  --point-color2: #eb7050;
+  --point-color2: #ff0000;
+  --point-color1: #3fa876;
+  --text-color: #161223;
+  --bg-color: #eaebe7;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ 
      v2.0 | 20110126
@@ -113,11 +113,14 @@ nav,
 section {
   display: block;
 }
+
 body {
+  font-size: 1.2rem;
   line-height: 1;
   background-color: var(--bg-color);
   color: var(--text-color);
 }
+
 ol,
 ul {
   list-style: none;

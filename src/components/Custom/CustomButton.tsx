@@ -13,7 +13,11 @@ export default CustomButton;
 
 const Button = styled.button`
   padding: 8px 16px;
-  background-color: white;
+  background-color: whitesmoke;
   border-radius: 8px;
   cursor: pointer;
+  font-size: 0.8rem;
+  &:disabled {
+    background-color: #e2e2e2;
+  }
 `;

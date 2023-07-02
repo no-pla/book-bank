@@ -8,12 +8,12 @@ import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
-import AuthInput from "../Custom/AuthInput";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import CustomButton from "../Custom/CustomButton";
 import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
 import { FcGoogle } from "react-icons/fc";
+import Input from "../Custom/Input";
 interface ILoginData {
   email: string;
   password: string;
@@ -91,7 +91,7 @@ const LoginForm = () => {
         <FormProvider {...methods}>
           {/* 중첩된 컴포넌트에서 useForm을 사용하기 위하여 FormProvider와 useFormContext를 사용 */}
           <form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -106,7 +106,7 @@ const LoginForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,

@@ -6,9 +6,9 @@ import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import { Button, FormContainer, ToggleLink } from "./LogInForm";
-import AuthInput from "../Custom/AuthInput";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
+import Input from "../Custom/Input";
 
 interface IUserData {
   email: string;
@@ -37,6 +37,8 @@ const SignUpForm = () => {
           const user = userCredential.user;
           await updateProfile(user, {
             displayName: username,
+            photoURL:
+              "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039",
           })
             .then(async () => {
               await axios.post(`${DB_LINK}/users`, {
@@ -82,7 +84,7 @@ const SignUpForm = () => {
       <FormContainer>
         <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: emailRegex,
@@ -97,7 +99,7 @@ const SignUpForm = () => {
               type="text"
               name="email"
             />
-            <AuthInput
+            <Input
               validation={{
                 pattern: {
                   value: passwordRegex,
@@ -113,7 +115,7 @@ const SignUpForm = () => {
               type="password"
               name="password"
             />
-            <AuthInput
+            <Input
               validation={{
                 validate: (value: string) =>
                   value === methods.watch("password") ||
@@ -127,7 +129,7 @@ const SignUpForm = () => {
               type="password"
               name="password_confirm"
             />
-            <AuthInput
+            <Input
               validation={{
                 minLength: {
                   value: 2,

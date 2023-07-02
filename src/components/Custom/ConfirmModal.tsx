@@ -50,12 +50,13 @@ export const ModalTitle = styled.h3`
   font-weight: 600;
   padding: 16px 0 0 0;
   color: var(--point-color2);
+  font-size: 1.5rem;
 `;
 
 export const ModalContent = styled.p`
   color: darkgray;
-  font-size: 12px;
   line-height: 16px;
+  font-size: 1rem;
 `;
 
 export const ModalButtonContainer = styled.div`
@@ -78,8 +79,10 @@ export const ModalButton = styled.button`
   height: 100%;
   width: 50%;
   border: 1px solid lightgray;
+  border-bottom: none;
   cursor: pointer;
   background-color: transparent;
+  font-size: 1.2rem;
 `;
 
 export default ConfirmModal;

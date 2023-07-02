@@ -3,9 +3,9 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
-import useAuth from "../Hooks/useAuth";
 import { DB_LINK } from "@/share/server";
-import { Title } from "../Auth/UpdateProfileForm";
+import useAuth from "@/components/Hooks/useAuth";
+import { Title } from "@/components/Auth/UpdateProfileForm";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -151,7 +151,8 @@ const PreviousChart = () => {
 export default PreviousChart;
 
 const Section = styled.section`
-  @media (max-width: 500px) {
+  overflow: hidden;
+  @media (max-width: 499px) {
     overflow-x: scroll;
     overflow-y: hidden;
   }

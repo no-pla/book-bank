@@ -1,15 +1,34 @@
-import React, { useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { useInfiniteQuery } from "react-query";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { BookDesc } from "./Form/ReviewForm";
+import { BookListItem } from "./Form/SearchForm";
+import useAuth from "../Hooks/useAuth";
 import useUser from "../Hooks/useUser";
 import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import { BookDesc } from "./ReviewForm";
-import { BookListItem } from "./SearchForm";
+import ConfirmModal from "../Custom/ConfirmModal";
+import useModal from "../Hooks/useModal";
 
-const ReviewItem = ({ currentUser }: any) => {
+interface IMyBook {
+  title: string;
+  publisher: string;
+  price: number;
+  id: string;
+  authors: string[];
+  createdAt: number;
+  createdDay: number;
+  createdMonth: number;
+  createdYear: number;
+  review: string;
+  thumbnail: string;
+}
+
+const ReviewItem = () => {
+  const currentUser = useAuth();
+  const { isShowing, toggle } = useModal();
   const userInfo = useUser(currentUser?.uid);
   const MAX_BOOK = 10;
   const setMyBookData = useSetRecoilState(selectMyBookState);
@@ -32,6 +51,14 @@ const ReviewItem = ({ currentUser }: any) => {
           return undefined;
         }
       },
+      select: (data) => {
+        // 불변성을 유지하기 위하여 id값을 추가하고 리턴
+        const modifiedData = data.pages.map((book: any) => {
+          // 필요 없는 데이터 제외 후 리턴
+          return book?.data;
+        });
+        return { pages: modifiedData, pageParams: data.pageParams };
+      },
     }
   );
 
@@ -41,22 +68,31 @@ const ReviewItem = ({ currentUser }: any) => {
     );
   };
 
-  const showDetailReview = (data: any) => {
-    setMyBookData(data);
+  const showDetailReview = (data: IMyBook) => {
     if (isEdit) {
+      toggle();
+      return;
       // 수정 폼이 열린 상태로 상세보기를 누르면 경고 모달 on
-      setIsEdit(!isEdit);
     }
+    setMyBookData(data);
   };
 
-  useEffect(() => {
-    console.log(myBookReviews?.pages);
-  });
   return (
     <BookListContainer>
+      {isShowing && (
+        <ConfirmModal
+          title="정말로 수정을 취소할까요?"
+          content="이 작업은 되돌릴 수 없습니다!"
+          toggle={toggle}
+          onFunc={() => {
+            setIsEdit((prev) => !prev);
+            toggle();
+          }}
+        />
+      )}
       <ul>
-        {myBookReviews?.pages?.map((list: any) => {
-          return list?.data.map((book: any, index: number) => {
+        {myBookReviews?.pages?.map((list: IMyBook[]) => {
+          return list?.map((book: IMyBook) => {
             return (
               <BookListItem
                 key={book.id}
@@ -68,7 +104,7 @@ const ReviewItem = ({ currentUser }: any) => {
                     <BookDesc>
                       <div>
                         {book.authors[0] || "정보 없음"}
-                        {book.authors.length > 1 && "외"}
+                        {book.authors.length > 1 && " 외"}
                         &nbsp;|&nbsp;{book.publisher}
                       </div>
                       <BookPrice>{book.price.toLocaleString()}</BookPrice>
@@ -95,6 +131,8 @@ const NextButton = styled.button`
   border-radius: 12px;
   border: 1px solid lightgray;
   cursor: pointer;
+  font-weight: 100;
+  font-size: 1.3rem;
 `;
 
 const BookListContainer = styled.div`
@@ -120,40 +158,12 @@ const BookListContainer = styled.div`
   gap: 12px;
 `;
 
-const ReivewItemContainer = styled.div`
-  overflow-y: scroll;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const ReviewListItemContainer = styled.ul`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  height: fit-content;
-`;
-
-const ReviewListItem = styled.li`
-  background-color: whitesmoke;
-  display: flex;
-  padding: 8px;
-  border-radius: 8px;
-  > img {
-    margin-right: 12px;
-  }
-  > div {
-    margin-top: 4px;
-  }
-`;
-
 const BookDescription = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-weight: 100;
   > button {
     border: 1px solid var(--main-color);
     color: var(--text-color);
@@ -161,24 +171,11 @@ const BookDescription = styled.div`
 `;
 
 const BookTitle = styled.div`
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 800;
   padding-bottom: 8px;
 `;
 
 const BookPrice = styled.div`
   margin: 4px 0;
-`;
-
-const GetNextPageButton = styled.button`
-  padding: 12px;
-  border: 1px solid lightgray;
-  cursor: pointer;
-  width: 100%;
-  color: var(--point-color1);
-  background-color: var(--main-color);
-  &:disabled {
-    background-color: lightgray;
-    color: var(--point-color2);
-  }
 `;

@@ -20,14 +20,14 @@ const Navigation = () => {
   return (
     <Header>
       <HomeButton>
-        <Link href="/">📚&nbsp;Book Bank</Link>
+        <Link href="/">Book Bank</Link>
       </HomeButton>
-      <MenuList>
+      {/* <MenuList>
         <Link href="/banking">내역</Link>
         <Link href="/banking/deposit">입금</Link>
         <Link href="/user/setting">설정</Link>
         <button onClick={onSignOut}>로그아웃</button>
-      </MenuList>
+      </MenuList> */}
     </Header>
   );
 };
@@ -43,7 +43,7 @@ const Header = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
+  padding: 0 20px;
   box-sizing: border-box;
   box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);
   -webkit-box-shadow: -1px 6px 7px 3px rgba(209, 198, 198, 0.62);

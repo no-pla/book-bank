@@ -155,9 +155,6 @@ const Profile = styled.div`
     flex-direction: column;
     gap: 8px;
   }
-  & button {
-    cursor: pointer;
-  }
   & button:first-of-type {
     border: 1px solid var(--point-color1);
     color: var(--point-color1);

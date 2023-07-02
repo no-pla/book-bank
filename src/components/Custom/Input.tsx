@@ -29,7 +29,7 @@ type IInputProps = {
   validation: INickName;
 };
 
-const AuthInput = ({ placeholder, type, name, validation }: IInputProps) => {
+const Input = ({ placeholder, type, name, validation }: IInputProps) => {
   const {
     register,
     formState: { errors },
@@ -40,7 +40,7 @@ const AuthInput = ({ placeholder, type, name, validation }: IInputProps) => {
     <>
       <Label htmlFor={name}>{placeholder}</Label>
       {/* placeholder는 스크린 리더가 읽지 못할 수도 있기 때문에 label를 추가해주어야 한다. */}
-      <Input
+      <StyleInput
         placeholder={placeholder}
         type={type}
         {...register(name, validation)}
@@ -57,7 +57,7 @@ const Label = styled.label`
   font-size: 0.9rem;
 `;
 
-export const Input = styled.input`
+export const StyleInput = styled.input`
   padding: 8px;
   border-radius: 4px;
   border: 1px solid lightgray;
@@ -73,6 +73,7 @@ const ErrorMessage = styled.p`
   padding: 8px 0 8px 4px;
   font-size: 0.7rem;
   width: 100%;
+  line-height: 0.9rem;
 `;
 
-export default AuthInput;
+export default Input;

@@ -6,9 +6,9 @@ import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
 import ConfirmModal from "@/components/Custom/ConfirmModal";
-import PreviousChart from "@/components/Banking/PreviousChart";
-import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 import ErrorModal from "@/components/Custom/ErrorModal";
+import PreviousChart from "@/components/Banking/Chart/PreviousChart";
+import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {
   const currentUser = useAuth();

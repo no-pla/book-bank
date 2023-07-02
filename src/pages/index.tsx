@@ -2,8 +2,10 @@ import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
+import Chart from "@/components/Banking/Chart/Chart";
+import { auth } from "@/share/firebase";
+import useAuth from "@/components/Hooks/useAuth";
 
 export const getServerSideProps = async () => {
   const res = await axios.get(
@@ -22,7 +24,8 @@ export const getServerSideProps = async () => {
   return { props: { keyword } };
 };
 
-export default function Home({ currentUser, keyword }: any) {
+export default function Home({ keyword }: any) {
+  const currentUser = useAuth();
   const userInfo = useUser(currentUser?.uid);
 
   return (

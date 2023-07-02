@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { useInfiniteQuery, useQueryClient } from "react-query";
 import styled from "@emotion/styled";
+import { Helmet } from "react-helmet";
+import { useQueryClient } from "react-query";
 import useUser from "@/components/Hooks/useUser";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
-import { DB_LINK } from "@/share/server";
+import BankBook from "@/components/Banking/BankBook";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import useAuth from "@/components/Hooks/useAuth";
 
 export interface IBookData {
   id: string;
@@ -25,41 +26,22 @@ export interface IBookData {
   createdDay: number;
 }
 
-const Index = ({ currentUser }: any) => {
-  const targetMyBookData = useRecoilValue<any>(selectMyBookState);
+const Index = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
   const setMyBookData = useSetRecoilState(selectMyBookState);
+  const currentUser = useAuth();
   const userInfo = useUser(currentUser?.uid);
-  const MAX_BOOK = 10;
-  const {
-    data: myBookReviews,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery(
-    "getMyBookList",
-    ({ pageParam = 1 }) => fetchMyBookReivewList(pageParam),
-    {
-      enabled: !!currentUser?.uid,
-      notifyOnChangeProps: "tracked",
-      getNextPageParam: (_lastPage, pages) => {
-        if (pages.length < Math.ceil(userInfo?.length / MAX_BOOK)) {
-          return pages.length + 1;
-        } else {
-          return undefined;
-        }
-      },
-    }
-  );
-  console.log(targetMyBookData);
+  const totalBook = userInfo?.length || 0;
+  const totalAmount =
+    userInfo
+      ?.reduce((cur: number, acc: IBookData) => {
+        return cur + acc.price;
+      }, 0)
+      .toLocaleString("ko-KR") || 0;
 
-  const fetchMyBookReivewList = async (pageParam: number) => {
-    return await axios.get(
-      `${DB_LINK}/review?_sort=createdAt&_order=desc&_limit=${MAX_BOOK}&_page=${pageParam}&uid=${currentUser?.uid}`
-    );
-  };
   useEffect(() => {
     queryClient.resetQueries();
     queryClient.invalidateQueries("getMyBookList");
@@ -69,24 +51,36 @@ const Index = ({ currentUser }: any) => {
     }
   }, []);
 
+  const onShare = async () => {
+    await window.Kakao.Share.sendCustom({
+      templateId: 94039,
+      templateArgs: {
+        totalBook,
+        totalAmount,
+        userProfile: currentUser?.photoURL,
+        userName: currentUser?.displayName,
+      },
+    });
+  };
+
   return (
     <Section>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank / 내역</title>
+      </Helmet>
       <DataItemContainer>
         <BankBookData>
-          <BankBookInfo>
-            {userInfo
-              ?.reduce((cur: number, acc: IBookData) => {
-                return cur + acc.price;
-              }, 0)
-              .toLocaleString("ko-KR") || 0}
-            원&nbsp;({userInfo?.length || 0}권)
-          </BankBookInfo>
-          <BankBookInfoButtonContainer>
-            <button>공유</button>
-            <button onClick={() => router.push("/banking/deposit")}>
-              입금하기
-            </button>
-          </BankBookInfoButtonContainer>
+          <BankBook
+            onClick={() => onShare()}
+            text="공유하기"
+            secondOnClick={() => router.push("/banking/deposit")}
+            secondText="입금하기"
+            transform="-80%"
+          />
         </BankBookData>
         <ReviewItem />
       </DataItemContainer>
@@ -100,7 +94,7 @@ const BankBookData = styled.div`
   background-color: #bfb0d1;
   border-radius: 12px;
   height: 160px;
-  padding: 20px 24px;
+  padding: 20px 0px;
   box-sizing: border-box;
   display: flex;
   justify-content: flex-end;
@@ -110,8 +104,8 @@ const BankBookData = styled.div`
 
 const BankBookInfo = styled.div`
   font-weight: 800;
-  font-size: 1.4rem;
-  transform: translateY(-150%);
+  font-size: 1.8rem;
+  transform: translateY(-80%);
 `;
 
 const BankBookInfoButtonContainer = styled.div`
@@ -122,6 +116,8 @@ const BankBookInfoButtonContainer = styled.div`
     border: none;
     background-color: transparent;
     cursor: pointer;
+    font-weight: 300;
+    font-size: 1rem;
   }
   > button:first-of-type {
     border-right: 1px solid lightgray;
@@ -134,6 +130,7 @@ const Section = styled.section`
   width: 100%;
   justify-content: space-between;
   gap: 20px;
+  position: relative;
 `;
 
 // 리뷰 인피티니 스크롤
@@ -142,6 +139,9 @@ const DataItemContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 export default Index;
