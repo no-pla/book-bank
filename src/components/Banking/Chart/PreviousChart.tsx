@@ -3,9 +3,9 @@ import axios from "axios";
 import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
-import useAuth from "../../Hooks/useAuth";
 import { DB_LINK } from "@/share/server";
-import { Title } from "../../Auth/UpdateProfileForm";
+import useAuth from "@/components/Hooks/useAuth";
+import { Title } from "@/components/Auth/UpdateProfileForm";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -71,7 +71,7 @@ const PreviousChart = () => {
     <Section>
       <Title>연간 독서량</Title>
       <div>
-        <SelectYear>연도 선택:&nbsp;</SelectYear>
+        <SelectYears>연도 선택:</SelectYears>
         <Select
           onChange={(event) => {
             setTargetYser(+event?.currentTarget?.value);
@@ -93,8 +93,7 @@ const PreviousChart = () => {
         options={{
           chart: {
             type: "bar",
-            height: 450,
-            fontFamily: "inherit",
+            height: 350,
           },
           fill: {
             colors: ["#8067a9"],
@@ -118,20 +117,28 @@ const PreviousChart = () => {
           },
           dataLabels: {
             enabled: true,
-            formatter: function (val) {
-              return val + "권";
-            },
-            offsetY: -20,
+            formatter: (val) => val + "권",
+            offsetY: 8,
             style: {
-              fontSize: "1rem",
+              fontSize: "12px",
               colors: ["#304758"],
             },
           },
+          responsive: [
+            {
+              breakpoint: 500,
+              options: {
+                chart: {
+                  width: 500,
+                },
+              },
+            },
+          ],
           plotOptions: {
             bar: {
-              borderRadius: 10,
+              borderRadius: 8,
               dataLabels: {
-                position: "top",
+                position: "bottom",
               },
             },
           },
@@ -144,14 +151,18 @@ const PreviousChart = () => {
 export default PreviousChart;
 
 const Section = styled.section`
-  position: relative;
-  margin: 12px;
+  overflow: hidden;
+  @media (max-width: 499px) {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
 `;
 
-const SelectYear = styled.span`
-  font-size: 1.3rem;
+const SelectYears = styled.span`
+  font-size: 0.9rem;
+  margin-right: 4px;
 `;
 
 const Select = styled.select`
-  font-size: 1rem;
+  padding: 4px 20px 4px 4px;
 `;

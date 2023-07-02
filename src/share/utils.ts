@@ -1,3 +1,2 @@
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-export const passwordRegex =
-  /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*\d).{8,25}$/;
+export const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{8,}$/;

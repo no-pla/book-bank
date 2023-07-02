@@ -4,11 +4,11 @@ import { useResetRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
-import { StyledInput } from "../../Custom/Input";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
 import { useQuery, useQueryClient } from "react-query";
+import Input, { StyleInput } from "@/components/Custom/Input";
 
 interface IBook {
   authors: string[];
@@ -37,7 +37,7 @@ const SearchForm = () => {
   const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
   const SearchInput = () => {
     return (
-      <StyledInput
+      <StyleInput
         ref={SearchInputRef}
         placeholder="검색할 책을 입력해주세요."
       />
