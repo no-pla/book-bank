@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,32 +5,25 @@ import styled from "@emotion/styled";
 import Chart from "@/components/Banking/Chart";
 import useUser from "@/components/Hooks/useUser";
 
-export default function Home({ currentUser }: any) {
-  const queryClient = useQueryClient();
+export const getServerSideProps = async () => {
+  const res = await axios.get(
+    `http://data4library.kr/api/monthlyKeywords?authKey=${
+      process.env.NEXT_PUBLIC_BIG_DATA_KEY
+    }&month=${
+      new Date().getFullYear() +
+      "-" +
+      String(new Date().getMonth()).padStart(2, "0")
+    }&format=json`
+  );
+  const select = await res?.data.response.keywords.slice(0, 5);
+  const keyword = await select.map(({ keyword }: any) => {
+    return keyword.word;
+  });
+  return { props: { keyword } };
+};
+
+export default function Home({ currentUser, keyword }: any) {
   const userInfo = useUser(currentUser?.uid);
-
-  // API 1일 500회 제한이므로 잠시 주석처리함
-  // const { data: keywords } = useQuery(
-  //   "getMonthlyKeyword",
-  //   async () => {
-  //     return await axios.get(
-  //       `http://data4library.kr/api/monthlyKeywords?authKey=${
-  //         process.env.NEXT_PUBLIC_BIG_DATA_KEY
-  //       }&month=${
-  //         new Date().getFullYear() +
-  //         "-" +
-  //         String(new Date().getMonth()).padStart(2, "0")
-  //       }&format=json`
-  //     );
-  //   },
-  //   {
-  //     select: (data) => data?.data.response.keywords.slice(0, 5),
-  //   }
-  // );
-
-  useEffect(() => {
-    queryClient.invalidateQueries("getReadBookInfo");
-  }, []);
 
   return (
     <Container>
@@ -66,17 +57,16 @@ export default function Home({ currentUser }: any) {
             <Link href="/banking/deposit">입금하기</Link>
           </BankPage>
         </BankingInfo>
-        {/* API 횟수 제한으로 임시 주석 처리 */}
         <RankingInfo>
-          <RankingTitle>최근 인기 도서 키워드</RankingTitle>
+          <RankingTitle>인기 도서 키워드</RankingTitle>
           <RankingList>
-            {/* {keywords?.map(({ keyword }: any, index: number) => {
+            {keyword?.map((keyword: any, index: number) => {
               return (
                 <li key={index}>
-                  {index + 1}.&nbsp;{keyword?.word}
+                  {index + 1}.&nbsp;{keyword}
                 </li>
               );
-            })} */}
+            })}
           </RankingList>
         </RankingInfo>
       </InfoContainer>
