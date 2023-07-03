@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import useUser from "../Hooks/useUser";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
-import useAuth from "../Hooks/useAuth";
 import { useRouter } from "next/router";
 
 const BankBook = ({
@@ -34,13 +33,16 @@ const BankBook = ({
       <BankName>{children}</BankName>
       <div>
         <BankAmount transform={transform}>
-          {router?.pathname === "/"
-            ? userInfo
-                ?.reduce((cur: number, acc: any) => {
-                  return cur + acc.price;
-                }, 0)
-                .toLocaleString("ko-KR") || 0
-            : `${totalAmount}`}
+          <span>
+            {router?.pathname === "/"
+              ? userInfo
+                  ?.reduce((cur: number, acc: any) => {
+                    return cur + acc.price;
+                  }, 0)
+                  .toLocaleString("ko-KR") || 0
+              : `${totalAmount}`}
+          </span>
+          <span>{router?.pathname == "/banking" && `(${totalBook}권)`}</span>
         </BankAmount>
       </div>
 
@@ -64,7 +66,6 @@ const BankingInfo = styled.article`
   background-color: var(--sub-main-color);
   @media (max-width: 768px) {
     width: 100%;
-    height: 100%;
   }
   @media (max-width: 600px) {
     width: 100%;
@@ -80,12 +81,15 @@ const BankName = styled.div`
   font-weight: 700;
 `;
 
-const BankAmount = styled.span<{ transform: number }>`
+const BankAmount = styled.div<{ transform: number }>`
   font-weight: 800;
   font-size: 1.4rem;
-  transform: translateY(20%);
-  &::after {
-    content: "원";
+  transform: translateY(40%);
+  > span:first-of-type {
+    padding: 8px;
+    &::after {
+      content: "원";
+    }
   }
   @media (min-width: 768px) {
   }

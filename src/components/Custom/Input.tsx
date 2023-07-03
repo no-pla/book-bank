@@ -27,9 +27,16 @@ type IInputProps = {
   type: string;
   name: string;
   validation: INickName;
+  children?: any;
 };
 
-const Input = ({ placeholder, type, name, validation }: IInputProps) => {
+const Input = ({
+  placeholder,
+  type,
+  name,
+  validation,
+  children,
+}: IInputProps) => {
   const {
     register,
     formState: { errors },
@@ -47,6 +54,7 @@ const Input = ({ placeholder, type, name, validation }: IInputProps) => {
         id={name}
         name={name}
       />
+      {children}
       <ErrorMessage>{error && error?.message?.toString()}</ErrorMessage>
     </>
   );

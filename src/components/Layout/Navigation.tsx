@@ -38,6 +38,7 @@ const Header = styled.header`
   background-color: #8067a9;
   position: fixed;
   top: 0;
+  z-index: 1;
   width: calc(min(100%, 1960px));
   height: 60px;
   display: flex;

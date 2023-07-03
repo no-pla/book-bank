@@ -163,7 +163,7 @@ const Profile = styled.div`
 
 export const FileInput = styled.input`
   cursor: pointer;
-  margin-top: 8px;
+  margin: 8px 0;
   &::file-selector-button {
     padding: 8px 16px;
     background-color: white;
@@ -190,7 +190,7 @@ const ButtonContainer = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 8px;
   > div:first-of-type {
     display: flex;
     flex-direction: column;
