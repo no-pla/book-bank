@@ -44,6 +44,7 @@ const EditForm = () => {
       authors: targetMyBookData?.authors,
       publisher: targetMyBookData?.publisher,
     },
+    mode: "onChange",
   });
 
   const onEdit = async (data: IEditData) => {
@@ -177,10 +178,12 @@ const EditForm = () => {
             placeholder="작가"
             type="text"
             name="authors"
-          />
-          <Message>
-            작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
-          </Message>
+          >
+            <Message>
+              작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
+            </Message>
+          </Input>
+
           <Input
             validation={{
               required: {
@@ -214,6 +217,7 @@ const EditForm = () => {
                 message: "최대 500자까지 입력 가능합니다,",
               },
             })}
+            placeholder="리뷰를 작성해 주세요.(최대 500자)"
           />
           <ErrorMessage>
             {methods.formState.errors.review?.type === "maxLength" &&
@@ -235,10 +239,7 @@ const EditForm = () => {
 export default EditForm;
 
 const Form = styled.form`
-  background-color: whitesmoke;
-  margin: 12px;
   border-radius: 4px;
-  padding: 12px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -265,12 +266,13 @@ export const TextArea = styled.textarea`
   border-radius: 4px;
   padding: 12px;
   height: 120px;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 100;
 `;
 
 export const Message = styled.p`
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 0.8rem;
   width: 100%;
+  margin-top: 8px;
 `;

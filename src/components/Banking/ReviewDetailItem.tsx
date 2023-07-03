@@ -38,6 +38,8 @@ const ReviewDetailItem = () => {
     toggle();
   };
 
+  console.log(targetMyBookData);
+
   return (
     <BankBookDetailDataContainer
       show={Object.keys(targetMyBookData).length > 0 ? "block" : "none"}
@@ -60,7 +62,9 @@ const ReviewDetailItem = () => {
                 <BookTitle>{targetMyBookData?.title}</BookTitle>
                 <BookSetting>
                   <BookDate>
-                    {new Date(targetMyBookData?.createdAt!).toLocaleString()}
+                    {new Date(
+                      targetMyBookData?.createdAt!
+                    ).toLocaleDateString()}
                   </BookDate>
                   <SettingButton>
                     <button onClick={toggleEdit}>수정</button>
@@ -105,21 +109,20 @@ const ReviewDetailItem = () => {
 export default ReviewDetailItem;
 
 const SettingButton = styled.div`
+  font-size: 1rem;
   > button:first-of-type {
-    font-size: 1.1rem;
     color: var(--point-color1);
   }
   > button:last-of-type {
-    font-size: 1.1rem;
     color: var(--point-color2);
   }
 `;
 
 const ButtonContainer = styled.div`
-  margin: 12px;
+  margin-top: 20px;
   text-align: center;
   > button {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 100;
     color: var(--point-color1);
     border: 1px solid var(--point-color1);
@@ -133,12 +136,10 @@ const BookSetting = styled.div`
   & button {
     border: none;
     background-color: transparent;
-    cursor: pointer;
     font-weight: 100;
-    font-size: 1rem;
+    padding: 0 4px;
   }
   @media (max-width: 320px) {
-    flex-direction: column;
     align-items: flex-start;
   }
 `;
@@ -168,53 +169,51 @@ const BankBookDetailData = styled.div`
   box-sizing: border-box;
   border-radius: 12px;
   overflow-y: scroll;
-  > div {
-    height: 100%;
-  }
 `;
 
 const BookInfoContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
   margin-top: 20px;
   @media (max-width: 320px) {
     img {
-      display: none;
+      width: 40%;
+      height: 100%;
     }
-  }
-  @media (max-width: 280px) {
-    flex-direction: column;
+    /* flex-direction: column; */
   }
 `;
 
 const ReviewTitle = styled.div`
-  margin: 12px 0;
+  margin: 24px 0 12px;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
 `;
 
 const Review = styled.div`
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 100;
   overflow-y: scroll;
   white-space: break-spaces;
+  word-break: break-all;
   border: 1px solid lightgray;
   padding: 12px;
   box-sizing: border-box;
   border-radius: 8px;
   line-height: 1.1rem;
-  height: 24%;
+  height: 220px;
+  width: 100%;
 `;
 
 const BookTitle = styled.div`
-  font-size: 2rem;
+  font-size: 1.1rem;
   font-weight: 800;
   margin-bottom: 12px;
 `;
 
 const BookDate = styled.div`
   color: darkgray;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 100;
 `;
 
@@ -223,6 +222,7 @@ const BookInfo = styled.div`
   flex-direction: column;
   gap: 8px;
   font-weight: 100;
+  font-size: 0.9rem;
   > div:nth-of-type(1)::before {
     content: "작가: ";
   }
