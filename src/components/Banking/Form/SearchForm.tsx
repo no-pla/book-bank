@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
@@ -7,8 +7,8 @@ import { v4 as uuid_v4 } from "uuid";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
-import { useQuery, useQueryClient } from "react-query";
-import Input, { StyleInput } from "@/components/Custom/Input";
+import { useQuery } from "react-query";
+import { StyleInput } from "@/components/Custom/Input";
 
 interface IBook {
   authors: string[];
@@ -124,7 +124,8 @@ const SearchForm = () => {
           ) : (
             <NoResult>
               <h2>검색 결과가 없습니다.</h2>
-              <button onClick={onClickDirectForm}>직접 입력하기</button>
+              <CustomButton value="직접 입력하기" onClick={onClickDirectForm} />
+              {/* <button onClick={onClickDirectForm}>직접 입력하기</button> */}
             </NoResult>
           )}
         </BookListItemContainer>
@@ -154,12 +155,11 @@ const Form = styled.form`
 `;
 
 const NoResult = styled.div`
-  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 24px;
+  font-size: 1rem;
   > button {
     padding: 12px 32px;
     background-color: whitesmoke;
@@ -170,7 +170,6 @@ const NoResult = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
   > button {
     border: 1px solid lightgrey;
     width: 50%;
@@ -193,7 +192,6 @@ const BookListItemContainer = styled.ul`
 `;
 
 export const BookListItem = styled.li`
-  background-color: whitesmoke;
   display: flex;
   gap: 12px;
   border-radius: 12px;
