@@ -10,43 +10,47 @@ import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
 import ErrorModal from "../Custom/ErrorModal";
+import { FormProvider, useForm } from "react-hook-form";
+import Input from "../Custom/Input";
+import useDisabled from "../Hooks/useDisabled";
 
 const UpdateProfileForm = () => {
   const router = useRouter();
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
+  const { isDisabled, toggleDisabled } = useDisabled();
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
-  const [newUserName, setNewUserName] = useState(currentUser?.displayName!);
-  const UpdateNicknameInputRef = useRef<HTMLInputElement>(null);
-  // const UpdateNicknameInput = () => {
-  //   return (
-  //     <Input
-  //       ref={UpdateNicknameInputRef}
-  //       defaultValue={currentUser?.displayName}
-  //       placeholder="닉네임"
-  //     />
-  //   );
-  // };
+  const methods = useForm({
+    defaultValues: {
+      newDisplayName: currentUser?.displayname,
+      newPhotoURL: currentUser?.photoURL,
+    },
+    mode: "onChange",
+  });
 
-  const onUpdateProfile = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const username = UpdateNicknameInputRef.current?.value;
-    if (UpdateNicknameInputRef.current?.value === "") return;
+  const onUpdateProfile = async ({
+    newDisplayName,
+  }: {
+    newDisplayName: any;
+  }) => {
+    toggleDisabled();
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
       const photoURL = await getDownloadURL(snapshot.ref);
 
       await updateProfile(currentUser, {
-        displayName: username ? username : currentUser?.displayName,
+        displayName: newDisplayName ? newDisplayName : currentUser?.displayName,
         photoURL: selectImage ? photoURL : currentUser?.photoURL,
       });
       router.push("/");
     } catch (error) {
       console.log(error);
       toggle();
+    } finally {
+      toggleDisabled();
     }
   };
 
@@ -56,8 +60,6 @@ const UpdateProfileForm = () => {
     setImageURL(objectUrl);
     return () => window.URL.revokeObjectURL(selectImage);
   }, [selectImage]);
-
-  useEffect(() => {}, []);
 
   return (
     <ProfileContainer>
@@ -71,41 +73,64 @@ const UpdateProfileForm = () => {
       )}
       {openProfile ? (
         <Profile>
-          <Form onSubmit={(event) => onUpdateProfile(event)}>
-            <div>
-              <Image
-                src={imageURL ? imageURL : currentUser?.photoURL}
-                height={100}
-                width={100}
-                style={{ borderRadius: "50%", objectFit: "cover" }}
-                alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
-              />
-              <FileInputLabel htmlFor="preview-image">파일 선택</FileInputLabel>
-              <FileInput
-                type="file"
-                accept="image/*"
-                name="preview-image"
-                id="preview-image"
-                onChange={(event: any) => {
-                  setSelectImage(event.target.files[0]);
-                }}
-              />
-            </div>
-            <div>
-              <Input
-                defaultValue={currentUser?.displayName}
-                placeholder="닉네임"
-              />
-              <ButtonContainer>
-                <CustomButton
-                  value="취소"
-                  type="button"
-                  onClick={() => setOpenProfile((prev) => !prev)}
+          <FormProvider {...methods}>
+            <Form
+              onSubmit={methods.handleSubmit((data) => onUpdateProfile(data))}
+            >
+              <div>
+                <Image
+                  src={imageURL ? imageURL : currentUser?.photoURL}
+                  height={100}
+                  width={100}
+                  style={{ borderRadius: "50%", objectFit: "cover" }}
+                  alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
                 />
-                <CustomButton type="submit" value="수정하기" />
-              </ButtonContainer>
-            </div>
-          </Form>
+                <FileInputLabel htmlFor="preview-image">
+                  파일 선택
+                </FileInputLabel>
+                <FileInput
+                  type="file"
+                  accept="image/*"
+                  name="preview-image"
+                  id="preview-image"
+                  onChange={(event: any) => {
+                    setSelectImage(event.target.files[0]);
+                  }}
+                />
+              </div>
+              <div>
+                <Input
+                  validation={{
+                    required: {
+                      value: true,
+                      message: "필수 입력 값입니다.",
+                    },
+                    maxLength: {
+                      value: 10,
+                      message: "닉네임은 최대 10자까지 입력해 주세요",
+                    },
+                  }}
+                  placeholder="닉네임"
+                  type="text"
+                  name="newDisplayName"
+                  defaultValue={currentUser?.displayName}
+                />
+                <ButtonContainer>
+                  <CustomButton
+                    value="취소"
+                    type="button"
+                    onClick={() => setOpenProfile((prev) => !prev)}
+                    disabled={isDisabled}
+                  />
+                  <CustomButton
+                    type="submit"
+                    value="수정하기"
+                    disabled={isDisabled}
+                  />
+                </ButtonContainer>
+              </div>
+            </Form>
+          </FormProvider>
         </Profile>
       ) : (
         <Profile>
@@ -131,15 +156,6 @@ const UpdateProfileForm = () => {
   );
 };
 export default UpdateProfileForm;
-
-const Input = styled.input`
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid lightgray;
-  color: var(--text-color);
-  box-sizing: border-box;
-  width: 144px;
-`;
 
 export const Title = styled.h2`
   font-weight: 600;
@@ -175,33 +191,11 @@ export const FileInputLabel = styled.label`
   border-radius: 4px;
   border: 1px solid lightgray;
   margin: 16px 0;
+  cursor: pointer;
 `;
 
 export const FileInput = styled.input`
   display: none;
-  cursor: pointer;
-  margin: 8px 0;
-  & label {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #fff;
-    vertical-align: middle;
-    background-color: #999999;
-    cursor: pointer;
-    height: 40px;
-    margin-left: 10px;
-  }
-  &&::filte-selctor-label {
-    color: red;
-  }
-  &::file-selector-button {
-    padding: 8px 16px;
-    background-color: white;
-    border-radius: 4px;
-    border: 1px solid lightgray;
-    margin-top: 8px;
-    margin-right: 8px;
-  }
 `;
 
 const ButtonContainer = styled.div`
@@ -221,6 +215,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  align-items: flex-start;
   > div:first-of-type {
     display: flex;
     flex-direction: column;
