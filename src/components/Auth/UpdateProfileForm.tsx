@@ -18,16 +18,17 @@ const UpdateProfileForm = () => {
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
+  const [newUserName, setNewUserName] = useState(currentUser?.displayName!);
   const UpdateNicknameInputRef = useRef<HTMLInputElement>(null);
-  const UpdateNicknameInput = () => {
-    return (
-      <Input
-        ref={UpdateNicknameInputRef}
-        defaultValue={currentUser?.displayName}
-        placeholder="닉네임"
-      />
-    );
-  };
+  // const UpdateNicknameInput = () => {
+  //   return (
+  //     <Input
+  //       ref={UpdateNicknameInputRef}
+  //       defaultValue={currentUser?.displayName}
+  //       placeholder="닉네임"
+  //     />
+  //   );
+  // };
 
   const onUpdateProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,6 +57,8 @@ const UpdateProfileForm = () => {
     return () => window.URL.revokeObjectURL(selectImage);
   }, [selectImage]);
 
+  useEffect(() => {}, []);
+
   return (
     <ProfileContainer>
       <Title>프로필 변경</Title>
@@ -71,24 +74,28 @@ const UpdateProfileForm = () => {
           <Form onSubmit={(event) => onUpdateProfile(event)}>
             <div>
               <Image
-                id="preview-image"
                 src={imageURL ? imageURL : currentUser?.photoURL}
                 height={100}
                 width={100}
                 style={{ borderRadius: "50%", objectFit: "cover" }}
                 alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
               />
+              <FileInputLabel htmlFor="preview-image">파일 선택</FileInputLabel>
               <FileInput
                 type="file"
                 accept="image/*"
                 name="preview-image"
+                id="preview-image"
                 onChange={(event: any) => {
                   setSelectImage(event.target.files[0]);
                 }}
               />
             </div>
             <div>
-              <UpdateNicknameInput />
+              <Input
+                defaultValue={currentUser?.displayName}
+                placeholder="닉네임"
+              />
               <ButtonContainer>
                 <CustomButton
                   value="취소"
@@ -161,13 +168,36 @@ const Profile = styled.div`
   }
 `;
 
+export const FileInputLabel = styled.label`
+  font-size: 1rem;
+  padding: 8px 16px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid lightgray;
+  margin: 16px 0;
+`;
+
 export const FileInput = styled.input`
+  display: none;
   cursor: pointer;
   margin: 8px 0;
+  & label {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    vertical-align: middle;
+    background-color: #999999;
+    cursor: pointer;
+    height: 40px;
+    margin-left: 10px;
+  }
+  &&::filte-selctor-label {
+    color: red;
+  }
   &::file-selector-button {
     padding: 8px 16px;
     background-color: white;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid lightgray;
     margin-top: 8px;
     margin-right: 8px;
