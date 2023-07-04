@@ -209,7 +209,8 @@ export const BookListItem = styled.li`
 
 export const BookTitle = styled.div`
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  font-size: 1.1rem;
 `;
 
 export const BookPrice = styled.div`
@@ -223,7 +224,11 @@ export const BookDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+  > div:nth-of-type(2),
+  div:last-of-type {
+    font-size: 0.9rem;
+  }
 `;
 
 const SearchButtonContainer = styled.div`

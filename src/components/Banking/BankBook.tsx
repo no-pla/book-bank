@@ -91,7 +91,8 @@ const BankAmount = styled.div<{ transform: number }>`
       content: "원";
     }
   }
-  @media (min-width: 768px) {
+  > span {
+    word-break: break-all;
   }
 `;
 

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
@@ -10,11 +15,9 @@ import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewDetailItem = () => {
-  const targetMyBookData = useRecoilValue(selectMyBookState);
+  const [myBookData, setMyBookData] = useRecoilState(selectMyBookState);
+  const [isEdit, setIsEdit] = useRecoilState(isFormEdit);
   const reset = useResetRecoilState(selectMyBookState);
-  const setMyBookData = useSetRecoilState(selectMyBookState);
-  const isEdit = useRecoilValue(isFormEdit);
-  const setIsEdit = useSetRecoilState(isFormEdit);
   const { mutate: deleteReview } = useDeleteBook();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
@@ -25,7 +28,7 @@ const ReviewDetailItem = () => {
 
   const onDelete = async () => {
     try {
-      await deleteReview(targetMyBookData?.id!);
+      await deleteReview(myBookData?.id!);
     } catch (error) {
       setErrorMessage(["에러가 발생했습니다.", "다시 삭제를 시도해 주세요."]);
     }
@@ -38,11 +41,9 @@ const ReviewDetailItem = () => {
     toggle();
   };
 
-  console.log(targetMyBookData);
-
   return (
     <BankBookDetailDataContainer
-      show={Object.keys(targetMyBookData).length > 0 ? "block" : "none"}
+      show={Object.keys(myBookData).length > 0 ? "block" : "none"}
     >
       {isShowing && (
         <ConfirmModal
@@ -57,14 +58,12 @@ const ReviewDetailItem = () => {
           <EditForm />
         ) : (
           <>
-            {Object.keys(targetMyBookData).length > 0 && (
+            {Object.keys(myBookData).length > 0 && (
               <div>
-                <BookTitle>{targetMyBookData?.title}</BookTitle>
+                <BookTitle>{myBookData?.title}</BookTitle>
                 <BookSetting>
                   <BookDate>
-                    {new Date(
-                      targetMyBookData?.createdAt!
-                    ).toLocaleDateString()}
+                    {new Date(myBookData?.createdAt!).toLocaleDateString()}
                   </BookDate>
                   <SettingButton>
                     <button onClick={toggleEdit}>수정</button>
@@ -73,26 +72,24 @@ const ReviewDetailItem = () => {
                 </BookSetting>
                 <BookInfoContainer>
                   <Image
-                    src={targetMyBookData?.thumbnail!}
+                    src={myBookData?.thumbnail!}
                     height={150}
                     width={110}
-                    alt={`${targetMyBookData?.title}의 책표지입니다. `}
+                    alt={`${myBookData?.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
                     loading="eager"
                   />
                   <BookInfo>
+                    <div>{myBookData?.authors!.join(", ") || "정보 없음"}</div>
+                    <div>{myBookData?.publisher || "정보 없음"}</div>
                     <div>
-                      {targetMyBookData?.authors!.join(", ") || "정보 없음"}
-                    </div>
-                    <div>{targetMyBookData?.publisher || "정보 없음"}</div>
-                    <div>
-                      {targetMyBookData?.price!.toLocaleString() || "정보 없음"}
+                      {myBookData?.price!.toLocaleString() || "정보 없음"}
                     </div>
                   </BookInfo>
                 </BookInfoContainer>
                 <ReviewTitle>후기</ReviewTitle>
                 <Review>
-                  {targetMyBookData.review || "작성한 리뷰가 없습니다."}
+                  {myBookData.review || "작성한 리뷰가 없습니다."}
                 </Review>
                 <ButtonContainer>
                   <CustomButton value="닫기" onClick={reset} />
@@ -176,11 +173,8 @@ const BookInfoContainer = styled.div`
   gap: 16px;
   margin-top: 20px;
   @media (max-width: 320px) {
-    img {
-      width: 40%;
-      height: 100%;
-    }
-    /* flex-direction: column; */
+    align-items: center;
+    flex-direction: column;
   }
 `;
 
@@ -223,6 +217,10 @@ const BookInfo = styled.div`
   gap: 8px;
   font-weight: 100;
   font-size: 0.9rem;
+  width: 100%;
+  > div {
+    text-align: left;
+  }
   > div:nth-of-type(1)::before {
     content: "작가: ";
   }
@@ -231,5 +229,8 @@ const BookInfo = styled.div`
   }
   > div:nth-of-type(3)::before {
     content: "가격: ";
+  }
+  > div:nth-of-type(3)::after {
+    content: "원";
   }
 `;

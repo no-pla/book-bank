@@ -13,7 +13,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
 import useDisabled from "../../Hooks/useDisabled";
-import { FileInput } from "@/components/Auth/UpdateProfileForm";
+import { FileInput, FileInputLabel } from "@/components/Auth/UpdateProfileForm";
 import Input, { ErrorMessage } from "@/components/Custom/Input";
 
 interface IEditData {
@@ -142,14 +142,13 @@ const EditForm = () => {
         >
           <div>
             <Image
-              id="preview-image"
               src={imageURL ? imageURL : targetMyBookData?.thumbnail}
-              height={120}
-              width={80}
+              height={160}
+              width={140}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
             />
-
+            <FileInputLabel htmlFor="preview-image">파일 선택</FileInputLabel>
             <FileInput
               type="file"
               accept="image/*"
@@ -183,7 +182,6 @@ const EditForm = () => {
               작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
             </Message>
           </Input>
-
           <Input
             validation={{
               required: {
@@ -257,6 +255,10 @@ const Form = styled.form`
   > div {
     display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+  > div:first-of-type {
+    margin-bottom: 12px;
   }
 `;
 
@@ -273,6 +275,5 @@ export const TextArea = styled.textarea`
 export const Message = styled.p`
   font-weight: 400;
   font-size: 0.8rem;
-  width: 100%;
   margin-top: 8px;
 `;
