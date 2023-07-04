@@ -28,6 +28,7 @@ type IInputProps = {
   name: string;
   validation: INickName;
   children?: any;
+  defaultValue?: string;
 };
 
 const Input = ({
@@ -36,6 +37,7 @@ const Input = ({
   name,
   validation,
   children,
+  defaultValue,
 }: IInputProps) => {
   const {
     register,
@@ -53,6 +55,7 @@ const Input = ({
         {...register(name, validation)}
         id={name}
         name={name}
+        defaultValue={defaultValue}
       />
       {children}
       <ErrorMessage>{error && error?.message?.toString()}</ErrorMessage>
