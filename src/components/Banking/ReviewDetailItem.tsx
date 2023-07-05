@@ -172,7 +172,15 @@ const BookInfoContainer = styled.div`
   display: flex;
   gap: 16px;
   margin-top: 20px;
-  @media (max-width: 320px) {
+  @media (max-width: 768px) {
+    align-items: center;
+    flex-direction: column;
+  }
+  @media (max-width: 600px) {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+  @media (max-width: 360px) {
     align-items: center;
     flex-direction: column;
   }
@@ -207,7 +215,7 @@ const BookTitle = styled.div`
 
 const BookDate = styled.div`
   color: darkgray;
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 100;
 `;
 
@@ -223,6 +231,7 @@ const BookInfo = styled.div`
   }
   > div:nth-of-type(1)::before {
     content: "작가: ";
+    line-height: 1.4;
   }
   > div:nth-of-type(2)::before {
     content: "출판사: ";

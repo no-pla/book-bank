@@ -153,6 +153,7 @@ const EditForm = () => {
               type="file"
               accept="image/*"
               name="preview-image"
+              id="preview-image"
               onChange={(event) => onUploadPhoto(event)}
             />
           </div>

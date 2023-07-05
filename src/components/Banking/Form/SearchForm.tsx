@@ -198,6 +198,7 @@ export const BookListItem = styled.li`
   padding: 16px;
   cursor: pointer;
   align-items: flex-end;
+  background-color: whitesmoke;
   @media (max-width: 600px) {
     > img {
       display: none;
