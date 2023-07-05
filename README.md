@@ -10,24 +10,39 @@ Book Bank는 개인적인 독서 기록을 관리하고, 월별, 연도별 독�
 
 
 ## Screenshots
-로그인 화면
-![스크린샷 2023-05-27 오후 5 28 25](https://github.com/no-pla/book-bank/assets/88391843/027fd1a3-f401-433f-9d32-7b6741437eaf)
+<h3>로그인 화면</h3>
 
-회원가입 화면
-![스크린샷 2023-05-27 오후 5 28 48](https://github.com/no-pla/book-bank/assets/88391843/7774c364-5045-4f33-8740-6643506e478b)
+![screencapture-book-bank-alpha-vercel-app-login-2023-07-05-17_00_58](https://github.com/no-pla/book-bank/assets/88391843/96751d76-e634-451b-8dbd-6c9a71d32315)
 
-메인 화면
-![스크린샷 2023-05-27 오후 5 01 56](https://github.com/no-pla/book-bank/assets/88391843/2fd2a8f0-5ef8-4c47-be59-1408695f6adb)
+<h3>회원가입 화면</h3>
 
-내역 화면
-![스크린샷 2023-05-27 오후 5 02 21](https://github.com/no-pla/book-bank/assets/88391843/fceac5d7-39f1-4467-97d0-744913f2894a)
+![screencapture-book-bank-alpha-vercel-app-register-2023-07-05-17_01_17](https://github.com/no-pla/book-bank/assets/88391843/2102b88e-f2e3-4818-8c4d-2983ea7cf15e)
 
-입금 화면
-![스크린샷 2023-05-27 오후 5 03 06](https://github.com/no-pla/book-bank/assets/88391843/0084c21e-a9b3-4854-b840-22a02526bf32)
-![스크린샷 2023-05-27 오후 5 03 17](https://github.com/no-pla/book-bank/assets/88391843/b29b587f-df92-4c06-990a-144ca8e54fef)
+<h3>메인 화면</h3>
 
-설정 화면
-![스크린샷 2023-05-27 오후 5 02 07](https://github.com/no-pla/book-bank/assets/88391843/49554ff4-ff8c-4f3e-8bc0-9272371643bb)
+![screencapture-book-bank-alpha-vercel-app-2023-07-05-17_00_19](https://github.com/no-pla/book-bank/assets/88391843/cebd3cae-76e3-428b-8e3d-720f2ce642b3)
+
+<h3>내역 화면</h3>
+
+![screencapture-book-bank-alpha-vercel-app-banking-2023-07-05-15_22_05](https://github.com/no-pla/book-bank/assets/88391843/959d5ae7-0bce-4661-b23b-f81ff4df4f32)
+
+<h3>입금 화면</h3>
+
+![screencapture-book-bank-alpha-vercel-app-banking-deposit-2023-07-05-15_19_37](https://github.com/no-pla/book-bank/assets/88391843/210a0467-b556-4210-bcd8-85c3559fc4f7)
+![screencapture-book-bank-alpha-vercel-app-banking-deposit-2023-07-05-15_21_01](https://github.com/no-pla/book-bank/assets/88391843/b24a8777-7e8f-4c18-bc7b-f556e9639018)
+
+<h3>설정 화면</h3>
+
+![screencapture-book-bank-alpha-vercel-app-user-setting-2023-07-05-15_22_47](https://github.com/no-pla/book-bank/assets/88391843/fac474cd-ecac-41cc-87ac-82780866ec5d)
+
+<h3>모바일 화면</h3>
+
+![F0QjUhRaQAAMqGc](https://github.com/no-pla/book-bank/assets/88391843/aa24184f-a89b-4543-a042-d3edd233eb68)
+![F0QjCxLagAAiGkT](https://github.com/no-pla/book-bank/assets/88391843/36c7bf03-d85c-4317-8e25-d664dd26e42c)
+
+<h3>독서 내역 공유</h3>
+
+![F0Qj1C8aQAMxc7y](https://github.com/no-pla/book-bank/assets/88391843/bb039b68-1669-45df-bd6c-69194d11686c)
 
 ## Tech Stack
 
