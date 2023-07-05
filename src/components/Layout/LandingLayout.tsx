@@ -35,7 +35,7 @@ const Icon = styled.div`
 export const Description = styled.p`
   text-align: center;
   margin: 20px 0 40px;
-  line-height: 1.1rem;
+  line-height: 1.3rem;
   font-weight: 800;
 `;
 
