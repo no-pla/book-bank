@@ -36,19 +36,21 @@ const Chart = ({ currentUser }: any) => {
 
   const { data: series, isFetched } = useQuery(
     "getCurrentMonthData",
-    async () =>
-      await axios.get(
+    async () => {
+      let month = new Date().getMonth() + 1;
+      console.log(month);
+      return await axios.get(
         `${DB_LINK}/review?uid=${
           currentUser.uid
-        }&_sort=_createdDay&_order=desc&_createdYear=${new Date().getFullYear()}&_createdMonth=${
-          new Date().getMonth() + 1
-        }`
-      ),
+        }&_sort=_createdDay&_order=desc&createdYear=${new Date().getFullYear()}&createdMonth=${month}`
+      );
+    },
     {
       enabled: !!currentUser,
       select: ({ data }) => {
         const tempArray: number[] = new Array(31).fill(0);
         data.forEach((monthlyReview: any) => {
+          console.log(monthlyReview);
           tempArray[monthlyReview.createdDay - 1] += 1;
         });
 
@@ -73,6 +75,8 @@ const Chart = ({ currentUser }: any) => {
       },
     }
   );
+
+  console.log(series);
 
   return (
     <Container>
