@@ -3,16 +3,13 @@ import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
-import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import CustomButton from "../Custom/CustomButton";
 import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
-import { FcGoogle } from "react-icons/fc";
 import Input from "../Custom/Input";
 interface ILoginData {
   email: string;
@@ -23,7 +20,6 @@ const LoginForm = () => {
   const router = useRouter();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
-  const provider = new GoogleAuthProvider();
   const methods = useForm({
     defaultValues: {
       email: "",
@@ -52,30 +48,6 @@ const LoginForm = () => {
       }
       toggle();
     }
-  };
-
-  const googleLogin = async () => {
-    await signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        if (!credential) return;
-        const user = result.user;
-        await axios.post(`${DB_LINK}/users`, {
-          id: user.uid,
-          nickname: user.displayName,
-          email: user.email,
-          signUpDate: new Date().toLocaleDateString(),
-        });
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        setErrorMessage([
-          "다시 시도해 주세요.",
-          "예기치 못한 에러가 발생했습니다.",
-        ]);
-        toggle();
-      });
   };
 
   return (
@@ -126,12 +98,13 @@ const LoginForm = () => {
             <ToggleLink href="/register">이메일로 시작하기</ToggleLink>
           </form>
         </FormProvider>
-        <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line>
-        <div>
+        {/* <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line> */}
+        {/* 오류로 임시 삭제 */}
+        {/* <div>
           <button onClick={() => googleLogin()}>
             <FcGoogle size={24} />
           </button>
-        </div>
+        </div> */}
       </FormContainer>
     </>
   );
