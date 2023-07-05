@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from "recoil";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from "recoil";
 import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
@@ -10,11 +15,9 @@ import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 
 const ReviewDetailItem = () => {
-  const targetMyBookData = useRecoilValue(selectMyBookState);
+  const [myBookData, setMyBookData] = useRecoilState(selectMyBookState);
+  const [isEdit, setIsEdit] = useRecoilState(isFormEdit);
   const reset = useResetRecoilState(selectMyBookState);
-  const setMyBookData = useSetRecoilState(selectMyBookState);
-  const isEdit = useRecoilValue(isFormEdit);
-  const setIsEdit = useSetRecoilState(isFormEdit);
   const { mutate: deleteReview } = useDeleteBook();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
@@ -25,7 +28,7 @@ const ReviewDetailItem = () => {
 
   const onDelete = async () => {
     try {
-      await deleteReview(targetMyBookData?.id!);
+      await deleteReview(myBookData?.id!);
     } catch (error) {
       setErrorMessage(["에러가 발생했습니다.", "다시 삭제를 시도해 주세요."]);
     }
@@ -40,7 +43,7 @@ const ReviewDetailItem = () => {
 
   return (
     <BankBookDetailDataContainer
-      show={Object.keys(targetMyBookData).length > 0 ? "block" : "none"}
+      show={Object.keys(myBookData).length > 0 ? "block" : "none"}
     >
       {isShowing && (
         <ConfirmModal
@@ -55,12 +58,12 @@ const ReviewDetailItem = () => {
           <EditForm />
         ) : (
           <>
-            {Object.keys(targetMyBookData).length > 0 && (
+            {Object.keys(myBookData).length > 0 && (
               <div>
-                <BookTitle>{targetMyBookData?.title}</BookTitle>
+                <BookTitle>{myBookData?.title}</BookTitle>
                 <BookSetting>
                   <BookDate>
-                    {new Date(targetMyBookData?.createdAt!).toLocaleString()}
+                    {new Date(myBookData?.createdAt!).toLocaleDateString()}
                   </BookDate>
                   <SettingButton>
                     <button onClick={toggleEdit}>수정</button>
@@ -69,26 +72,24 @@ const ReviewDetailItem = () => {
                 </BookSetting>
                 <BookInfoContainer>
                   <Image
-                    src={targetMyBookData?.thumbnail!}
+                    src={myBookData?.thumbnail!}
                     height={150}
                     width={110}
-                    alt={`${targetMyBookData?.title}의 책표지입니다. `}
+                    alt={`${myBookData?.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
                     loading="eager"
                   />
                   <BookInfo>
+                    <div>{myBookData?.authors!.join(", ") || "정보 없음"}</div>
+                    <div>{myBookData?.publisher || "정보 없음"}</div>
                     <div>
-                      {targetMyBookData?.authors!.join(", ") || "정보 없음"}
-                    </div>
-                    <div>{targetMyBookData?.publisher || "정보 없음"}</div>
-                    <div>
-                      {targetMyBookData?.price!.toLocaleString() || "정보 없음"}
+                      {myBookData?.price!.toLocaleString() || "정보 없음"}
                     </div>
                   </BookInfo>
                 </BookInfoContainer>
                 <ReviewTitle>후기</ReviewTitle>
                 <Review>
-                  {targetMyBookData.review || "작성한 리뷰가 없습니다."}
+                  {myBookData.review || "작성한 리뷰가 없습니다."}
                 </Review>
                 <ButtonContainer>
                   <CustomButton value="닫기" onClick={reset} />
@@ -105,21 +106,20 @@ const ReviewDetailItem = () => {
 export default ReviewDetailItem;
 
 const SettingButton = styled.div`
+  font-size: 1rem;
   > button:first-of-type {
-    font-size: 1.1rem;
     color: var(--point-color1);
   }
   > button:last-of-type {
-    font-size: 1.1rem;
     color: var(--point-color2);
   }
 `;
 
 const ButtonContainer = styled.div`
-  margin: 12px;
+  margin-top: 20px;
   text-align: center;
   > button {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 100;
     color: var(--point-color1);
     border: 1px solid var(--point-color1);
@@ -133,12 +133,10 @@ const BookSetting = styled.div`
   & button {
     border: none;
     background-color: transparent;
-    cursor: pointer;
     font-weight: 100;
-    font-size: 1rem;
+    padding: 0 4px;
   }
   @media (max-width: 320px) {
-    flex-direction: column;
     align-items: flex-start;
   }
 `;
@@ -168,53 +166,56 @@ const BankBookDetailData = styled.div`
   box-sizing: border-box;
   border-radius: 12px;
   overflow-y: scroll;
-  > div {
-    height: 100%;
-  }
 `;
 
 const BookInfoContainer = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 16px;
   margin-top: 20px;
-  @media (max-width: 320px) {
-    img {
-      display: none;
-    }
+  @media (max-width: 768px) {
+    align-items: center;
+    flex-direction: column;
   }
-  @media (max-width: 280px) {
+  @media (max-width: 600px) {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+  @media (max-width: 360px) {
+    align-items: center;
     flex-direction: column;
   }
 `;
 
 const ReviewTitle = styled.div`
-  margin: 12px 0;
+  margin: 24px 0 12px;
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.1rem;
 `;
 
 const Review = styled.div`
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 100;
   overflow-y: scroll;
   white-space: break-spaces;
+  word-break: break-all;
   border: 1px solid lightgray;
   padding: 12px;
   box-sizing: border-box;
   border-radius: 8px;
   line-height: 1.1rem;
-  height: 24%;
+  height: 220px;
+  width: 100%;
 `;
 
 const BookTitle = styled.div`
-  font-size: 2rem;
+  font-size: 1.1rem;
   font-weight: 800;
   margin-bottom: 12px;
 `;
 
 const BookDate = styled.div`
   color: darkgray;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 100;
 `;
 
@@ -223,13 +224,22 @@ const BookInfo = styled.div`
   flex-direction: column;
   gap: 8px;
   font-weight: 100;
+  font-size: 0.9rem;
+  width: 100%;
+  > div {
+    text-align: left;
+  }
   > div:nth-of-type(1)::before {
     content: "작가: ";
+    line-height: 1.4;
   }
   > div:nth-of-type(2)::before {
     content: "출판사: ";
   }
   > div:nth-of-type(3)::before {
     content: "가격: ";
+  }
+  > div:nth-of-type(3)::after {
+    content: "원";
   }
 `;

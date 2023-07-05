@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
-import { Helmet } from "react-helmet";
 import { deleteUser } from "firebase/auth";
 import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
-import ErrorModal from "@/components/Custom/ErrorModal";
 import ConfirmModal from "@/components/Custom/ConfirmModal";
+import ErrorModal from "@/components/Custom/ErrorModal";
 import PreviousChart from "@/components/Banking/Chart/PreviousChart";
-import { UpdateProfileForm } from "@/components/Auth/UpdateProfileForm";
+import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 
 const Setting = () => {
   const currentUser = useAuth();
@@ -72,13 +71,6 @@ const Setting = () => {
 
   return (
     <SettingPage>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <meta name="description" content="독서 기록 남기기" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
-        <title>Book Bank / 설정</title>
-      </Helmet>
       {openError && (
         <ErrorModal
           title={errorMessage[0]}
@@ -94,28 +86,35 @@ const Setting = () => {
           onFunc={onWithdrawal}
         />
       )}
-      <div>
+      <ContentContainer>
         <UpdateProfileForm />
         <PreviousChart />
-      </div>
-      <section>
+      </ContentContainer>
+      <WithdrawalContainer>
         <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
-      </section>
+      </WithdrawalContainer>
     </SettingPage>
   );
 };
 
 export default Setting;
 
-const SettingPage = styled.section`
-  width: 100%;
-  height: 100%;
+const WithdrawalContainer = styled.section`
+  margin-top: 12px;
+`;
+
+const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
-  justify-content: spb;
-  @media (max-width: 600px) {
-  }
+  gap: 30px;
+`;
+
+const SettingPage = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 `;
 
 const WithdrawalButton = styled.button`
@@ -123,9 +122,6 @@ const WithdrawalButton = styled.button`
   border: none;
   color: var(--point-color2);
   float: right;
-  cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  margin: 8px;
-  font-size: 0.8rem;
 `;

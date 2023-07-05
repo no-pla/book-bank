@@ -3,17 +3,14 @@ import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import { GoogleAuthProvider } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/share/firebase";
-import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import Input from "../Custom/Input";
 import ErrorModal from "../Custom/ErrorModal";
-import CustomButton from "../Custom/CustomButton";
 import useModal from "../Hooks/useModal";
-
+import Input from "../Custom/Input";
 interface ILoginData {
   email: string;
   password: string;
@@ -23,12 +20,12 @@ const LoginForm = () => {
   const router = useRouter();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
-  const provider = new GoogleAuthProvider();
   const methods = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
 
   const onLogIn = async ({ email, password }: ILoginData) => {
@@ -53,32 +50,8 @@ const LoginForm = () => {
     }
   };
 
-  const googleLogin = async () => {
-    await signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        if (!credential) return;
-        const user = result.user;
-        await axios.post(`${DB_LINK}/users`, {
-          id: user.uid,
-          nickname: user.displayName,
-          email: user.email,
-          signUpDate: new Date().toLocaleDateString(),
-        });
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        setErrorMessage([
-          "다시 시도해 주세요.",
-          "예기치 못한 에러가 발생했습니다.",
-        ]);
-        toggle();
-      });
-  };
-
   return (
-    <Container>
+    <>
       {isShowing && (
         <ErrorModal
           title={errorMessage[0]}
@@ -87,9 +60,9 @@ const LoginForm = () => {
         />
       )}
       <FormContainer>
-        <h1>로그인</h1>
         <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
+          {/* 중첩된 컴포넌트에서 useForm을 사용하기 위하여 FormProvider와 useFormContext를 사용 */}
+          <form onSubmit={methods.handleSubmit((data) => onLogIn(data))}>
             <Input
               validation={{
                 pattern: {
@@ -110,7 +83,7 @@ const LoginForm = () => {
                 pattern: {
                   value: passwordRegex,
                   message:
-                    "비밀번호는 알파벳 대소문자, 숫자, 특수문자(!@#$%^*+=-)를 모두 포함하고, 길이는 8자 이상 25자 이하여야 합니다.",
+                    "비밀번호는 최소 6자 이상, 숫자와 영문자를 모두 포함해야 합니다.",
                 },
                 required: {
                   value: true,
@@ -121,73 +94,67 @@ const LoginForm = () => {
               type="password"
               name="password"
             />
-            <CustomButton value="로그인" />
-          </Form>
+            <Button type="submit">로그인</Button>
+            <ToggleLink href="/register">이메일로 시작하기</ToggleLink>
+          </form>
         </FormProvider>
-        <ToggleLink href="/register">회원가입</ToggleLink>
-        <OAuth>
-          <CustomButton value="구글로 로그인" onClick={() => googleLogin()} />
-        </OAuth>
+        {/* <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line> */}
+        {/* 오류로 임시 삭제 */}
+        {/* <div>
+          <button onClick={() => googleLogin()}>
+            <FcGoogle size={24} />
+          </button>
+        </div> */}
       </FormContainer>
-    </Container>
+    </>
   );
 };
 
 export default LoginForm;
 
-export const ToggleLink = styled(Link)`
-  color: whitesmoke;
-  text-decoration: none;
-  margin: 20px 0;
+const Line = styled.div`
+  padding: 12px 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  &::before {
+    content: "";
+    background-color: #c0c0c0;
+    flex-grow: 1;
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
+  &::after {
+    content: "";
+    background-color: #c0c0c0;
+    flex-grow: 1;
+    height: 1px;
+    font-size: 0;
+    line-height: 0;
+  }
 `;
 
-export const Container = styled.div`
-  display: flex;
-  justify-content: center;
+export const ToggleLink = styled(Link)`
+  text-decoration: none;
+  display: inline-flex;
+  padding-top: 16px;
+  vertical-align: middle;
   align-items: center;
-  flex-direction: column;
-  gap: 62px;
-  color: var(--text-color);
-  overflow-y: scroll;
+  justify-content: center;
+  font-size: 0.9rem;
+  width: 100%;
 `;
 
 export const FormContainer = styled.div`
-  color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(60%, 600px);
-  padding: 40px;
-  border-radius: 8px;
-  > h1 {
-    margin-bottom: 40px;
-    font-size: 2rem;
-    font-weight: 800;
+  > div:last-of-type {
+    text-align: center;
   }
   > div:last-of-type > button {
-    color: #db4437;
     border: 2px solid #db4437;
-  }
-  @media (max-width: 768px) {
-    padding: 0 20px;
-    > h1 {
-      margin-bottom: 12px;
-    }
-  }
-`;
-
-export const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 4px;
-  > button {
-    width: 100%;
-    border: 1px solid var(--point-color1);
-    color: var(--point-color1);
-    font-size: 1.2rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
   }
 `;
 
@@ -196,20 +163,5 @@ export const Button = styled.button`
   padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid lightgray;
-  cursor: pointer;
-`;
-
-export const TitleContainer = styled.div`
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 60px;
-`;
-
-const OAuth = styled.div`
-  > button {
-    font-size: 1.2rem;
-    width: 100%;
-  }
+  margin-top: 12px;
 `;

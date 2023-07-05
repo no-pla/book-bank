@@ -160,7 +160,7 @@ const TextArea = styled.textarea`
   border: none;
   resize: none;
   border-radius: 4px;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 100;
   box-sizing: border-box;
   width: 100%;
@@ -204,6 +204,7 @@ export const BookDesc = styled.div`
   gap: 8px;
   line-height: normal;
   font-weight: 100;
+  font-size: 1rem;
   > div:nth-of-type(1)::before {
     content: "작가: ";
   }

@@ -16,7 +16,7 @@ const Button = styled.button`
   background-color: whitesmoke;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   &:disabled {
     background-color: #e2e2e2;
   }

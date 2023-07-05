@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import useUser from "../Hooks/useUser";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
+import { useRouter } from "next/router";
 
 const BankBook = ({
   onClick,
@@ -10,8 +11,10 @@ const BankBook = ({
   text,
   secondText,
   transform,
+  children,
 }: any) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const userInfo = useUser(auth.currentUser?.uid!);
   const totalBook = userInfo?.length || 0;
   const totalAmount =
@@ -26,38 +29,82 @@ const BankBook = ({
   }, []);
 
   return (
-    <>
-      <BankBookInfo transform={transform}>
-        {totalAmount}원&nbsp;({totalBook}권)
-      </BankBookInfo>
-      <BankBookInfoButtonContainer>
+    <BankingInfo>
+      <BankName>{children}</BankName>
+      <div>
+        <BankAmount transform={transform}>
+          <span>
+            {router?.pathname === "/"
+              ? userInfo
+                  ?.reduce((cur: number, acc: any) => {
+                    return cur + acc.price;
+                  }, 0)
+                  .toLocaleString("ko-KR") || 0
+              : `${totalAmount}`}
+          </span>
+          <span>{router?.pathname == "/banking" && `(${totalBook}권)`}</span>
+        </BankAmount>
+      </div>
+
+      <BankPage>
         <button onClick={onClick}>{text}</button>
         <button onClick={secondOnClick}>{secondText}</button>
-      </BankBookInfoButtonContainer>
-    </>
+      </BankPage>
+    </BankingInfo>
   );
 };
 
 export default BankBook;
 
-const BankBookInfo = styled.div<{ transform: number }>`
-  font-weight: 800;
-  font-size: 1.8rem;
-  transform: translateY(${(props) => props.transform});
+const BankingInfo = styled.article`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 200px;
+  border-radius: 12px;
+  background-color: var(--sub-main-color);
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+    height: 200px;
+  }
 `;
 
-const BankBookInfoButtonContainer = styled.div`
+const BankName = styled.div`
   width: 100%;
-  > button {
-    width: 50%;
-    padding: 2px 4px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    font-weight: 300;
-    font-size: 1.2rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  padding: 0 20px;
+  font-weight: 700;
+`;
+
+const BankAmount = styled.div<{ transform: number }>`
+  font-weight: 800;
+  font-size: 1.4rem;
+  transform: translateY(40%);
+  > span:first-of-type {
+    padding: 8px;
+    &::after {
+      content: "원";
+    }
   }
-  > button:first-of-type {
-    border-right: 1px solid lightgray;
+  > span {
+    word-break: break-all;
+  }
+`;
+
+const BankPage = styled.div`
+  > button {
+    font-size: 0.9rem;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+  }
+  > button:first-of-type::after {
+    content: "|";
+    padding: 0 8px;
   }
 `;

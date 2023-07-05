@@ -1,48 +1,62 @@
-import { useEffect } from "react";
-import { useQueryClient } from "react-query";
-import { Helmet } from "react-helmet";
+import axios from "axios";
 import styled from "@emotion/styled";
-import { auth } from "@/share/firebase";
-import Ranking from "@/components/Banking/Ranking";
-import BankBook from "@/components/Banking/BankBook";
 import { useRouter } from "next/router";
-import UserProfile from "@/components/Auth/UserProfile";
+import useAuth from "@/components/Hooks/useAuth";
 import Chart from "@/components/Banking/Chart/Chart";
+import BankBook from "@/components/Banking/BankBook";
+import UserProfile from "@/components/Auth/UserProfile";
 
-export default function Home() {
-  const queryClient = useQueryClient();
+export const getServerSideProps = async () => {
+  const res = await axios.get(
+    `http://data4library.kr/api/monthlyKeywords?authKey=${
+      process.env.NEXT_PUBLIC_BIG_DATA_KEY
+    }&month=${
+      new Date().getFullYear() +
+      "-" +
+      String(new Date().getMonth()).padStart(2, "0")
+    }&format=json`
+  );
+  const select = await res?.data.response.keywords.slice(0, 5);
+  const keyword = await select.map(({ keyword }: any) => {
+    return keyword.word;
+  });
+  return { props: { keyword } };
+};
+
+export default function Home({ keyword }: any) {
+  const currentUser = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    queryClient.invalidateQueries("getReadBookInfo");
-  }, []);
 
   return (
     <Container>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <meta name="description" content="독서 기록 남기기" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
-        <title>Book Bank</title>
-      </Helmet>
       <InfoContainer>
         <UserProfile />
-        <BankingInfo>
-          <BankName>
-            {auth.currentUser?.displayName || "닉네임 없음"}&nbsp;님의 독서 통장
-          </BankName>
-          <BankBook
-            onClick={() => router.push("/banking")}
-            text="내역 보기"
-            secondOnClick={() => router.push("/banking/deposit")}
-            secondText="입금하기"
-            transform="10%"
-          />
-        </BankingInfo>
-        <Ranking />
+        <BankBook
+          onClick={() => router.push("/banking")}
+          text="내역 보기"
+          secondOnClick={() => router.push("/banking/deposit")}
+          secondText="입금하기"
+          transform="10%"
+        >
+          <span>
+            {currentUser?.displayName || "닉네임 없음"}&nbsp;님의 독서 통장
+          </span>
+        </BankBook>
+        <RankingInfo>
+          {/* getServerSideProps는 컴포넌트에서는 사용 불가 페이지에서만 가능 */}
+          <RankingTitle>인기 도서 키워드</RankingTitle>
+          <RankingList>
+            {keyword?.map((keyword: any, index: number) => {
+              return (
+                <li key={index}>
+                  {index + 1}.&nbsp;{keyword}
+                </li>
+              );
+            })}
+          </RankingList>
+        </RankingInfo>
       </InfoContainer>
-      <Chart />
+      <Chart currentUser={currentUser} />
     </Container>
   );
 }
@@ -53,52 +67,82 @@ const Container = styled.div`
   flex-direction: column;
   gap: 100px;
   @media (max-width: 768px) {
-    gap: 250px;
-  }
-  @media (max-width: 600px) {
-    gap: 60px;
+    gap: 40px;
   }
 `;
 
 const InfoContainer = styled.section`
   display: flex;
-  gap: 20px;
-  width: 100%;
-  height: 200px;
+  gap: 12px;
+  > article {
+    height: 212px;
+    border-radius: 12px;
+    background-color: var(--sub-main-color);
+  }
+  > article:nth-of-type(1) {
+    flex-grow: 1;
+    flex-basis: 20%;
+  }
+  > article:nth-of-type(2) {
+    flex-grow: 2;
+  }
+  > article:nth-of-type(3) {
+    flex-basis: 20%;
+    flex-grow: 1;
+  }
   @media (max-width: 768px) {
     flex-wrap: wrap;
+    gap: 16px;
+    > article:nth-of-type(1) {
+      order: -1;
+    }
+    > article:nth-of-type(2) {
+      order: 1;
+    }
   }
   @media (max-width: 600px) {
+    gap: 20px;
     flex-direction: column;
-    height: 100%;
+    > article:nth-of-type(1) {
+      width: 100%;
+      padding-bottom: 20px;
+    }
+    > article:nth-of-type(2) {
+      order: 0;
+    }
   }
 `;
 
-const BankingInfo = styled.section`
-  width: 60vw;
-  background-color: var(--sub-main-color);
+const RankingInfo = styled.article`
   box-sizing: border-box;
-  border-radius: 12px;
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 12px;
+  @media (max-width: 768px) {
+    width: 48%;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+const RankingTitle = styled.div`
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 4px 0;
+`;
+
+const RankingList = styled.ul`
+  background-color: whitesmoke;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
+  gap: 8px;
+  padding: 20px 8px;
+  text-align: left;
+  font-size: 0.9rem;
+  margin-top: 12px;
+  border-radius: 12px;
   @media (max-width: 768px) {
-    order: 1;
-    width: 100%;
-    height: 100%;
+    padding: 24px 8px;
   }
-  @media (max-width: 600px) {
-    order: 0;
-    width: 100%;
-    height: 200px;
-  }
-`;
-
-const BankName = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  padding: 0 20px;
-  font-weight: 400;
-  font-size: 1.4rem;
 `;

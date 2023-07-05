@@ -36,12 +36,12 @@ export const ModalContainer = styled.div`
 
 export const Modal = styled.div`
   text-align: center;
-  width: calc(min(60vw, 300px));
+  width: calc(min(90vw, 300px));
   background-color: #ffffff;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
-  height: calc(min(32vw, 140px));
+  gap: 8px;
   justify-content: space-between;
   z-index: 10;
 `;
@@ -50,13 +50,14 @@ export const ModalTitle = styled.h3`
   font-weight: 600;
   padding: 16px 0 0 0;
   color: var(--point-color2);
-  font-size: 1.5rem;
+  font-size: 1.1rem;
 `;
 
 export const ModalContent = styled.p`
   color: darkgray;
   line-height: 16px;
-  font-size: 1rem;
+  font-size: 0.8rem;
+  padding: 12px 8px;
 `;
 
 export const ModalButtonContainer = styled.div`
@@ -80,9 +81,9 @@ export const ModalButton = styled.button`
   width: 50%;
   border: 1px solid lightgray;
   border-bottom: none;
-  cursor: pointer;
   background-color: transparent;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 12px 0;
 `;
 
 export default ConfirmModal;

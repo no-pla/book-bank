@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import Input from "../../Custom/Input";
+import Input, { ErrorMessage } from "../../Custom/Input";
 import Image from "next/image";
 import { NO_IMAGE } from "@/share/server";
-import { FileInput } from "../../Auth/UpdateProfileForm";
+import { FileInput, FileInputLabel } from "../../Auth/UpdateProfileForm";
 import styled from "@emotion/styled";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import Resizer from "react-image-file-resizer";
@@ -29,7 +29,14 @@ const UserDirectForm = () => {
   const { mutate: addNewBookReview } = useAddBook();
   const [imageURL, setImageURL] = useState<any>(null);
   const methods = useForm<any>({
-    defaultValues: {},
+    defaultValues: {
+      authors: "",
+      price: "",
+      publisher: "",
+      title: "",
+      review: "",
+    },
+    mode: "onChange",
   });
 
   const onSubmit = async ({
@@ -101,6 +108,11 @@ const UserDirectForm = () => {
     }
   };
 
+  console.log(
+    methods.formState.errors,
+    methods.formState.errors.review?.message
+  );
+
   return (
     <>
       {isShowing && (
@@ -114,18 +126,19 @@ const UserDirectForm = () => {
         <FormProvider {...methods}>
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <Image
-              id="preview-image"
               src={imageURL ? imageURL : NO_IMAGE}
-              height={100}
-              width={100}
+              height={160}
+              width={140}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
               loading="eager"
             />
+            <FileInputLabel htmlFor="preview-image">파일 선택</FileInputLabel>
             <FileInput
               type="file"
               accept="image/*"
               name="preview-image"
+              id="preview-image"
               onChange={(event) => onUploadPhoto(event)}
             />
             <Input
@@ -149,10 +162,11 @@ const UserDirectForm = () => {
               placeholder="작가"
               type="text"
               name="authors"
-            />
-            <Message>
-              작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
-            </Message>
+            >
+              <Message>
+                작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
+              </Message>
+            </Input>
             <Input
               validation={{
                 required: {
@@ -187,7 +201,11 @@ const UserDirectForm = () => {
                   message: "최대 500자까지 입력 가능합니다,",
                 },
               })}
-            />
+            ></TextArea>
+            <ErrorMessage>
+              {methods.formState.errors &&
+                methods.formState.errors?.review?.message?.toString()}
+            </ErrorMessage>
             <ButtonContainer>
               <CustomButton
                 type="submit"
@@ -211,6 +229,7 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const Form = styled.form`
@@ -225,16 +244,16 @@ const TextArea = styled.textarea`
   border: none;
   resize: none;
   border-radius: 4px;
-  height: 100%;
+  height: 200px;
   padding: 12px;
   width: 100%;
-  margin-bottom: 12px;
   box-sizing: border-box;
 `;
 
 const TextAreaLabel = styled.label`
   text-align: left;
   width: 100%;
+  font-size: 0.9rem;
 `;
 
 export default UserDirectForm;

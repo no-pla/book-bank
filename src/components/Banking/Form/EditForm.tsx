@@ -7,14 +7,14 @@ import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../../Hooks/useBanking";
 import CustomButton from "../../Custom/CustomButton";
 import ConfirmModal from "../../Custom/ConfirmModal";
-import Input, { ErrorMessage } from "../../Custom/Input";
 import useModal from "../../Hooks/useModal";
 import Image from "next/image";
-import { FileInput } from "../../Auth/UpdateProfileForm";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
 import useDisabled from "../../Hooks/useDisabled";
+import { FileInput, FileInputLabel } from "@/components/Auth/UpdateProfileForm";
+import Input, { ErrorMessage } from "@/components/Custom/Input";
 
 interface IEditData {
   authors: string;
@@ -44,6 +44,7 @@ const EditForm = () => {
       authors: targetMyBookData?.authors,
       publisher: targetMyBookData?.publisher,
     },
+    mode: "onChange",
   });
 
   const onEdit = async (data: IEditData) => {
@@ -141,18 +142,18 @@ const EditForm = () => {
         >
           <div>
             <Image
-              id="preview-image"
               src={imageURL ? imageURL : targetMyBookData?.thumbnail}
-              height={120}
-              width={80}
+              height={160}
+              width={140}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
             />
-
+            <FileInputLabel htmlFor="preview-image">파일 선택</FileInputLabel>
             <FileInput
               type="file"
               accept="image/*"
               name="preview-image"
+              id="preview-image"
               onChange={(event) => onUploadPhoto(event)}
             />
           </div>
@@ -177,10 +178,11 @@ const EditForm = () => {
             placeholder="작가"
             type="text"
             name="authors"
-          />
-          <Message>
-            작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
-          </Message>
+          >
+            <Message>
+              작가가 여러 명인 경우, 쉼표(,)로 구분하여 작성해 주세요.
+            </Message>
+          </Input>
           <Input
             validation={{
               required: {
@@ -214,6 +216,7 @@ const EditForm = () => {
                 message: "최대 500자까지 입력 가능합니다,",
               },
             })}
+            placeholder="리뷰를 작성해 주세요.(최대 500자)"
           />
           <ErrorMessage>
             {methods.formState.errors.review?.type === "maxLength" &&
@@ -235,10 +238,7 @@ const EditForm = () => {
 export default EditForm;
 
 const Form = styled.form`
-  background-color: whitesmoke;
-  margin: 12px;
   border-radius: 4px;
-  padding: 12px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -256,6 +256,10 @@ const Form = styled.form`
   > div {
     display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+  > div:first-of-type {
+    margin-bottom: 12px;
   }
 `;
 
@@ -265,12 +269,12 @@ export const TextArea = styled.textarea`
   border-radius: 4px;
   padding: 12px;
   height: 120px;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   font-weight: 100;
 `;
 
 export const Message = styled.p`
   font-weight: 400;
-  font-size: 1rem;
-  width: 100%;
+  font-size: 0.8rem;
+  margin-top: 8px;
 `;

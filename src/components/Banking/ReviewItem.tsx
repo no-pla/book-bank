@@ -130,9 +130,8 @@ const NextButton = styled.button`
   background-color: whitesmoke;
   border-radius: 12px;
   border: 1px solid lightgray;
-  cursor: pointer;
   font-weight: 100;
-  font-size: 1.3rem;
+  font-size: 1rem;
 `;
 
 const BookListContainer = styled.div`
@@ -154,8 +153,8 @@ const BookListContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow-y: scroll;
   gap: 12px;
+  overflow-y: scroll;
 `;
 
 const BookDescription = styled.div`
@@ -171,8 +170,8 @@ const BookDescription = styled.div`
 `;
 
 const BookTitle = styled.div`
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.1rem;
+  font-weight: 400;
   padding-bottom: 8px;
 `;
 

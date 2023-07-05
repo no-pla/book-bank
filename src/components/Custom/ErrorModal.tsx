@@ -35,7 +35,7 @@ const ErrorModalButton = styled.button`
   width: 100%;
   border: none;
   border-top: 1px solid lightgray;
-  cursor: pointer;
   background-color: transparent;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  padding: 12px 0;
 `;

@@ -145,6 +145,7 @@ a {
   text-decoration: none;
   color: var(--text-color);
 }
+
 button {
   cursor: pointer;
 }

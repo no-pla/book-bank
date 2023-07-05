@@ -5,16 +5,10 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import {
-  Button,
-  Container,
-  Form,
-  FormContainer,
-  ToggleLink,
-} from "./LogInForm";
-import Input from "../Custom/Input";
+import { Button, FormContainer, ToggleLink } from "./LogInForm";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
+import Input from "../Custom/Input";
 
 interface IUserData {
   email: string;
@@ -32,6 +26,7 @@ const SignUpForm = () => {
       password_confirm: "",
       username: "",
     },
+    mode: "onChange",
   });
 
   const onSubmit = async ({ email, password, username }: IUserData) => {
@@ -42,16 +37,20 @@ const SignUpForm = () => {
           const user = userCredential.user;
           await updateProfile(user, {
             displayName: username,
-          }).then(async () => {
-            await axios.post(`${DB_LINK}/users`, {
-              id: user.uid,
-              nickname: user.displayName,
-              email: user.email,
-              signUpDate: new Date().toLocaleDateString(),
-              photoURL:
-                "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039",
+            photoURL:
+              "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039",
+          })
+            .then(async () => {
+              await axios.post(`${DB_LINK}/users`, {
+                id: user.uid,
+                nickname: user.displayName,
+                email: user.email,
+                signUpDate: new Date().toLocaleDateString(),
+              });
+            })
+            .catch((error) => {
+              console.log(error);
             });
-          });
         }
       );
     } catch ({ code }: any) {
@@ -60,7 +59,6 @@ const SignUpForm = () => {
           "이미 가입된 이메일입니다.",
           "로그인 혹은 다른 이메일로 다시 시도해 주세요.",
         ]);
-
         toggle();
         return;
       } else {
@@ -75,7 +73,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <Container>
+    <>
       {isShowing && (
         <ErrorModal
           title={errorMessage[0]}
@@ -84,9 +82,8 @@ const SignUpForm = () => {
         />
       )}
       <FormContainer>
-        <h1>회원가입</h1>
         <FormProvider {...methods}>
-          <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
+          <form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <Input
               validation={{
                 pattern: {
@@ -107,7 +104,7 @@ const SignUpForm = () => {
                 pattern: {
                   value: passwordRegex,
                   message:
-                    "비밀번호는 알파벳 대소문자, 숫자, 특수문자(!@#$%^*+=-)를 모두 포함하고, 길이는 8자 이상 25자 이하여야 합니다.",
+                    "비밀번호는 최소 8자 이상, 숫자와 영문자를 모두 포함해야 합니다.",
                 },
                 required: {
                   value: true,
@@ -136,11 +133,11 @@ const SignUpForm = () => {
               validation={{
                 minLength: {
                   value: 2,
-                  message: "닉네임은 2글자 이상 10글자 이하로 설정해 주세요.",
+                  message: "닉네임은 2글자 이상 6글자 이하로 설정해 주세요.",
                 },
                 maxLength: {
-                  value: 10,
-                  message: "닉네임은 2글자 이상 10글자 이하로 설정해 주세요.",
+                  value: 6,
+                  message: "닉네임은 2글자 이상 6글자 이하로 설정해 주세요.",
                 },
                 required: {
                   value: true,
@@ -152,11 +149,11 @@ const SignUpForm = () => {
               name="username"
             />
             <Button>회원가입</Button>
-          </Form>
+          </form>
         </FormProvider>
         <ToggleLink href="/login">로그인하기</ToggleLink>
       </FormContainer>
-    </Container>
+    </>
   );
 };
 

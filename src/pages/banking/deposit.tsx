@@ -43,6 +43,7 @@ const DepositContainer = styled.div<{ show: string }>`
   height: 100%;
   gap: 20px;
   position: relative;
+
   > div {
     width: 50%;
     background-color: #bfb0d1;

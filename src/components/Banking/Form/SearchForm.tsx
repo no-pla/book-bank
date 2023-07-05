@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
-import { StyledInput } from "../../Custom/Input";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
+import { StyleInput } from "@/components/Custom/Input";
 
 interface IBook {
   authors: string[];
@@ -37,7 +37,7 @@ const SearchForm = () => {
   const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
   const SearchInput = () => {
     return (
-      <StyledInput
+      <StyleInput
         ref={SearchInputRef}
         placeholder="검색할 책을 입력해주세요."
       />
@@ -124,7 +124,8 @@ const SearchForm = () => {
           ) : (
             <NoResult>
               <h2>검색 결과가 없습니다.</h2>
-              <button onClick={onClickDirectForm}>직접 입력하기</button>
+              <CustomButton value="직접 입력하기" onClick={onClickDirectForm} />
+              {/* <button onClick={onClickDirectForm}>직접 입력하기</button> */}
             </NoResult>
           )}
         </BookListItemContainer>
@@ -154,12 +155,11 @@ const Form = styled.form`
 `;
 
 const NoResult = styled.div`
-  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   gap: 24px;
+  font-size: 1rem;
   > button {
     padding: 12px 32px;
     background-color: whitesmoke;
@@ -170,7 +170,6 @@ const NoResult = styled.div`
 `;
 
 const Container = styled.div`
-  display: flex;
   > button {
     border: 1px solid lightgrey;
     width: 50%;
@@ -193,13 +192,13 @@ const BookListItemContainer = styled.ul`
 `;
 
 export const BookListItem = styled.li`
-  background-color: whitesmoke;
   display: flex;
   gap: 12px;
   border-radius: 12px;
   padding: 16px;
   cursor: pointer;
   align-items: flex-end;
+  background-color: whitesmoke;
   @media (max-width: 600px) {
     > img {
       display: none;
@@ -209,7 +208,8 @@ export const BookListItem = styled.li`
 
 export const BookTitle = styled.div`
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  font-size: 1.1rem;
 `;
 
 export const BookPrice = styled.div`
@@ -223,7 +223,11 @@ export const BookDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px;
+  > div:nth-of-type(2),
+  div:last-of-type {
+    font-size: 0.9rem;
+  }
 `;
 
 const SearchButtonContainer = styled.div`
