@@ -9,6 +9,7 @@ import { Button, FormContainer, ToggleLink } from "./LogInForm";
 import useModal from "../Hooks/useModal";
 import ErrorModal from "../Custom/ErrorModal";
 import Input from "../Custom/Input";
+import { useRouter } from "next/router";
 
 interface IUserData {
   email: string;
@@ -17,6 +18,7 @@ interface IUserData {
 }
 
 const SignUpForm = () => {
+  const router = useRouter();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
   const methods = useForm({
@@ -41,12 +43,16 @@ const SignUpForm = () => {
               "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039",
           })
             .then(async () => {
-              await axios.post(`${DB_LINK}/users`, {
-                id: user.uid,
-                nickname: user.displayName,
-                email: user.email,
-                signUpDate: new Date().toLocaleDateString(),
-              });
+              await axios
+                .post(`${DB_LINK}/users`, {
+                  id: user.uid,
+                  nickname: user.displayName,
+                  email: user.email,
+                  signUpDate: new Date().toLocaleDateString(),
+                })
+                .then(() => {
+                  router.push("/");
+                });
             })
             .catch((error) => {
               console.log(error);

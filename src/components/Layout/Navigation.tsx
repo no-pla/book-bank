@@ -18,7 +18,6 @@ const Navigation = () => {
       toggle();
     }
   };
-  console.log(openMenu);
   return (
     <Header>
       <HomeButton>
