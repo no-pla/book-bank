@@ -12,6 +12,10 @@ const DynamicChart = dynamic(() => import("react-apexcharts"), {
 
 const PreviousChart = () => {
   const currentUser = useAuth();
+  const registarDate = +new Date(+currentUser?.metadata.createdAt)
+    .toLocaleDateString("ko-KR")
+    .split(". ")[0];
+
   const [targetYear, setTargetYser] = useState<number>(
     new Date().getFullYear()
   );
@@ -22,12 +26,11 @@ const PreviousChart = () => {
     },
     {
       enabled: !!currentUser,
-      select: (data) => {
-        const registerDate = +data?.data.signUpDate.split(". ")[0];
+      select: () => {
         const today = +new Date().toLocaleDateString().split(". ")[0];
         const tempArray: number[] = [];
-
-        for (let i = today; i >= registerDate; i--) {
+        if (isNaN(registarDate)) return;
+        for (let i = today; i >= registarDate; i--) {
           tempArray.push(+i);
         }
 
