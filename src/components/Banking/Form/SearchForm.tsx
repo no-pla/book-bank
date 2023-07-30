@@ -104,9 +104,11 @@ const SearchForm = () => {
                 <BookListItem key={book.id} onClick={() => onClick(book)}>
                   <Image
                     src={book.thumbnail || NO_IMAGE}
-                    height={80}
-                    loading="eager"
-                    width={60}
+                    loading="lazy"
+                    width={0}
+                    height={0}
+                    sizes="100vw"
+                    style={{ width: "20%", height: "auto" }}
                     alt={`${book.title}의 책표지입니다. `}
                   />
                   <BookDescription>
@@ -197,7 +199,7 @@ export const BookListItem = styled.li`
   border-radius: 12px;
   padding: 16px;
   cursor: pointer;
-  align-items: flex-end;
+  align-items: flex-start;
   background-color: whitesmoke;
   @media (max-width: 600px) {
     > img {
@@ -210,6 +212,10 @@ export const BookTitle = styled.div`
   font-weight: 700;
   margin-bottom: 4px;
   font-size: 1.1rem;
+  padding-top: 8px;
+  @media (max-width: 600px) {
+    padding-top: 0;
+  }
 `;
 
 export const BookPrice = styled.div`
@@ -223,6 +229,7 @@ export const BookDescription = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 8px;
   > div:nth-of-type(2),
   div:last-of-type {

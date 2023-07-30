@@ -5,8 +5,13 @@ import useAuth from "@/components/Hooks/useAuth";
 import Chart from "@/components/Banking/Chart/Chart";
 import BankBook from "@/components/Banking/BankBook";
 import UserProfile from "@/components/Auth/UserProfile";
+import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
-export const getServerSideProps = async () => {
+type Rank = {
+  keyword: string[];
+};
+
+export const getStaticProps: GetStaticProps<Rank> = async () => {
   const res = await axios.get(
     `http://data4library.kr/api/monthlyKeywords?authKey=${
       process.env.NEXT_PUBLIC_BIG_DATA_KEY
@@ -17,13 +22,13 @@ export const getServerSideProps = async () => {
     }&format=json`
   );
   const select = await res?.data.response.keywords.slice(0, 5);
-  const keyword = await select.map(({ keyword }: any) => {
-    return keyword.word;
-  });
+  const keyword = await select.map(({ keyword }: any) => keyword.word);
   return { props: { keyword } };
 };
 
-export default function Home({ keyword }: any) {
+export default function Home({
+  keyword,
+}: InferGetStaticPropsType<GetStaticProps>) {
   const currentUser = useAuth();
   const router = useRouter();
 
