@@ -9,6 +9,7 @@ import ConfirmModal from "@/components/Custom/ConfirmModal";
 import ErrorModal from "@/components/Custom/ErrorModal";
 import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
+import { Helmet } from "react-helmet";
 
 const Setting = () => {
   const currentUser = useAuth();
@@ -70,30 +71,39 @@ const Setting = () => {
   };
 
   return (
-    <SettingPage>
-      {openError && (
-        <ErrorModal
-          title={errorMessage[0]}
-          content={errorMessage[1]}
-          toggle={() => setOpenError((prev) => !prev)}
-        />
-      )}
-      {isShowing && (
-        <ConfirmModal
-          title="정말로 탈퇴할까요?"
-          content="이 작업은 되돌릴 수 없습니다!"
-          toggle={toggle}
-          onFunc={onWithdrawal}
-        />
-      )}
-      <ContentContainer>
-        <UpdateProfileForm />
-        <PreviousChart />
-      </ContentContainer>
-      <WithdrawalContainer>
-        <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
-      </WithdrawalContainer>
-    </SettingPage>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank / 마이 페이지</title>
+      </Helmet>
+      <SettingPage>
+        {openError && (
+          <ErrorModal
+            title={errorMessage[0]}
+            content={errorMessage[1]}
+            toggle={() => setOpenError((prev) => !prev)}
+          />
+        )}
+        {isShowing && (
+          <ConfirmModal
+            title="정말로 탈퇴할까요?"
+            content="이 작업은 되돌릴 수 없습니다!"
+            toggle={toggle}
+            onFunc={onWithdrawal}
+          />
+        )}
+        <ContentContainer>
+          <UpdateProfileForm />
+          <PreviousChart />
+        </ContentContainer>
+        <WithdrawalContainer>
+          <WithdrawalButton onClick={toggle}>회원탈퇴</WithdrawalButton>
+        </WithdrawalContainer>
+      </SettingPage>
+    </>
   );
 };
 

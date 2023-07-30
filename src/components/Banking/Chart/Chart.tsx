@@ -38,7 +38,6 @@ const Chart = ({ currentUser }: any) => {
     "getCurrentMonthData",
     async () => {
       let month = new Date().getMonth() + 1;
-      console.log(month);
       return await axios.get(
         `${DB_LINK}/review?uid=${
           currentUser.uid
@@ -50,7 +49,6 @@ const Chart = ({ currentUser }: any) => {
       select: ({ data }) => {
         const tempArray: number[] = new Array(31).fill(0);
         data.forEach((monthlyReview: any) => {
-          console.log(monthlyReview);
           tempArray[monthlyReview.createdDay - 1] += 1;
         });
 
@@ -75,8 +73,6 @@ const Chart = ({ currentUser }: any) => {
       },
     }
   );
-
-  console.log(series);
 
   return (
     <Container>
