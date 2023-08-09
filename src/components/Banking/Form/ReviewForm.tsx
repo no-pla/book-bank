@@ -152,7 +152,7 @@ const ReviewFormContainer = styled.div`
   height: 100%;
   border-radius: 12px;
   padding: 20px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
   box-sizing: border-box;
 `;
 

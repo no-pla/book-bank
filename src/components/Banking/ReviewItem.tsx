@@ -92,6 +92,7 @@ const ReviewItem = () => {
       )}
       <ul>
         {myBookReviews?.pages?.map((list: IMyBook[]) => {
+          console.log(list);
           return list?.map((book: IMyBook) => {
             return (
               <BookListItem
@@ -154,7 +155,7 @@ const BookListContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 12px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const BookDescription = styled.div`
