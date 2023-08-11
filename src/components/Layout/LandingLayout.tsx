@@ -8,14 +8,14 @@ type ILandingImage = {
 };
 
 const FormLayout = ({ children }: any) => {
-  const a = useRouter();
-  console.log();
+  const router = useRouter();
+
   return (
     <LayoutContainer LandingImage={LandingImage}>
       <BannerContainer>
         <Icon>📚</Icon>
         <Description>
-          {a.pathname.includes("login") ? "로그인" : "회원가입"}하고
+          {router.pathname.includes("login") ? "로그인" : "회원가입"}하고
           <br />
           독서를 저금하세요.
         </Description>

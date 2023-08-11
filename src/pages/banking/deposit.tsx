@@ -43,7 +43,6 @@ const DepositContainer = styled.div<{ show: string }>`
   height: 100%;
   gap: 20px;
   position: relative;
-
   > div {
     width: 50%;
     background-color: #bfb0d1;
@@ -54,7 +53,6 @@ const DepositContainer = styled.div<{ show: string }>`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    overflow-y: scroll;
   }
   @media (max-width: 600px) {
     > div:first-of-type {
