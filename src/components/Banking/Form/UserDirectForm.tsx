@@ -108,11 +108,6 @@ const UserDirectForm = () => {
     }
   };
 
-  console.log(
-    methods.formState.errors,
-    methods.formState.errors.review?.message
-  );
-
   return (
     <>
       {isShowing && (

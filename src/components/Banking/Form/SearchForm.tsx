@@ -104,7 +104,6 @@ const SearchForm = () => {
                 <BookListItem key={book.id} onClick={() => onClick(book)}>
                   <Image
                     src={book.thumbnail || NO_IMAGE}
-                    loading="lazy"
                     width={0}
                     height={0}
                     sizes="100vw"
@@ -127,7 +126,6 @@ const SearchForm = () => {
             <NoResult>
               <h2>검색 결과가 없습니다.</h2>
               <CustomButton value="직접 입력하기" onClick={onClickDirectForm} />
-              {/* <button onClick={onClickDirectForm}>직접 입력하기</button> */}
             </NoResult>
           )}
         </BookListItemContainer>
@@ -172,6 +170,7 @@ const NoResult = styled.div`
 `;
 
 const Container = styled.div`
+  overflow: auto;
   > button {
     border: 1px solid lightgrey;
     width: 50%;
@@ -180,16 +179,14 @@ const Container = styled.div`
   }
   @media (max-width: 600px) {
     width: 100%;
-    height: 100%;
   }
 `;
 
 const BookListItemContainer = styled.ul`
-  padding: 20px 0;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  overflow-y: scroll;
+  padding-bottom: 20px;
   box-sizing: border-box;
 `;
 

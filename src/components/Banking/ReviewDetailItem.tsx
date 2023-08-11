@@ -154,7 +154,7 @@ const BankBookDetailDataContainer = styled.section<{ show: string }>`
     display: ${(props) => props.show};
   }
   @media (max-width: 280px) {
-    overflow: scroll;
+    overflow: auto;
   }
 `;
 
@@ -165,7 +165,7 @@ const BankBookDetailData = styled.div`
   padding: 20px;
   box-sizing: border-box;
   border-radius: 12px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const BookInfoContainer = styled.div`
@@ -195,7 +195,7 @@ const ReviewTitle = styled.div`
 const Review = styled.div`
   font-size: 0.9rem;
   font-weight: 100;
-  overflow-y: scroll;
+  overflow-y: auto;
   white-space: break-spaces;
   word-break: break-all;
   border: 1px solid lightgray;
