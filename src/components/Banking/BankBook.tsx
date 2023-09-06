@@ -104,7 +104,7 @@ const BankName = styled.div`
   font-weight: 700;
 `;
 
-const BankAmount = styled.div<{ transform: number }>`
+const BankAmount = styled.div<{ transform: string }>`
   font-weight: 800;
   font-size: 1.4rem;
   transform: translateY(40%);
