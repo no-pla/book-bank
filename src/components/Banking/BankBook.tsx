@@ -1,9 +1,34 @@
 import styled from "@emotion/styled";
 import React, { useEffect } from "react";
-import useUser from "../Hooks/useUser";
+import useUserDepositList from "../Hooks/useUserDepositList";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
 import { useRouter } from "next/router";
+
+interface IBook {
+  authors: string[];
+  contents: string;
+  datetime: string;
+  id: string;
+  isbn: string;
+  price: number;
+  publisher: string;
+  sale_price: number;
+  status: string;
+  thumbnail: string;
+  title: string;
+  translators: string[];
+  url: string;
+}
+
+interface IBookBankProps {
+  onClick: () => void;
+  secondOnClick: () => void;
+  text: string;
+  secondText: string;
+  transform: string;
+  children: React.ReactNode;
+}
 
 const BankBook = ({
   onClick,
@@ -12,16 +37,14 @@ const BankBook = ({
   secondText,
   transform,
   children,
-}: any) => {
+}: IBookBankProps) => {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const userInfo = useUser(auth.currentUser?.uid!);
-  const totalBook = userInfo?.length || 0;
+  const userReviewList = useUserDepositList(auth.currentUser?.uid!);
+  const totalBook = userReviewList?.length || 0;
   const totalAmount =
-    userInfo
-      ?.reduce((cur: number, acc: any) => {
-        return cur + acc.price;
-      }, 0)
+    userReviewList
+      ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
       .toLocaleString("ko-KR") || 0;
 
   useEffect(() => {
@@ -35,8 +58,8 @@ const BankBook = ({
         <BankAmount transform={transform}>
           <span>
             {router?.pathname === "/"
-              ? userInfo
-                  ?.reduce((cur: number, acc: any) => {
+              ? userReviewList
+                  ?.reduce((cur: number, acc: IBook) => {
                     return cur + acc.price;
                   }, 0)
                   .toLocaleString("ko-KR") || 0

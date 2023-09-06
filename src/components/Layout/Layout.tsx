@@ -3,7 +3,11 @@ import styled from "@emotion/styled";
 import Navigation from "./Navigation";
 import { useRouter } from "next/router";
 
-const Layout = ({ children }: any) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const Layout = ({ children }: Props) => {
   const router = useRouter();
 
   return (

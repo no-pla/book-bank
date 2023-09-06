@@ -18,17 +18,22 @@ import { ButtonContainer } from "./ReviewForm";
 import { Message } from "./EditForm";
 import ErrorModal from "../../Custom/ErrorModal";
 import useModal from "../../Hooks/useModal";
-import useDisabled from "../../Hooks/useDisabled";
 
 const UserDirectForm = () => {
   const { isShowing, toggle } = useModal();
-  const { isDisabled, toggleDisabled } = useDisabled();
+  const [disabled, toggleDisabled] = useState<boolean>(false);
   const userDirectFormData = useSetRecoilState(userDirectFormState);
   const currentUser = useAuth();
   const [selectImage, setSelectImage] = useState<any>(null);
   const { mutate: addNewBookReview } = useAddBook();
   const [imageURL, setImageURL] = useState<any>(null);
-  const methods = useForm<any>({
+  const methods = useForm<{
+    authors: string;
+    price: string;
+    publisher: string;
+    title: string;
+    review: string;
+  }>({
     defaultValues: {
       authors: "",
       price: "",
@@ -46,7 +51,7 @@ const UserDirectForm = () => {
     title,
     review,
   }: any) => {
-    toggleDisabled();
+    toggleDisabled((prev) => !prev);
     const storageRef = ref(storage, uuid_v4());
     const snapshot = await uploadBytes(storageRef, selectImage);
     const photoURL = await getDownloadURL(snapshot.ref);
@@ -65,7 +70,7 @@ const UserDirectForm = () => {
       thumbnail: selectImage ? photoURL : NO_IMAGE,
     };
     try {
-      await addNewBookReview(newBookReview);
+      addNewBookReview(newBookReview);
     } catch (error) {
       toggle();
       console.log(error);
@@ -205,12 +210,12 @@ const UserDirectForm = () => {
               <CustomButton
                 type="submit"
                 value="기록하기"
-                disabled={isDisabled}
+                disabled={disabled}
               />
               <CustomButton
                 onClick={() => userDirectFormData(false)}
                 value="닫기"
-                disabled={isDisabled}
+                disabled={disabled}
               />
             </ButtonContainer>
           </Form>

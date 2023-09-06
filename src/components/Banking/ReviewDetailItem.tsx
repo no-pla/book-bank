@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
@@ -21,10 +16,6 @@ const ReviewDetailItem = () => {
   const { mutate: deleteReview } = useDeleteBook();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
-
-  const toggleEdit = () => {
-    setIsEdit(!isEdit);
-  };
 
   const onDelete = async () => {
     try {
@@ -66,7 +57,7 @@ const ReviewDetailItem = () => {
                     {new Date(myBookData?.createdAt!).toLocaleDateString()}
                   </BookDate>
                   <SettingButton>
-                    <button onClick={toggleEdit}>수정</button>
+                    <button onClick={() => setIsEdit(!isEdit)}>수정</button>
                     <button onClick={toggleDelete}>삭제</button>
                   </SettingButton>
                 </BookSetting>

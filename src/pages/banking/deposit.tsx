@@ -9,7 +9,7 @@ import { selectBookState, userDirectFormState } from "@/share/atom";
 const Deposit = () => {
   const resetList = useResetRecoilState(selectBookState);
   const resetDirectList = useResetRecoilState(userDirectFormState);
-  const targetBookData = useRecoilValue<any>(selectBookState);
+  const targetBookData = useRecoilValue(selectBookState);
   const userDirectFormData = useRecoilValue(userDirectFormState);
 
   useEffect(() => {

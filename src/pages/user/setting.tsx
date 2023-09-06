@@ -11,6 +11,21 @@ import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 import { Helmet } from "react-helmet";
 
+interface IBook {
+  title: string;
+  publisher: string;
+  price: number;
+  id: string;
+  authors?: string[] | string;
+  thumbnail: string;
+  review: string;
+  uid: string;
+  createdAt: number;
+  createdYear: number;
+  createdMonth: number;
+  createdDay: number;
+}
+
 const Setting = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
@@ -18,25 +33,22 @@ const Setting = () => {
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
 
   const deleteUserBookReview = async (uid: string) => {
-    // 유저가 작성한 게시글 전체 가져옴
-    const reviewIdList: any = [];
-    const { data } = await axios.get(`${DB_LINK}/review?uid=${uid}`);
-    data.forEach((review: any) => {
-      reviewIdList.push(review.id);
-    });
-    //  forEach 실행 종료 후 실헹하기 위해 promise 사용
-    const promise = reviewIdList.map(async (id: string) => {
-      return await axios.delete(`${DB_LINK}/review/${id}`);
-    });
-
-    return Promise.all(promise);
+    try {
+      const { data } = await axios.get(`${DB_LINK}/review?uid=${uid}`);
+      const promise = data.forEach(async (review: IBook) => {
+        return await axios.delete(`${DB_LINK}/review/${review.id}`);
+      });
+      await Promise.all(promise);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const deleteUserProfile = async (uid: string) => {
     try {
       // 프로필 삭제 성공
-      await axios.delete(`${DB_LINK}/users/${uid}`).then(() => {
-        deleteUserBookReview(uid);
+      await axios.delete(`${DB_LINK}/users/${uid}`).then(async () => {
+        await deleteUserBookReview(uid);
       });
     } catch (error) {
       // 프로필 db 삭제 실패

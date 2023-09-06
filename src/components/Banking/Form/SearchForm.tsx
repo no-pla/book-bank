@@ -26,6 +26,17 @@ interface IBook {
   url: string;
 }
 
+interface IBookData {
+  data: {
+    documents: IBook[];
+    meta: {
+      is_end: boolean;
+      pageable_count: number;
+      total_count: number;
+    };
+  };
+}
+
 const REST_API_KEY = process.env.NEXT_PUBLIC_LIBRARY_KEY;
 
 const SearchForm = () => {
@@ -35,6 +46,7 @@ const SearchForm = () => {
   const setSelectBook = useSetRecoilState(selectBookState);
   const resetSelectBook = useResetRecoilState(selectBookState);
   const setToggleDirectFormState = useSetRecoilState(userDirectFormState);
+
   const SearchInput = () => {
     return (
       <StyleInput
@@ -61,13 +73,12 @@ const SearchForm = () => {
     {
       keepPreviousData: true,
       enabled: !!searchBookName,
-      select: (data) => {
-        // 불변성을 유지하기 위하여 id값을 추가하고 리턴
-        const modifiedData = data.data.documents.map((book: IBook) => {
-          // forEach는 리턴 값이 없으므로 사용하면 안된다.
+      select: ({ data }: IBookData) => {
+        const modifiedData = data.documents.map((book: IBook) => {
+          // 불변성을 유지하기 위하여 id값을 추가하고 리턴
           return { ...book, id: uuid_v4() };
         });
-        return { documents: modifiedData, meta: data.data.meta };
+        return { documents: modifiedData, meta: data.meta };
       },
     }
   );
@@ -82,7 +93,7 @@ const SearchForm = () => {
     }
   };
 
-  const onClick = (book: any) => {
+  const onClick = (book: IBook) => {
     setSelectBook(book);
     setToggleDirectFormState(false);
   };
@@ -115,7 +126,7 @@ const SearchForm = () => {
                     <div>
                       {book.authors[0] || "정보 없음"}
                       {book.authors.length > 1 && "외"}
-                      &nbsp;|&nbsp;{book.publisher}
+                      &nbsp;|&nbsp;{book.publisher || "정보 없음"}
                     </div>
                     <BookPrice>{book.price.toLocaleString()}</BookPrice>
                   </BookDescription>

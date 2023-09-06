@@ -12,13 +12,12 @@ import useAuth from "../Hooks/useAuth";
 import ErrorModal from "../Custom/ErrorModal";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../Custom/Input";
-import useDisabled from "../Hooks/useDisabled";
 
 const UpdateProfileForm = () => {
   const router = useRouter();
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
-  const { isDisabled, toggleDisabled } = useDisabled();
+  const [disabled, toggleDisabled] = useState<boolean>(false);
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [selectImage, setSelectImage] = useState<any>(null);
@@ -33,9 +32,9 @@ const UpdateProfileForm = () => {
   const onUpdateProfile = async ({
     newDisplayName,
   }: {
-    newDisplayName: any;
+    newDisplayName: string;
   }) => {
-    toggleDisabled();
+    toggleDisabled((prev) => !prev);
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
@@ -49,9 +48,8 @@ const UpdateProfileForm = () => {
     } catch (error) {
       console.log(error);
       toggle();
-    } finally {
-      toggleDisabled();
     }
+    toggleDisabled((prev) => !prev);
   };
 
   useEffect(() => {
@@ -120,12 +118,12 @@ const UpdateProfileForm = () => {
                     value="취소"
                     type="button"
                     onClick={() => setOpenProfile((prev) => !prev)}
-                    disabled={isDisabled}
+                    disabled={disabled}
                   />
                   <CustomButton
                     type="submit"
                     value="수정하기"
-                    disabled={isDisabled}
+                    disabled={disabled}
                   />
                 </ButtonContainer>
               </div>

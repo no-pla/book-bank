@@ -22,7 +22,7 @@ const useAuth = () => {
       setUser(currentUser);
     });
     return unSub;
-    /*
+    /**
      * useEffect를 이용하여 이벤트 리스너 등록 시 메모리 누수를 막기 위해 unSubscribe를 해주어야 한다.
      */
   }, [router, router.pathname]);

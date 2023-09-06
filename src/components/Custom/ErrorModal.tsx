@@ -9,7 +9,13 @@ import {
 } from "./ConfirmModal";
 import styled from "@emotion/styled";
 
-const ErrorModal = ({ title, content, toggle }: any) => {
+interface IError {
+  title: string;
+  content: string;
+  toggle: () => void;
+}
+
+const ErrorModal = ({ title, content, toggle }: IError) => {
   return (
     <>
       {createPortal(
