@@ -27,7 +27,7 @@ interface IBookBankProps {
   text: string;
   secondText: string;
   transform: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const BankBook = ({
