@@ -10,6 +10,21 @@ const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
+interface IMonthyUserReview {
+  title: string;
+  publisher: string;
+  price: number;
+  id: string;
+  authors?: string[] | string;
+  thumbnail: string;
+  review: string;
+  uid: string;
+  createdAt: number;
+  createdYear: number;
+  createdMonth: number;
+  createdDay: number;
+}
+
 const PreviousChart = () => {
   const currentUser = useAuth();
   const registarDate = +new Date(+currentUser?.metadata.createdAt)
@@ -57,9 +72,10 @@ const PreviousChart = () => {
       enabled: !!currentUser,
       select: ({ data }) => {
         const tempArray: number[] = new Array(12).fill(0);
-        data.map((monthData: any) => {
-          tempArray[monthData.createdMonth - 1] += 1;
-        });
+        data.map(
+          (monthData: IMonthyUserReview) =>
+            (tempArray[monthData.createdMonth - 1] += 1)
+        );
         return [
           {
             name: "연간 독서량",

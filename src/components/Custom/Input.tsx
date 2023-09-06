@@ -2,7 +2,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { useFormContext } from "react-hook-form";
 
-type INickName = {
+interface INickName {
   maxLength?: {
     value: number;
     message: string;
@@ -20,16 +20,16 @@ type INickName = {
     message: string;
   };
   validate?: any;
-};
+}
 
-type IInputProps = {
+interface IInputProps {
   placeholder: string;
   type: string;
   name: string;
   validation: INickName;
   children?: any;
   defaultValue?: string;
-};
+}
 
 const Input = ({
   placeholder,

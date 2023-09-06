@@ -7,9 +7,16 @@ import BankBook from "@/components/Banking/BankBook";
 import UserProfile from "@/components/Auth/UserProfile";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
 
-type Rank = {
+interface Rank {
   keyword: string[];
-};
+}
+
+interface Ranking {
+  keyword: {
+    word: string;
+    weight: number;
+  };
+}
 
 export const getStaticProps: GetStaticProps<Rank> = async () => {
   const res = await axios.get(
@@ -21,8 +28,8 @@ export const getStaticProps: GetStaticProps<Rank> = async () => {
       String(new Date().getMonth()).padStart(2, "0")
     }&format=json`
   );
-  const select = await res?.data.response.keywords.slice(0, 5);
-  const keyword = await select.map(({ keyword }: any) => keyword.word);
+  const select = res?.data.response?.keywords.slice(0, 5);
+  const keyword = select?.map(({ keyword }: Ranking) => keyword.word);
   return { props: { keyword } };
 };
 
@@ -48,10 +55,10 @@ export default function Home({
           </span>
         </BankBook>
         <RankingInfo>
-          {/* getServerSideProps는 컴포넌트에서는 사용 불가 페이지에서만 가능 */}
+          {/* getServerSideProps는 컴포넌트에서는 사용 불가 페이지에서만 가능*/}
           <RankingTitle>인기 도서 키워드</RankingTitle>
           <RankingList>
-            {keyword?.map((keyword: any, index: number) => {
+            {keyword?.map((keyword: string, index: number) => {
               return (
                 <li key={index}>
                   {index + 1}.&nbsp;{keyword}

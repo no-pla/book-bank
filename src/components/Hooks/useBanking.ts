@@ -5,8 +5,39 @@ import { useResetRecoilState } from "recoil";
 import { DB_LINK } from "@/share/server";
 import { selectMyBookState } from "@/share/atom";
 
+interface IBook {
+  authors: string[];
+  contents: string;
+  datetime: string;
+  id: string;
+  isbn: string;
+  price: number;
+  publisher: string;
+  sale_price: number;
+  status: string;
+  thumbnail: string;
+  title: string;
+  translators: string[];
+  url: string;
+}
+
+interface IUserBookReviewData {
+  title: string;
+  publisher: string;
+  price: number;
+  id: string;
+  authors?: string[] | string;
+  thumbnail: string;
+  review: string;
+  uid: string;
+  createdAt: number;
+  createdYear: number;
+  createdMonth: number;
+  createdDay: number;
+}
+
 // 독서 입금 Create
-const addBook = async (newBookReview: any) => {
+const addBook = async (newBookReview: IUserBookReviewData) => {
   try {
     await axios.post(`${DB_LINK}/review`, newBookReview);
   } catch (error) {
@@ -16,11 +47,9 @@ const addBook = async (newBookReview: any) => {
 
 export const useAddBook = () => {
   const router = useRouter();
-  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: addBook,
     onSuccess: () => {
-      queryClient.invalidateQueries("getMyBookList");
       router.push("/banking");
     },
   });
@@ -44,7 +73,7 @@ const fetchBookList = async (pageParam: number, userId: string) => {
 };
 
 // 독서 입금 Update
-const updateBook = async (bookInfo: any) => {
+const updateBook = async (bookInfo: IBook) => {
   try {
     await axios.patch(`${DB_LINK}/review/${bookInfo?.id}`, bookInfo);
   } catch (error) {
@@ -62,9 +91,8 @@ export const useUpdateBook = () => {
     },
   });
 };
-// 독서 입금 Delete
 
-// 책 삭제
+// 독서 입금 Delete
 const deleteBook = async (targetId: string) => {
   // 책 데이터 삭제
   try {
@@ -72,7 +100,6 @@ const deleteBook = async (targetId: string) => {
   } catch (error) {
     console.log(error);
   }
-  // 유저 데이터 책 개수 빼기
 };
 
 export const useDeleteBook = () => {

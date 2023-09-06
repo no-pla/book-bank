@@ -6,7 +6,7 @@ import { DB_LINK } from "@/share/server";
 import styled from "@emotion/styled";
 
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
-  /*
+  /**
    * next.js는 pre-rendering을 하는데 서버 사이드에서 코드를 실행할 때는
    * window가 존재하지 않는 상태이기 때문에 오류가 발생한다. 그렇게 때문에
    * Lazy Loading을 사용하여 렌더링을 했다.
