@@ -5,6 +5,7 @@ import { auth } from "@/share/firebase";
 import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
+import ErrorModal from "../Custom/ErrorModal";
 
 const Navigation = () => {
   const { isShowing, toggle } = useModal();
@@ -20,6 +21,13 @@ const Navigation = () => {
   };
   return (
     <Header>
+      {isShowing && (
+        <ErrorModal
+          title="로그아웃을 실패했습니다."
+          content="인터넷을 연결해 주세요."
+          toggle={toggle}
+        />
+      )}
       <HomeButton>
         <Link href="/">Book Bank</Link>
       </HomeButton>

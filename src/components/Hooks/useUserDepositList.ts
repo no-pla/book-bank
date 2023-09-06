@@ -2,8 +2,8 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
 
-const useUser = (uid: string) => {
-  const { data: userInfo } = useQuery(
+const useUserDepositList = (uid: string) => {
+  const { data: userBookList } = useQuery(
     "getReadBookInfo",
     async () => {
       return await axios.get(`${DB_LINK}/review?uid=${uid}`);
@@ -13,7 +13,7 @@ const useUser = (uid: string) => {
       enabled: !!uid,
     }
   );
-  return userInfo;
+  return userBookList;
 };
 
-export default useUser;
+export default useUserDepositList;

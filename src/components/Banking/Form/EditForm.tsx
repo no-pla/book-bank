@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { FormProvider, useForm } from "react-hook-form";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import Resizer from "react-image-file-resizer";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../../Hooks/useBanking";
@@ -12,7 +12,6 @@ import Image from "next/image";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
-import useDisabled from "../../Hooks/useDisabled";
 import { FileInput, FileInputLabel } from "@/components/Auth/UpdateProfileForm";
 import Input, { ErrorMessage } from "@/components/Custom/Input";
 
@@ -26,10 +25,9 @@ interface IEditData {
 
 const EditForm = () => {
   const { isShowing, toggle } = useModal();
-  const { isDisabled, toggleDisabled } = useDisabled();
+  const [disabled, toggleDisabled] = useState<boolean>(false);
   const { mutate: updateReview } = useUpdateBook();
-  const isEdit = useRecoilValue(isFormEdit);
-  const setIsEdit = useSetRecoilState(isFormEdit);
+  const [edit, setEdit] = useRecoilState(isFormEdit);
   const targetMyBookData = useRecoilValue<any>(selectMyBookState);
   const setDetail = useSetRecoilState<any>(selectMyBookState);
   const [selectImage, setSelectImage] = useState<any>(null);
@@ -50,9 +48,9 @@ const EditForm = () => {
   const onEdit = async (data: IEditData) => {
     let authors: string[] | string = data.authors;
     if (typeof data.authors === "string") {
-      authors = authors.split(",").map((author: any) => author.trim());
+      authors = authors.split(",").map((author: string) => author.trim());
     }
-    toggleDisabled();
+    toggleDisabled((prev) => !prev);
     try {
       const storageRef = ref(storage, uuid_v4());
       const snapshot = await uploadBytes(storageRef, selectImage);
@@ -67,9 +65,9 @@ const EditForm = () => {
         thumbnail: selectImage ? thumbnail : targetMyBookData.thumbnail,
       };
 
-      await updateReview(editReview);
+      updateReview(editReview);
       setDetail(editReview);
-      setIsEdit(!isEdit);
+      setEdit(!edit);
     } catch (error) {
       setErrorMessage([
         "예기치 못한 오류가 발생했습니다!",
@@ -119,8 +117,8 @@ const EditForm = () => {
       const image = await resizeFile(file);
       // blob 파일 생성
       setSelectImage(image);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -131,7 +129,7 @@ const EditForm = () => {
           title={errorMessage[0]}
           content={errorMessage[1]}
           toggle={toggle}
-          onFunc={() => setIsEdit(!isEdit)}
+          onFunc={() => setEdit(!edit)}
         />
       )}
       <FormProvider {...methods}>
@@ -222,12 +220,12 @@ const EditForm = () => {
             {methods.formState.errors.review?.type === "maxLength" &&
               methods.formState.errors.review.message?.toString()}
           </ErrorMessage>
-          <CustomButton value="수정" type="submit" disabled={isDisabled} />
+          <CustomButton value="수정" type="submit" disabled={disabled} />
           <CustomButton
             value="수정 취소"
             type="button"
             onClick={onClickClose}
-            disabled={isDisabled}
+            disabled={disabled}
           />
         </Form>
       </FormProvider>

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { GoogleAuthProvider } from "firebase/auth";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";

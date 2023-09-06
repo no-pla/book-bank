@@ -3,11 +3,15 @@ import styled from "@emotion/styled";
 import LandingImage from "../../../public/landing-image.jpg";
 import { useRouter } from "next/router";
 
-type ILandingImage = {
+interface ILandingImage {
   src: string;
-};
+}
 
-const FormLayout = ({ children }: any) => {
+interface Props {
+  children: React.ReactNode;
+}
+
+const FormLayout = ({ children }: Props) => {
   const router = useRouter();
 
   return (

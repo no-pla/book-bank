@@ -6,7 +6,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { BookDesc } from "./Form/ReviewForm";
 import { BookListItem } from "./Form/SearchForm";
 import useAuth from "../Hooks/useAuth";
-import useUser from "../Hooks/useUser";
+import useUserDepositList from "../Hooks/useUserDepositList";
 import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import ConfirmModal from "../Custom/ConfirmModal";
@@ -29,11 +29,12 @@ interface IMyBook {
 const ReviewItem = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
-  const userInfo = useUser(currentUser?.uid);
+  const userReviewList = useUserDepositList(currentUser?.uid);
   const MAX_BOOK = 10;
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
+
   const {
     data: myBookReviews,
     fetchNextPage,
@@ -45,7 +46,7 @@ const ReviewItem = () => {
       enabled: !!currentUser?.uid,
       notifyOnChangeProps: "tracked",
       getNextPageParam: (_lastPage, pages) => {
-        if (pages.length < Math.ceil(userInfo?.length / MAX_BOOK)) {
+        if (pages.length < Math.ceil(userReviewList?.length / MAX_BOOK)) {
           return pages.length + 1;
         } else {
           return undefined;
@@ -53,9 +54,8 @@ const ReviewItem = () => {
       },
       select: (data) => {
         // 불변성을 유지하기 위하여 id값을 추가하고 리턴
-        const modifiedData = data.pages.map((book: any) => {
-          // 필요 없는 데이터 제외 후 리턴
-          return book?.data;
+        const modifiedData = data.pages.map(({ data }: { data: IMyBook[] }) => {
+          return data;
         });
         return { pages: modifiedData, pageParams: data.pageParams };
       },
@@ -92,7 +92,6 @@ const ReviewItem = () => {
       )}
       <ul>
         {myBookReviews?.pages?.map((list: IMyBook[]) => {
-          console.log(list);
           return list?.map((book: IMyBook) => {
             return (
               <BookListItem

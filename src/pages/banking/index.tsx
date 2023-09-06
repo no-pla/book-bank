@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet";
 import { useQueryClient } from "react-query";
-import useUser from "@/components/Hooks/useUser";
+import useUserDepositList from "@/components/Hooks/useUserDepositList";
 import ReviewItem from "@/components/Banking/ReviewItem";
 import ReviewDetailItem from "@/components/Banking/ReviewDetailItem";
 import BankBook from "@/components/Banking/BankBook";
@@ -27,27 +27,25 @@ export interface IBookData {
 }
 
 const Index = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const isEdit = useRecoilValue(isFormEdit);
-  const setIsEdit = useSetRecoilState(isFormEdit);
-  const setMyBookData = useSetRecoilState(selectMyBookState);
+  const router = useRouter();
   const currentUser = useAuth();
-  const userInfo = useUser(currentUser?.uid);
-  const totalBook = userInfo?.length || 0;
+  const userReviewList = useUserDepositList(currentUser?.uid);
+  const [edit, setEdit] = useRecoilState(isFormEdit);
+  const resetMyBookData = useResetRecoilState(selectMyBookState);
+
   const totalAmount =
-    userInfo
+    userReviewList
       ?.reduce((cur: number, acc: IBookData) => {
         return cur + acc.price;
       }, 0)
       .toLocaleString("ko-KR") || 0;
 
   useEffect(() => {
-    queryClient.resetQueries();
     queryClient.invalidateQueries("getMyBookList");
-    setMyBookData({});
-    if (isEdit) {
-      setIsEdit(!isEdit);
+    resetMyBookData();
+    if (edit) {
+      setEdit(false);
     }
   }, []);
 
@@ -55,7 +53,7 @@ const Index = () => {
     await window.Kakao.Share.sendCustom({
       templateId: 94039,
       templateArgs: {
-        totalBook,
+        totalBook: userReviewList?.length || 0,
         totalAmount,
         userProfile: currentUser?.photoURL,
         userName: currentUser?.displayName,

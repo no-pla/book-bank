@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { v4 as uuid_v4 } from "uuid";
 import styled from "@emotion/styled";
@@ -11,25 +11,16 @@ import ErrorModal from "../../Custom/ErrorModal";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
-import useDisabled from "../../Hooks/useDisabled";
-
-interface ItargetBookData {
-  title: string;
-  publisher: string;
-  thumbnail: string;
-  price: number;
-  authors: string | string[];
-}
 
 const ReviewForm = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
-  const { isDisabled, toggleDisabled } = useDisabled();
   const targetBookData = useRecoilValue(selectBookState);
   const ReviewAreaRef = useRef<HTMLTextAreaElement>(null);
   const { mutate: addNewBookReview } = useAddBook();
   const userDirectFormData = useRecoilValue(userDirectFormState);
   const resetList = useResetRecoilState(selectBookState);
+  const [disabled, toggleDisabled] = useState<boolean>(false);
 
   const ReviewArea = () => {
     return (
@@ -43,10 +34,11 @@ const ReviewForm = () => {
 
   const onSubmitReview = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    toggleDisabled();
+    toggleDisabled((prev) => !prev);
+
     const newBookReview = {
-      title: targetBookData.title,
-      publisher: targetBookData.publisher,
+      title: targetBookData.title || "",
+      publisher: targetBookData.publisher || "",
       price: targetBookData?.price || 0,
       id: uuid_v4(),
       authors:
@@ -54,22 +46,19 @@ const ReviewForm = () => {
           ? targetBookData?.authors
           : ["정보 없음"],
       thumbnail: targetBookData?.thumbnail || NO_IMAGE,
-      review: ReviewAreaRef.current?.value,
+      review: ReviewAreaRef.current?.value || "",
       uid: currentUser.uid,
       createdAt: Date.now(),
       createdYear: new Date().getFullYear(),
       createdMonth: new Date().getMonth() + 1,
       createdDay: new Date().getDate(),
     };
+
     try {
       await addNewBookReview(newBookReview);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const onClose = () => {
-    resetList();
   };
 
   return (
@@ -102,7 +91,7 @@ const ReviewForm = () => {
                         targetBookData.authors?.slice(0, 3).join(", ")}
                     {targetBookData.authors?.length! > 3 && " 외"}
                   </div>
-                  <div>{targetBookData.publisher}</div>
+                  <div>{targetBookData?.publisher || "정보 없음"}</div>
                   <div>{targetBookData.price?.toLocaleString()}</div>
                 </BookDesc>
               </BookDescriptionConatiner>
@@ -112,14 +101,14 @@ const ReviewForm = () => {
                 <CustomButton
                   type="submit"
                   value="기록하기"
-                  disabled={isDisabled}
+                  disabled={disabled}
                 />
 
                 <CustomButton
                   type="button"
                   value="닫기"
-                  onClick={onClose}
-                  disabled={isDisabled}
+                  onClick={resetList}
+                  disabled={disabled}
                 />
               </ButtonContainer>
             </form>
