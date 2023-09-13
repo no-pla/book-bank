@@ -95,7 +95,7 @@ const Section = styled.section`
 `;
 
 // 리뷰 인피티니 스크롤
-const DataItemContainer = styled.div`
+const DataItemContainer = styled.article`
   width: 50%;
   display: flex;
   flex-direction: column;

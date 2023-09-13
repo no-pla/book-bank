@@ -132,7 +132,7 @@ const BookSetting = styled.div`
   }
 `;
 
-const BankBookDetailDataContainer = styled.section<{ show: string }>`
+const BankBookDetailDataContainer = styled.article<{ show: string }>`
   height: 100%;
   background-color: #bfb0d1;
   border-radius: 12px;
