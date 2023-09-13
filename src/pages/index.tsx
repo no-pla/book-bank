@@ -93,10 +93,11 @@ const InfoContainer = styled.section`
     flex-grow: 1;
     flex-basis: 20%;
   }
-  > article:nth-of-type(2) {
+  > div {
+    height: 212px;
     flex-grow: 2;
   }
-  > article:nth-of-type(3) {
+  > article:nth-of-type(2) {
     flex-basis: 20%;
     flex-grow: 1;
   }
@@ -106,7 +107,7 @@ const InfoContainer = styled.section`
     > article:nth-of-type(1) {
       order: -1;
     }
-    > article:nth-of-type(2) {
+    > div {
       order: 1;
     }
   }
