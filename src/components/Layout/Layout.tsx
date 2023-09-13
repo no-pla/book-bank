@@ -16,10 +16,10 @@ const Layout = ({ children }: Props) => {
         // 로그인이나 회원가입 페이지가 아닐 때면 헤더 show
         <LayoutContainer>
           <Navigation />
-          <div>{children}</div>
+          <main>{children}</main>
         </LayoutContainer>
       ) : (
-        <div>{children}</div>
+        <main>{children}</main>
       )}
     </>
   );
@@ -30,7 +30,7 @@ export default Layout;
 const LayoutContainer = styled.div`
   max-width: 1960px;
   margin: 60px auto 40px;
-  > div {
+  > main {
     padding: 20px 24px 0;
     height: calc(100vh - 120px);
   }

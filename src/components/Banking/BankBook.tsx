@@ -79,7 +79,7 @@ const BankBook = ({
 
 export default BankBook;
 
-const BankingInfo = styled.article`
+const BankingInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -6,6 +6,7 @@ import Chart from "@/components/Banking/Chart/Chart";
 import BankBook from "@/components/Banking/BankBook";
 import UserProfile from "@/components/Auth/UserProfile";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
+import { Helmet } from "react-helmet";
 
 interface Rank {
   keyword: string[];
@@ -40,7 +41,14 @@ export default function Home({
   const router = useRouter();
 
   return (
-    <Container>
+    <>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <meta name="description" content="독서 기록 남기기" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="독서, 독후감, 독서 기록, 독서기록장" />
+        <title>Book Bank</title>
+      </Helmet>
       <InfoContainer>
         <UserProfile />
         <BankBook
@@ -69,19 +77,9 @@ export default function Home({
         </RankingInfo>
       </InfoContainer>
       <Chart currentUser={currentUser} />
-    </Container>
+    </>
   );
 }
-
-const Container = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 100px;
-  @media (max-width: 768px) {
-    gap: 40px;
-  }
-`;
 
 const InfoContainer = styled.section`
   display: flex;
@@ -95,10 +93,11 @@ const InfoContainer = styled.section`
     flex-grow: 1;
     flex-basis: 20%;
   }
-  > article:nth-of-type(2) {
+  > div {
+    height: 212px;
     flex-grow: 2;
   }
-  > article:nth-of-type(3) {
+  > article:nth-of-type(2) {
     flex-basis: 20%;
     flex-grow: 1;
   }
@@ -108,7 +107,7 @@ const InfoContainer = styled.section`
     > article:nth-of-type(1) {
       order: -1;
     }
-    > article:nth-of-type(2) {
+    > div {
       order: 1;
     }
   }

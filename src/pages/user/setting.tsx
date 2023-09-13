@@ -121,11 +121,11 @@ const Setting = () => {
 
 export default Setting;
 
-const WithdrawalContainer = styled.section`
+const WithdrawalContainer = styled.div`
   margin-top: 12px;
 `;
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.article`
   display: flex;
   flex-direction: column;
   gap: 30px;

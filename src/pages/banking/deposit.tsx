@@ -38,12 +38,12 @@ const Deposit = () => {
   );
 };
 
-const DepositContainer = styled.div<{ show: string }>`
+const DepositContainer = styled.section<{ show: string }>`
   display: flex;
   height: 100%;
   gap: 20px;
   position: relative;
-  > div {
+  > article {
     width: 50%;
     background-color: #bfb0d1;
     border-radius: 12px;
@@ -55,10 +55,10 @@ const DepositContainer = styled.div<{ show: string }>`
     justify-content: space-between;
   }
   @media (max-width: 600px) {
-    > div:first-of-type {
+    > article:first-of-type {
       width: 100%;
     }
-    > div:last-of-type {
+    > article:last-of-type {
       width: 100%;
       display: ${(props) => props.show};
     }

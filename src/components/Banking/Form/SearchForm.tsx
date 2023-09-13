@@ -180,7 +180,7 @@ const NoResult = styled.div`
   }
 `;
 
-const Container = styled.div`
+const Container = styled.article`
   overflow: auto;
   > button {
     border: 1px solid lightgrey;

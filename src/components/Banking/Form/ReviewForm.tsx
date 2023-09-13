@@ -82,6 +82,7 @@ const ReviewForm = () => {
                   height={150}
                   width={100}
                   alt={`${targetBookData.title}의 책표지입니다. `}
+                  loading="eager"
                 />
                 <BookDesc>
                   <div>
@@ -121,7 +122,7 @@ const ReviewForm = () => {
 
 export default ReviewForm;
 
-const Container = styled.div`
+const Container = styled.article`
   width: 100%;
   height: 100%;
   @media (max-width: 600px) {

@@ -31,7 +31,7 @@ const Navigation = () => {
       <HomeButton>
         <Link href="/">Book Bank</Link>
       </HomeButton>
-      <MenuButton onClick={() => setOpenMenu((prev) => !prev)}>
+      <MenuButton name="메뉴 버튼" onClick={() => setOpenMenu((prev) => !prev)}>
         <RxHamburgerMenu size={20} />
       </MenuButton>
       <MenuList menubar={openMenu}>
@@ -71,16 +71,18 @@ const Header = styled.header`
 
 const HomeButton = styled.div`
   > a {
+    color: whitesmoke;
     font-size: 1.2rem;
   }
 `;
 
 const MenuButton = styled.button`
+  color: whitesmoke;
+  background-color: transparent;
   padding: 12px 20px;
   border: none;
   text-align: right;
   display: none;
-  background-color: transparent;
   @media (max-width: 600px) {
     display: block;
   }
@@ -122,6 +124,7 @@ const MenuCloseButton = styled.button`
 `;
 
 const MenuLink = styled(Link)`
+  color: whitesmoke;
   padding: 12px 0px;
   text-align: left;
   @media (max-width: 600px) {
@@ -132,6 +135,7 @@ const MenuLink = styled(Link)`
 
 const LogoutButton = styled.button`
   text-align: left;
+  color: whitesmoke;
   background-color: transparent;
   border: none;
   font-size: 0.9rem;
