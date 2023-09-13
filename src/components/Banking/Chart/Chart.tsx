@@ -137,7 +137,11 @@ const Chart = ({ currentUser }: any) => {
 
 export default Chart;
 
-const Container = styled.div`
+const Container = styled.section`
+  margin-top: 100px;
+  @media (max-width: 768px) {
+    margin-top: 40px;
+  }
   @media (max-width: 500px) {
     overflow-x: scroll;
     overflow-y: hidden;
