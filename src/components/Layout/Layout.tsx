@@ -2,10 +2,13 @@ import React from "react";
 import styled from "@emotion/styled";
 import Navigation from "./Navigation";
 import { useRouter } from "next/router";
+import { Open_Sans } from "next/font/google";
 
 interface Props {
   children: React.ReactNode;
 }
+
+const openSans = Open_Sans({ weight: "variable", subsets: ["latin"] });
 
 const Layout = ({ children }: Props) => {
   const router = useRouter();
@@ -16,10 +19,10 @@ const Layout = ({ children }: Props) => {
         // 로그인이나 회원가입 페이지가 아닐 때면 헤더 show
         <LayoutContainer>
           <Navigation />
-          <main>{children}</main>
+          <main className={openSans.className}>{children}</main>
         </LayoutContainer>
       ) : (
-        <main>{children}</main>
+        <main className={openSans.className}>{children}</main>
       )}
     </>
   );

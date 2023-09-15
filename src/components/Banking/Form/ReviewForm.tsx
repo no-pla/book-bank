@@ -79,8 +79,8 @@ const ReviewForm = () => {
               <BookDescriptionConatiner>
                 <Image
                   src={targetBookData.thumbnail || NO_IMAGE}
-                  height={150}
-                  width={100}
+                  height={174}
+                  width={120}
                   alt={`${targetBookData.title}의 책표지입니다. `}
                   loading="eager"
                 />
@@ -142,8 +142,8 @@ const ReviewFormContainer = styled.div`
   height: 100%;
   border-radius: 12px;
   padding: 20px;
-  /* overflow-y: scroll; */
   box-sizing: border-box;
+  overflow-y: scroll;
 `;
 
 const TextArea = styled.textarea`
@@ -159,8 +159,7 @@ const TextArea = styled.textarea`
   margin: 20px 0;
   @media (max-width: 280px) {
     height: 140px;
-    margin: 0;
-    margin-top: 8px;
+    margin: 12px 0;
   }
 `;
 
@@ -175,15 +174,10 @@ const BookDescriptionConatiner = styled.div`
   align-items: flex-start;
   margin-bottom: 20px;
   @media (max-width: 375px) {
-    > img {
-      width: 70px;
-      height: 100px;
-    }
-  }
-  @media (max-width: 280px) {
-    > img {
-      display: none;
-      margin: 0;
+    flex-direction: column;
+    img {
+      height: 160px;
+      width: 110px;
     }
   }
 `;

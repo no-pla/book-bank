@@ -127,8 +127,8 @@ const UserDirectForm = () => {
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <Image
               src={imageURL ? imageURL : NO_IMAGE}
-              height={160}
-              width={140}
+              height={174}
+              width={120}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
               loading="eager"

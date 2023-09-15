@@ -118,7 +118,7 @@ const InfoContainer = styled.section`
       width: 100%;
       padding-bottom: 20px;
     }
-    > article:nth-of-type(2) {
+    > div {
       order: 0;
     }
   }
