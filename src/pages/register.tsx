@@ -1,11 +1,11 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import SignUpForm from "@/components/Auth/SignUpForm";
-import FormLayout from "@/components/Layout/LandingLayout";
+import LandingLayout from "@/components/Layout/LandingLayout";
 
 const Register = () => {
   return (
-    <FormLayout>
+    <LandingLayout>
       <Helmet>
         <meta charSet="utf-8" />
         <meta name="description" content="독서 기록 남기기" />
@@ -14,7 +14,7 @@ const Register = () => {
         <title>Book Bank / 회원가입</title>
       </Helmet>
       <SignUpForm />
-    </FormLayout>
+    </LandingLayout>
   );
 };
 

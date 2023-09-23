@@ -64,8 +64,8 @@ const ReviewDetailItem = () => {
                 <BookInfoContainer>
                   <Image
                     src={myBookData?.thumbnail!}
-                    height={150}
-                    width={110}
+                    height={174}
+                    width={120}
                     alt={`${myBookData?.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
                     loading="eager"

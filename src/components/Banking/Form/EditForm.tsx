@@ -141,8 +141,8 @@ const EditForm = () => {
           <div>
             <Image
               src={imageURL ? imageURL : targetMyBookData?.thumbnail}
-              height={160}
-              width={140}
+              height={174}
+              width={120}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
             />

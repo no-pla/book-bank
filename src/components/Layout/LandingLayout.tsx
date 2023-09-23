@@ -11,7 +11,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const FormLayout = ({ children }: Props) => {
+const LandingLayout = ({ children }: Props) => {
   const router = useRouter();
 
   return (
@@ -19,7 +19,7 @@ const FormLayout = ({ children }: Props) => {
       <BannerContainer>
         <Icon>📚</Icon>
         <Description>
-          {router.pathname.includes("login") ? "로그인" : "회원가입"}하고
+          {router.pathname?.includes("login") ? "로그인" : "회원가입"}하고
           <br />
           독서를 저금하세요.
         </Description>
@@ -29,7 +29,7 @@ const FormLayout = ({ children }: Props) => {
   );
 };
 
-export default FormLayout;
+export default LandingLayout;
 
 const Icon = styled.div`
   font-size: 3rem;
