@@ -29,13 +29,21 @@ const Navigation = () => {
         />
       )}
       <HomeButton>
-        <Link href="/">Book Bank</Link>
+        <Link href="/" aria-label="메인 페이지로 이동">
+          Book Bank
+        </Link>
       </HomeButton>
-      <MenuButton name="메뉴 버튼" onClick={() => setOpenMenu((prev) => !prev)}>
+      <MenuButton
+        aria-label="메뉴 버튼"
+        onClick={() => setOpenMenu((prev) => !prev)}
+      >
         <RxHamburgerMenu size={20} />
       </MenuButton>
       <MenuList menubar={openMenu}>
-        <MenuCloseButton onClick={() => setOpenMenu((prev) => !prev)}>
+        <MenuCloseButton
+          onClick={() => setOpenMenu((prev) => !prev)}
+          aria-label="메뉴 버튼"
+        >
           <RxCross1 size={20} />
         </MenuCloseButton>
         <MenuLink href="/banking">내역</MenuLink>
@@ -47,7 +55,7 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+export default React.memo(Navigation);
 
 const Header = styled.header`
   background-color: #8067a9;
@@ -71,13 +79,13 @@ const Header = styled.header`
 
 const HomeButton = styled.div`
   > a {
-    color: whitesmoke;
+    color: white;
     font-size: 1.2rem;
   }
 `;
 
 const MenuButton = styled.button`
-  color: whitesmoke;
+  color: white;
   background-color: transparent;
   padding: 12px 20px;
   border: none;
@@ -106,14 +114,14 @@ const MenuList = styled.div<{ menubar: boolean }>`
     box-sizing: border-box;
     display: ${(props) => (props.menubar ? "flex" : "none")};
     > * {
-      color: whitesmoke;
+      color: white;
     }
   }
 `;
 
 const MenuCloseButton = styled.button`
   width: fit-content;
-  color: whitesmoke;
+  color: white;
   padding: 12px 8px 0 0;
   border: none;
   background-color: transparent;
@@ -124,24 +132,24 @@ const MenuCloseButton = styled.button`
 `;
 
 const MenuLink = styled(Link)`
-  color: whitesmoke;
+  color: white;
   padding: 12px 0px;
   text-align: left;
   @media (max-width: 600px) {
-    border-bottom: 0.7px solid whitesmoke;
+    border-bottom: 0.7px solid white;
     width: 100%;
   }
 `;
 
 const LogoutButton = styled.button`
   text-align: left;
-  color: whitesmoke;
+  color: white;
   background-color: transparent;
   border: none;
   font-size: 0.9rem;
   @media (max-width: 600px) {
     padding: 12px 0;
     width: 100%;
-    border-bottom: 0.7px solid whitesmoke;
+    border-bottom: 0.7px solid white;
   }
 `;
