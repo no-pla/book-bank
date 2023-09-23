@@ -205,7 +205,7 @@ const BookTitle = styled.div`
 `;
 
 const BookDate = styled.div`
-  color: darkgray;
+  color: #696969;
   font-size: 0.9rem;
   font-weight: 100;
 `;

@@ -13,7 +13,7 @@ export default CustomButton;
 
 const Button = styled.button`
   padding: 8px 16px;
-  background-color: whitesmoke;
+  background-color: white;
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.8rem;
