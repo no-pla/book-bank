@@ -1,13 +1,13 @@
-import React, { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
+import { useQuery } from "react-query";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
-import { useQuery } from "react-query";
 import { StyleInput } from "@/components/Custom/Input";
 
 interface IBook {
@@ -115,11 +115,12 @@ const SearchForm = () => {
                 <BookListItem key={book.id} onClick={() => onClick(book)}>
                   <Image
                     src={book.thumbnail || NO_IMAGE}
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: "20%", height: "auto" }}
+                    height={174}
+                    width={120}
                     alt={`${book.title}의 책표지입니다. `}
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88R8AApUByU2MEcEAAAAASUVORK5CYII="
                   />
                   <BookDescription>
                     <BookTitle>{book.title}</BookTitle>
@@ -209,6 +210,14 @@ export const BookListItem = styled.li`
   cursor: pointer;
   align-items: flex-start;
   background-color: whitesmoke;
+  position: relative;
+  @media (max-width: 1200px) {
+    > img {
+      height: 120px;
+      width: 82.75px;
+      object-fit: cover;
+    }
+  }
   @media (max-width: 600px) {
     > img {
       display: none;
@@ -221,6 +230,11 @@ export const BookTitle = styled.div`
   margin-bottom: 4px;
   font-size: 1.1rem;
   padding-top: 8px;
+  line-height: 1.2rem;
+  @media (max-width: 1200px) {
+    font-size: 0.9rem;
+    padding-top: 0;
+  }
   @media (max-width: 600px) {
     padding-top: 0;
   }
@@ -243,6 +257,13 @@ export const BookDescription = styled.div`
   div:last-of-type {
     font-size: 0.9rem;
   }
+  @media (max-width: 1200px) {
+    > div:nth-of-type(2),
+    div:last-of-type {
+      font-size: 0.8rem;
+    }
+    gap: 6px;
+  }
 `;
 
 const SearchButtonContainer = styled.div`
@@ -259,4 +280,4 @@ const SearchButtonContainer = styled.div`
   }
 `;
 
-export default SearchForm;
+export default memo(SearchForm);
