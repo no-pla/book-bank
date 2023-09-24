@@ -104,7 +104,6 @@ const ReviewForm = () => {
                   value="기록하기"
                   disabled={disabled}
                 />
-
                 <CustomButton
                   type="button"
                   value="닫기"
@@ -134,6 +133,9 @@ export const BookTitle = styled.div`
   font-weight: 800;
   font-size: 1.2rem;
   margin-bottom: 24px;
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReviewFormContainer = styled.div`
@@ -173,6 +175,12 @@ const BookDescriptionConatiner = styled.div`
   gap: 20px;
   align-items: flex-start;
   margin-bottom: 20px;
+  @media (max-width: 1200px) {
+    > img {
+      height: 120px;
+      width: auto;
+    }
+  }
   @media (max-width: 375px) {
     flex-direction: column;
     img {
@@ -197,6 +205,11 @@ export const BookDesc = styled.div`
   }
   > div:nth-of-type(3)::before {
     content: "가격: ";
+  }
+  @media (max-width: 1200px) {
+    > div {
+      font-size: 0.9rem;
+    }
   }
   @media (max-width: 280px) {
     gap: 4px;
