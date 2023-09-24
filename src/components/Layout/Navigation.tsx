@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import Link from "next/link";
-import React, { useState } from "react";
+import { memo, useState } from "react";
 import { auth } from "@/share/firebase";
 import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
@@ -55,7 +55,7 @@ const Navigation = () => {
   );
 };
 
-export default React.memo(Navigation);
+export default memo(Navigation);
 
 const Header = styled.header`
   background-color: #8067a9;

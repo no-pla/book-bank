@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -50,6 +50,12 @@ const UpdateProfileForm = () => {
       toggle();
     }
     toggleDisabled((prev) => !prev);
+  };
+
+  const onClickCancel = () => {
+    setImageURL(null);
+    setOpenProfile((prev) => !prev);
+    methods.reset();
   };
 
   useEffect(() => {
@@ -117,7 +123,7 @@ const UpdateProfileForm = () => {
                   <CustomButton
                     value="취소"
                     type="button"
-                    onClick={() => setOpenProfile((prev) => !prev)}
+                    onClick={onClickCancel}
                     disabled={disabled}
                   />
                   <CustomButton
@@ -145,7 +151,7 @@ const UpdateProfileForm = () => {
             />
           </div>
           <div>
-            <h1>{currentUser?.displayName}</h1>
+            <h1>{currentUser?.displayName ?? "닉네임 없음"}</h1>
             <CustomButton
               onClick={() => setOpenProfile((prev) => !prev)}
               value="닉네임 변경하기"

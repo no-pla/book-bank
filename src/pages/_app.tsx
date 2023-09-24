@@ -36,6 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <Script
               src="https://developers.kakao.com/sdk/js/kakao.js"
               onLoad={kakaoInit}
+              strategy="lazyOnload"
             />
           </Layout>
         </QueryClientProvider>

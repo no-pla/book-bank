@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import React, { useEffect } from "react";
+import { ReactNode, memo, useEffect, useMemo } from "react";
 import useUserDepositList from "../Hooks/useUserDepositList";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
@@ -27,7 +27,7 @@ interface IBookBankProps {
   text: string;
   secondText: string;
   transform: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 const BankBook = ({
@@ -42,10 +42,13 @@ const BankBook = ({
   const router = useRouter();
   const userReviewList = useUserDepositList(auth.currentUser?.uid!);
   const totalBook = userReviewList?.length || 0;
-  const totalAmount =
-    userReviewList
-      ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
-      .toLocaleString("ko-KR") || 0;
+  const amount = useMemo(() => {
+    return (
+      userReviewList
+        ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
+        .toLocaleString("ko-KR") || 0
+    );
+  }, [userReviewList]);
 
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
@@ -56,15 +59,7 @@ const BankBook = ({
       <BankName>{children}</BankName>
       <div>
         <BankAmount transform={transform}>
-          <span>
-            {router?.pathname === "/"
-              ? userReviewList
-                  ?.reduce((cur: number, acc: IBook) => {
-                    return cur + acc.price;
-                  }, 0)
-                  .toLocaleString("ko-KR") || 0
-              : `${totalAmount}`}
-          </span>
+          <span>{amount}</span>
           <span>{router?.pathname == "/banking" && `(${totalBook}권)`}</span>
         </BankAmount>
       </div>
@@ -77,7 +72,7 @@ const BankBook = ({
   );
 };
 
-export default BankBook;
+export default memo(BankBook);
 
 const BankingInfo = styled.div`
   display: flex;

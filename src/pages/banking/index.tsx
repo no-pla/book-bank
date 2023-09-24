@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import styled from "@emotion/styled";
@@ -34,12 +34,13 @@ const Index = () => {
   const [edit, setEdit] = useRecoilState(isFormEdit);
   const resetMyBookData = useResetRecoilState(selectMyBookState);
 
-  const totalAmount =
-    userReviewList
-      ?.reduce((cur: number, acc: IBookData) => {
-        return cur + acc.price;
-      }, 0)
-      .toLocaleString("ko-KR") || 0;
+  const totalAmount = useMemo(() => {
+    return (
+      userReviewList
+        ?.reduce((cur: number, acc: IBookData) => cur + acc.price, 0)
+        .toLocaleString("ko-KR") || 0
+    );
+  }, [userReviewList]);
 
   useEffect(() => {
     queryClient.invalidateQueries("getMyBookList");
