@@ -136,7 +136,8 @@ const Line = styled.div`
 export const ToggleLink = styled(Link)`
   text-decoration: none;
   display: inline-flex;
-  padding-top: 16px;
+  padding: 12px 0;
+  margin-top: 16px;
   vertical-align: middle;
   align-items: center;
   justify-content: center;
