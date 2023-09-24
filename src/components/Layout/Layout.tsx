@@ -1,21 +1,27 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styled from "@emotion/styled";
 import Navigation from "./Navigation";
 import { useRouter } from "next/router";
 import { Open_Sans } from "next/font/google";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const openSans = Open_Sans({ weight: "variable", subsets: ["latin"] });
+const openSans = Open_Sans({
+  weight: "variable",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const Layout = ({ children }: Props) => {
   const router = useRouter();
 
   return (
     <>
-      {router.pathname !== "/login" && router.pathname !== "/register" ? (
+      {router.pathname !== "/login" &&
+      router.pathname !== "/register" &&
+      router.pathname !== "/404" ? (
         // 로그인이나 회원가입 페이지가 아닐 때면 헤더 show
         <LayoutContainer>
           <Navigation />
