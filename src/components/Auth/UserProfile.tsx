@@ -1,4 +1,3 @@
-import { auth } from "@/share/firebase";
 import styled from "@emotion/styled";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +18,7 @@ const UserProfile = () => {
         height={100}
         width={100}
         alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
+        loading="eager"
       />
       <span>{currentUser?.displayName || "닉네임 없음"}</span>
       <Link href="/user/setting">

@@ -34,8 +34,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <Layout>
             <Component {...pageProps} />
             <Script
-              src="https://developers.kakao.com/sdk/js/kakao.js"
+              src="https://t1.kakaocdn.net/kakao_js_sdk/2.4.0/kakao.min.js"
+              integrity="sha384-mXVrIX2T/Kszp6Z0aEWaA8Nm7J6/ZeWXbL8UpGRjKwWe56Srd/iyNmWMBhcItAjH"
+              crossOrigin="anonymous"
               onLoad={kakaoInit}
+              strategy="lazyOnload"
             />
           </Layout>
         </QueryClientProvider>

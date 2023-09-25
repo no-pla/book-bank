@@ -1,25 +1,29 @@
-import React from "react";
 import styled from "@emotion/styled";
-import LandingImage from "../../../public/landing-image.jpg";
 import { useRouter } from "next/router";
-
-interface ILandingImage {
-  src: string;
-}
+import Image from "next/image";
+import { ReactNode } from "react";
 
 interface Props {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const FormLayout = ({ children }: Props) => {
+const LandingLayout = ({ children }: Props) => {
   const router = useRouter();
 
   return (
-    <LayoutContainer LandingImage={LandingImage}>
+    <LayoutContainer>
+      <Image
+        src="/landing-image.jpg"
+        alt="배경 이미지이다. 많은 책들이 가득 쌓여있다."
+        fill={true}
+        style={{
+          objectFit: "cover",
+        }}
+      />
       <BannerContainer>
         <Icon>📚</Icon>
         <Description>
-          {router.pathname.includes("login") ? "로그인" : "회원가입"}하고
+          {router.pathname?.includes("login") ? "로그인" : "회원가입"}하고
           <br />
           독서를 저금하세요.
         </Description>
@@ -29,7 +33,7 @@ const FormLayout = ({ children }: Props) => {
   );
 };
 
-export default FormLayout;
+export default LandingLayout;
 
 const Icon = styled.div`
   font-size: 3rem;
@@ -48,18 +52,15 @@ const BannerContainer = styled.div`
   border: 2px solid var(--main-color);
   width: calc(min(90vw, 400px));
   height: fit-content;
-  padding: 32px;
+  padding: 24px 32px;
   box-sizing: border-box;
+  position: absolute;
 `;
 
-const LayoutContainer = styled.div<{ LandingImage: ILandingImage }>`
-  background-repeat: no-repeat;
-  background-image: url(${(props) => props.LandingImage.src});
-  background-position: center;
-  background-size: cover;
+const LayoutContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;

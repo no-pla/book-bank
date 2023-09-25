@@ -6,9 +6,14 @@ import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
 import { emailRegex, passwordRegex } from "@/share/utils";
-import ErrorModal from "../Custom/ErrorModal";
 import useModal from "../Hooks/useModal";
 import Input from "../Custom/Input";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
+  ssr: false,
+});
+
 interface ILoginData {
   email: string;
   password: string;
@@ -136,7 +141,8 @@ const Line = styled.div`
 export const ToggleLink = styled(Link)`
   text-decoration: none;
   display: inline-flex;
-  padding-top: 16px;
+  padding: 12px 0;
+  margin-top: 16px;
   vertical-align: middle;
   align-items: center;
   justify-content: center;

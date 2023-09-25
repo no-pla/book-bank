@@ -7,9 +7,13 @@ import { DB_LINK } from "@/share/server";
 import { emailRegex, passwordRegex } from "@/share/utils";
 import { Button, FormContainer, ToggleLink } from "./LogInForm";
 import useModal from "../Hooks/useModal";
-import ErrorModal from "../Custom/ErrorModal";
 import Input from "../Custom/Input";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 interface IUserData {
   email: string;

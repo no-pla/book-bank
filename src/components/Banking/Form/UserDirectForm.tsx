@@ -16,8 +16,12 @@ import { userDirectFormState } from "@/share/atom";
 import CustomButton from "../../Custom/CustomButton";
 import { ButtonContainer } from "./ReviewForm";
 import { Message } from "./EditForm";
-import ErrorModal from "../../Custom/ErrorModal";
 import useModal from "../../Hooks/useModal";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 const UserDirectForm = () => {
   const { isShowing, toggle } = useModal();
@@ -127,8 +131,8 @@ const UserDirectForm = () => {
           <Form onSubmit={methods.handleSubmit((data) => onSubmit(data))}>
             <Image
               src={imageURL ? imageURL : NO_IMAGE}
-              height={160}
-              width={140}
+              height={174}
+              width={120}
               style={{ objectFit: "cover" }}
               alt={"책표지 프리뷰입니다"}
               loading="eager"

@@ -3,14 +3,20 @@ import Image from "next/image";
 import { v4 as uuid_v4 } from "uuid";
 import styled from "@emotion/styled";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import UserDirectForm from "./UserDirectForm";
 import useAuth from "../../Hooks/useAuth";
 import useModal from "../../Hooks/useModal";
 import { useAddBook } from "../../Hooks/useBanking";
-import ErrorModal from "../../Custom/ErrorModal";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../../Custom/ErrorModal"), {
+  ssr: false,
+});
+const UserDirectForm = dynamic(() => import("./UserDirectForm"), {
+  ssr: false,
+});
 
 const ReviewForm = () => {
   const currentUser = useAuth();
@@ -79,8 +85,8 @@ const ReviewForm = () => {
               <BookDescriptionConatiner>
                 <Image
                   src={targetBookData.thumbnail || NO_IMAGE}
-                  height={150}
-                  width={100}
+                  height={174}
+                  width={120}
                   alt={`${targetBookData.title}의 책표지입니다. `}
                   loading="eager"
                 />
@@ -104,7 +110,6 @@ const ReviewForm = () => {
                   value="기록하기"
                   disabled={disabled}
                 />
-
                 <CustomButton
                   type="button"
                   value="닫기"
@@ -134,6 +139,9 @@ export const BookTitle = styled.div`
   font-weight: 800;
   font-size: 1.2rem;
   margin-bottom: 24px;
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 
 const ReviewFormContainer = styled.div`
@@ -142,8 +150,8 @@ const ReviewFormContainer = styled.div`
   height: 100%;
   border-radius: 12px;
   padding: 20px;
-  /* overflow-y: scroll; */
   box-sizing: border-box;
+  overflow-y: scroll;
 `;
 
 const TextArea = styled.textarea`
@@ -159,8 +167,7 @@ const TextArea = styled.textarea`
   margin: 20px 0;
   @media (max-width: 280px) {
     height: 140px;
-    margin: 0;
-    margin-top: 8px;
+    margin: 12px 0;
   }
 `;
 
@@ -174,16 +181,17 @@ const BookDescriptionConatiner = styled.div`
   gap: 20px;
   align-items: flex-start;
   margin-bottom: 20px;
-  @media (max-width: 375px) {
+  @media (max-width: 1200px) {
     > img {
-      width: 70px;
-      height: 100px;
+      height: 120px;
+      width: auto;
     }
   }
-  @media (max-width: 280px) {
-    > img {
-      display: none;
-      margin: 0;
+  @media (max-width: 375px) {
+    flex-direction: column;
+    img {
+      height: 160px;
+      width: 110px;
     }
   }
 `;
@@ -203,6 +211,11 @@ export const BookDesc = styled.div`
   }
   > div:nth-of-type(3)::before {
     content: "가격: ";
+  }
+  @media (max-width: 1200px) {
+    > div {
+      font-size: 0.9rem;
+    }
   }
   @media (max-width: 280px) {
     gap: 4px;
