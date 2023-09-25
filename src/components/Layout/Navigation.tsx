@@ -5,7 +5,11 @@ import { auth } from "@/share/firebase";
 import { signOut } from "firebase/auth";
 import useModal from "../Hooks/useModal";
 import { RxHamburgerMenu, RxCross1 } from "react-icons/rx";
-import ErrorModal from "../Custom/ErrorModal";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 const Navigation = () => {
   const { isShowing, toggle } = useModal();

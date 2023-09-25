@@ -9,9 +9,13 @@ import CustomButton from "../Custom/CustomButton";
 import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
-import ErrorModal from "../Custom/ErrorModal";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../Custom/Input";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 const UpdateProfileForm = () => {
   const router = useRouter();

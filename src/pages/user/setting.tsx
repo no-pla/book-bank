@@ -1,15 +1,21 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
 import { deleteUser } from "firebase/auth";
 import { DB_LINK } from "@/share/server";
 import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
-import ConfirmModal from "@/components/Custom/ConfirmModal";
-import ErrorModal from "@/components/Custom/ErrorModal";
 import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 import { Helmet } from "react-helmet";
+import dynamic from "next/dynamic";
+
+const ConfirmModal = dynamic(() => import("@/components/Custom/ConfirmModal"), {
+  ssr: false,
+});
+const ErrorModal = dynamic(() => import("@/components/Custom/ErrorModal"), {
+  ssr: false,
+});
 
 interface IBook {
   title: string;

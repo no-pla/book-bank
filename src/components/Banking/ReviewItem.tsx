@@ -9,8 +9,12 @@ import useAuth from "../Hooks/useAuth";
 import useUserDepositList from "../Hooks/useUserDepositList";
 import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
-import ConfirmModal from "../Custom/ConfirmModal";
 import useModal from "../Hooks/useModal";
+import dynamic from "next/dynamic";
+
+const ConfirmModal = dynamic(() => import("../Custom/ConfirmModal"), {
+  ssr: false,
+});
 
 interface IMyBook {
   title: string;

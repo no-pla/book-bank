@@ -6,7 +6,6 @@ import Resizer from "react-image-file-resizer";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import { useUpdateBook } from "../../Hooks/useBanking";
 import CustomButton from "../../Custom/CustomButton";
-import ConfirmModal from "../../Custom/ConfirmModal";
 import useModal from "../../Hooks/useModal";
 import Image from "next/image";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -14,6 +13,11 @@ import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
 import { FileInput, FileInputLabel } from "@/components/Auth/UpdateProfileForm";
 import Input, { ErrorMessage } from "@/components/Custom/Input";
+import dynamic from "next/dynamic";
+
+const ConfirmModal = dynamic(() => import("../../Custom/ConfirmModal"), {
+  ssr: false,
+});
 
 interface IEditData {
   authors: string;

@@ -16,8 +16,12 @@ import { userDirectFormState } from "@/share/atom";
 import CustomButton from "../../Custom/CustomButton";
 import { ButtonContainer } from "./ReviewForm";
 import { Message } from "./EditForm";
-import ErrorModal from "../../Custom/ErrorModal";
 import useModal from "../../Hooks/useModal";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 const UserDirectForm = () => {
   const { isShowing, toggle } = useModal();

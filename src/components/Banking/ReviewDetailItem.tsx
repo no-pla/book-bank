@@ -5,9 +5,13 @@ import { useRecoilState, useResetRecoilState } from "recoil";
 import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
-import ConfirmModal from "../Custom/ConfirmModal";
 import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
+import dynamic from "next/dynamic";
+
+const ConfirmModal = dynamic(() => import("../Custom/ConfirmModal"), {
+  ssr: false,
+});
 
 const ReviewDetailItem = () => {
   const [myBookData, setMyBookData] = useRecoilState(selectMyBookState);
