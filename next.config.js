@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
+  minimumCacheTTL: 60,
   images: {
     domains: [
       "search1.kakaocdn.net",

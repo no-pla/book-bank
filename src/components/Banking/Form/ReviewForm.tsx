@@ -3,14 +3,20 @@ import Image from "next/image";
 import { v4 as uuid_v4 } from "uuid";
 import styled from "@emotion/styled";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import UserDirectForm from "./UserDirectForm";
 import useAuth from "../../Hooks/useAuth";
 import useModal from "../../Hooks/useModal";
 import { useAddBook } from "../../Hooks/useBanking";
-import ErrorModal from "../../Custom/ErrorModal";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../../Custom/ErrorModal"), {
+  ssr: false,
+});
+const UserDirectForm = dynamic(() => import("./UserDirectForm"), {
+  ssr: false,
+});
 
 const ReviewForm = () => {
   const currentUser = useAuth();

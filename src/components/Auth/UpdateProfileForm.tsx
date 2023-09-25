@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { useRouter } from "next/router";
@@ -9,9 +9,13 @@ import CustomButton from "../Custom/CustomButton";
 import { storage } from "@/share/firebase";
 import useModal from "../Hooks/useModal";
 import useAuth from "../Hooks/useAuth";
-import ErrorModal from "../Custom/ErrorModal";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../Custom/Input";
+import dynamic from "next/dynamic";
+
+const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
+  ssr: false,
+});
 
 const UpdateProfileForm = () => {
   const router = useRouter();
@@ -144,8 +148,11 @@ const UpdateProfileForm = () => {
                 currentUser?.photoURL ||
                 "https://firebasestorage.googleapis.com/v0/b/bookbank-e46c2.appspot.com/o/34AD2.jpg?alt=media&token=0c4ebb6c-cc17-40be-bdfb-aba945649039"
               }
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88R8AApUByU2MEcEAAAAASUVORK5CYII="
               height={100}
               width={100}
+              loading="eager"
               alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
               style={{ borderRadius: "50%", objectFit: "cover" }}
             />
