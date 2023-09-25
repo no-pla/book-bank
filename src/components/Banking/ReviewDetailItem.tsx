@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styled from "@emotion/styled";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import EditForm from "./Form/EditForm";
 import useModal from "../Hooks/useModal";
 import { useDeleteBook } from "../Hooks/useBanking";
 import CustomButton from "../Custom/CustomButton";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import dynamic from "next/dynamic";
+
+const EditForm = dynamic(() => import("./Form/EditForm"), {
+  ssr: false,
+});
 
 const ConfirmModal = dynamic(() => import("../Custom/ConfirmModal"), {
   ssr: false,
@@ -73,6 +76,8 @@ const ReviewDetailItem = () => {
                     alt={`${myBookData?.title}의 책표지입니다. `}
                     style={{ objectFit: "cover" }}
                     loading="eager"
+                    placeholder="blur"
+                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88R8AApUByU2MEcEAAAAASUVORK5CYII="
                   />
                   <BookInfo>
                     <div>{myBookData?.authors!.join(", ") || "정보 없음"}</div>

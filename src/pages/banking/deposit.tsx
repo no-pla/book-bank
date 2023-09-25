@@ -1,10 +1,17 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { Helmet } from "react-helmet";
 import styled from "@emotion/styled";
 import SearchForm from "@/components/Banking/Form/SearchForm";
-import ReviewForm from "@/components/Banking/Form/ReviewForm";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import dynamic from "next/dynamic";
+
+const ReviewForm = dynamic(
+  () => import("@/components/Banking/Form/ReviewForm"),
+  {
+    ssr: false,
+  }
+);
 
 const Deposit = () => {
   const resetList = useResetRecoilState(selectBookState);

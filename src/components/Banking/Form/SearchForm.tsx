@@ -121,6 +121,9 @@ const SearchForm = () => {
                     loading="lazy"
                     placeholder="blur"
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88R8AApUByU2MEcEAAAAASUVORK5CYII="
+                    style={{
+                      objectFit: "cover",
+                    }}
                   />
                   <BookDescription>
                     <BookTitle>{book.title}</BookTitle>
