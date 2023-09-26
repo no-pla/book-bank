@@ -7,7 +7,7 @@ import useAuth from "@/components/Hooks/useAuth";
 import useModal from "@/components/Hooks/useModal";
 import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import dynamic from "next/dynamic";
 
 const ConfirmModal = dynamic(() => import("@/components/Custom/ConfirmModal"), {

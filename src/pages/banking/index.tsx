@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import { useRecoilState, useResetRecoilState } from "recoil";
 import styled from "@emotion/styled";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useQueryClient } from "react-query";
 import useUserDepositList from "@/components/Hooks/useUserDepositList";
 import ReviewItem from "@/components/Banking/ReviewItem";
