@@ -4,6 +4,7 @@ import useUserDepositList from "../Hooks/useUserDepositList";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
 import { useRouter } from "next/router";
+import SkeletonAmount from "../Skeleton/SkeletonAmount";
 
 interface IBook {
   authors: string[];
@@ -43,27 +44,34 @@ const BankBook = ({
   const userReviewList = useUserDepositList(auth.currentUser?.uid!);
   const totalBook = userReviewList?.length || 0;
   const amount = useMemo(() => {
-    return (
-      userReviewList
-        ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
-        .toLocaleString("ko-KR") || 0
-    );
+    return userReviewList
+      ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
+      .toLocaleString("ko-KR");
   }, [userReviewList]);
 
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
   }, []);
 
+  console.log(userReviewList);
+
   return (
     <BankingInfo>
       <BankName>{children}</BankName>
       <div>
         <BankAmount transform={transform}>
-          <span>{amount}</span>
-          <span>{router?.pathname == "/banking" && `(${totalBook}권)`}</span>
+          {userReviewList ? (
+            <>
+              <span>{`${amount}원`}</span>
+              <span>
+                {router?.pathname == "/banking" && `(${totalBook}권)`}
+              </span>
+            </>
+          ) : (
+            <SkeletonAmount color="#bfb0d1" />
+          )}
         </BankAmount>
       </div>
-
       <BankPage>
         <button onClick={onClick}>{text}</button>
         <button onClick={secondOnClick}>{secondText}</button>
@@ -103,12 +111,6 @@ const BankAmount = styled.div<{ transform: string }>`
   font-weight: 800;
   font-size: 1.4rem;
   transform: translateY(40%);
-  > span:first-of-type {
-    padding: 8px;
-    &::after {
-      content: "원";
-    }
-  }
   > span {
     word-break: break-all;
   }
