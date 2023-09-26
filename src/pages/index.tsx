@@ -6,7 +6,7 @@ import Chart from "@/components/Banking/Chart/Chart";
 import BankBook from "@/components/Banking/BankBook";
 import UserProfile from "@/components/Auth/UserProfile";
 import type { GetStaticProps, InferGetStaticPropsType } from "next";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 interface Rank {
   keyword: string[];
@@ -58,9 +58,7 @@ export default function Home({
           secondText="입금하기"
           transform="10%"
         >
-          <span>
-            {currentUser?.displayName || "닉네임 없음"}&nbsp;님의 독서 통장
-          </span>
+          <span>{currentUser?.displayName || "로딩 중..."}님의 독서 통장</span>
         </BankBook>
         <RankingInfo>
           {/* getServerSideProps는 컴포넌트에서는 사용 불가 페이지에서만 가능*/}

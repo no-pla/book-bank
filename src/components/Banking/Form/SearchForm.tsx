@@ -1,4 +1,4 @@
-import { memo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { useResetRecoilState, useSetRecoilState } from "recoil";
 import axios from "axios";
@@ -283,4 +283,4 @@ const SearchButtonContainer = styled.div`
   }
 `;
 
-export default memo(SearchForm);
+export default SearchForm;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import SignUpForm from "@/components/Auth/SignUpForm";
 import LandingLayout from "@/components/Layout/LandingLayout";
 

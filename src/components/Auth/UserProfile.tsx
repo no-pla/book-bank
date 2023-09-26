@@ -20,7 +20,7 @@ const UserProfile = () => {
         alt={`${currentUser?.displayName} 님의 프로필 사진입니다.`}
         loading="eager"
       />
-      <span>{currentUser?.displayName || "닉네임 없음"}</span>
+      <span>{currentUser?.displayName || "로딩 중..."}</span>
       <Link href="/user/setting">
         <FiSettings style={{ paddingRight: "8px" }} />
         프로필 설정

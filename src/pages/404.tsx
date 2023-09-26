@@ -2,7 +2,7 @@ import CustomButton from "@/components/Custom/CustomButton";
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const Custom404 = () => {
   const router = useRouter();
