@@ -42,7 +42,7 @@ const BankBook = ({
   const queryClient = useQueryClient();
   const router = useRouter();
   const userReviewList = useUserDepositList(auth.currentUser?.uid!);
-  const totalBook = userReviewList?.length || 0;
+  const totalBook = userReviewList?.length;
   const amount = useMemo(() => {
     return userReviewList
       ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
@@ -52,8 +52,6 @@ const BankBook = ({
   useEffect(() => {
     queryClient.invalidateQueries("getReadBookInfo");
   }, []);
-
-  console.log(userReviewList);
 
   return (
     <BankingInfo>
