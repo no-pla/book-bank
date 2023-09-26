@@ -101,42 +101,12 @@ const LoginForm = () => {
             <ToggleLink href="/register">이메일로 시작하기</ToggleLink>
           </form>
         </FormProvider>
-        {/* <Line>&nbsp;&nbsp;또는&nbsp;&nbsp;</Line> */}
-        {/* 오류로 임시 삭제 */}
-        {/* <div>
-          <button onClick={() => googleLogin()}>
-            <FcGoogle size={24} />
-          </button>
-        </div> */}
       </FormContainer>
     </>
   );
 };
 
 export default LoginForm;
-
-const Line = styled.div`
-  padding: 12px 0;
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  &::before {
-    content: "";
-    background-color: #c0c0c0;
-    flex-grow: 1;
-    height: 1px;
-    font-size: 0;
-    line-height: 0;
-  }
-  &::after {
-    content: "";
-    background-color: #c0c0c0;
-    flex-grow: 1;
-    height: 1px;
-    font-size: 0;
-    line-height: 0;
-  }
-`;
 
 export const ToggleLink = styled(Link)`
   text-decoration: none;

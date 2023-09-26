@@ -11,6 +11,7 @@ import { DB_LINK } from "@/share/server";
 import { isFormEdit, selectMyBookState } from "@/share/atom";
 import useModal from "../Hooks/useModal";
 import dynamic from "next/dynamic";
+import SkeletonBookItem from "../Skeleton/SkeletonBookItem";
 
 const ConfirmModal = dynamic(() => import("../Custom/ConfirmModal"), {
   ssr: false,
@@ -38,11 +39,11 @@ const ReviewItem = () => {
   const setMyBookData = useSetRecoilState(selectMyBookState);
   const isEdit = useRecoilValue(isFormEdit);
   const setIsEdit = useSetRecoilState(isFormEdit);
-
   const {
     data: myBookReviews,
     fetchNextPage,
     hasNextPage,
+    isFetched,
   } = useInfiniteQuery(
     "getMyBookList",
     ({ pageParam = 1 }) => fetchMyBookReivewList(pageParam),
@@ -95,30 +96,34 @@ const ReviewItem = () => {
         />
       )}
       <ul>
-        {myBookReviews?.pages?.map((list: IMyBook[]) => {
-          return list?.map((book: IMyBook) => {
-            return (
-              <BookListItem
-                key={book.id}
-                onClick={() => showDetailReview(book)}
-              >
-                <BookDescription>
-                  <BookTitle>{book.title}</BookTitle>
-                  <BookDescription>
-                    <BookDesc>
-                      <div>
-                        {book.authors[0] || "정보 없음"}
-                        {book.authors.length > 1 && " 외"}
-                        &nbsp;|&nbsp;{book.publisher}
-                      </div>
-                      <BookPrice>{book.price.toLocaleString()}</BookPrice>
-                    </BookDesc>
-                  </BookDescription>
-                </BookDescription>
-              </BookListItem>
-            );
-          });
-        })}
+        {isFetched
+          ? myBookReviews?.pages?.map((list: IMyBook[]) => {
+              return list?.map((book: IMyBook) => {
+                return (
+                  <BookListItem
+                    key={book.id}
+                    onClick={() => showDetailReview(book)}
+                  >
+                    <BookDescription>
+                      <BookTitle>{book.title}</BookTitle>
+                      <BookDescription>
+                        <BookDesc>
+                          <div>
+                            {book.authors[0] || "정보 없음"}
+                            {" | "}
+                            {book.publisher}
+                          </div>
+                          <BookPrice>{book.price.toLocaleString()}</BookPrice>
+                        </BookDesc>
+                      </BookDescription>
+                    </BookDescription>
+                  </BookListItem>
+                );
+              });
+            })
+          : Array.from({ length: MAX_BOOK }, (_, index) => (
+              <SkeletonBookItem key={index} idx={String(index)} />
+            ))}
       </ul>
       <NextButton disabled={!hasNextPage} onClick={() => fetchNextPage()}>
         더보기
@@ -150,6 +155,7 @@ const BookListContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 12px;
+    width: 100%;
   }
 
   position: relative;
@@ -173,10 +179,11 @@ const BookDescription = styled.div`
   }
 `;
 
-const BookTitle = styled.div`
+export const BookTitle = styled.div`
   font-size: 1.1rem;
   font-weight: 400;
   padding-bottom: 8px;
+  line-height: 1.2rem;
 `;
 
 const BookPrice = styled.div`

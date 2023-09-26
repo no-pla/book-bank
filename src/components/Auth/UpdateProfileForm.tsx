@@ -12,6 +12,7 @@ import useAuth from "../Hooks/useAuth";
 import { FormProvider, useForm } from "react-hook-form";
 import Input from "../Custom/Input";
 import dynamic from "next/dynamic";
+import SkeletonAmount from "../Skeleton/SkeletonAmount";
 
 const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
   ssr: false,
@@ -158,7 +159,11 @@ const UpdateProfileForm = () => {
             />
           </div>
           <div>
-            <h1>{currentUser?.displayName ?? "닉네임 없음"}</h1>
+            {currentUser ? (
+              <h1>{currentUser?.displayName ?? "닉네임 없음"}</h1>
+            ) : (
+              <SkeletonAmount color="#d4d6d0" />
+            )}
             <CustomButton
               onClick={() => setOpenProfile((prev) => !prev)}
               value="닉네임 변경하기"
@@ -195,6 +200,9 @@ const Profile = styled.div`
   & button:first-of-type {
     border: 1px solid var(--point-color1);
     color: var(--point-color1);
+  }
+  h1 {
+    font-size: 1rem;
   }
 `;
 
