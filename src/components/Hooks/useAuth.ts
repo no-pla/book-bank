@@ -8,24 +8,21 @@ const useAuth = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const unSub = auth.onAuthStateChanged(async (currentUser) => {
+    const checkLogin = async (currentUser: any) => {
       if (!currentUser) {
-        // 로그인 X 일때 | 기본적으로 login 페이지로 이동
+        // 로그인이 되어 있지 않으면 로그인 페이지로 이동 (로그인 & 회원가입 페이지인 경우는 제외)
         if (pathname !== "/login" && pathname !== "/register") {
-          // 로그인 & 회원 가입 페이지가 아니면 로그인 페이지로
-          return router.push("/login");
+          router.push("/login");
         }
       } else {
         if (pathname === "/login" || pathname === "/register") {
-          return router.push("/");
+          router.push("/");
         }
       }
-      setUser(currentUser);
-    });
+    };
+
+    const unSub = auth.onAuthStateChanged(checkLogin);
     return unSub;
-    /**
-     * useEffect를 이용하여 이벤트 리스너 등록 시 메모리 누수를 막기 위해 unSubscribe를 해주어야 한다.
-     */
   }, [pathname]);
   return user;
 };

@@ -4,7 +4,6 @@ import Providers from "@/utils/providers";
 import "@/style/reset.css";
 
 export const metadata: Metadata = {
-  title: "Book Bank",
   description: "독서 기록 남기기",
   viewport: "width=device-width, initial-scale=1.0",
   keywords: "독서, 독후감, 독서 기록, 독서기록장",
@@ -19,6 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <Head>
+        <meta charSet="utf-8" />
         <meta
           httpEquiv="Content-Security-Policy"
           content="upgrade-insecure-requests"
