@@ -1,7 +1,7 @@
 "use client";
 
-import SignUpForm from "@/components/Auth/SignUpForm";
-import useAuth from "@/components/Hooks/useAuth";
+import SignUpForm from "../../src/components/Auth/SignUpForm";
+import useAuth from "../../src/components/Hooks/useAuth";
 import React from "react";
 import { Helmet } from "react-helmet-async";
 

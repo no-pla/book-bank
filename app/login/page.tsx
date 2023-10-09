@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import LoginForm from "@/components/Auth/LogInForm";
 import { Helmet } from "react-helmet-async";
-import useAuth from "@/components/Hooks/useAuth";
+import useAuth from "../../src/components/Hooks/useAuth";
+import LoginForm from "../../src/components/Auth/LogInForm";
 
 const Page = () => {
   const _ = useAuth();

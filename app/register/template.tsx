@@ -1,7 +1,6 @@
 "use client";
 
 import styled from "@emotion/styled";
-import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { ReactNode } from "react";
 
@@ -9,9 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
-const LandingLayout = ({ children }: Props) => {
-  const pathname = usePathname();
-
+const Template = ({ children }: Props) => {
   return (
     <LayoutContainer>
       <Image
@@ -35,7 +32,7 @@ const LandingLayout = ({ children }: Props) => {
   );
 };
 
-export default LandingLayout;
+export default Template;
 
 const Icon = styled.div`
   font-size: 3rem;
