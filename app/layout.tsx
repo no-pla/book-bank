@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Head from "next/head";
 import Providers from "@/utils/providers";
 import "@/style/reset.css";
 
@@ -17,16 +16,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <Head>
-        <meta charSet="utf-8" />
-        <meta
-          httpEquiv="Content-Security-Policy"
-          content="upgrade-insecure-requests"
-        />
-      </Head>
+      <meta charSet="utf-8" />
+      <meta
+        httpEquiv="Content-Security-Policy"
+        content="upgrade-insecure-requests"
+      />
       <body>
-        <div id="portal" />
-        <Providers>{children}</Providers>
+        <Providers>
+          <div id="portal" />
+          {children}
+        </Providers>
       </body>
     </html>
   );

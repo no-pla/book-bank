@@ -37,6 +37,7 @@
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {
-    "@types/react-helmet": "^6.1.6"
+    "@types/react-helmet": "^6.1.6",
+    "encoding": "^0.1.13"
   }
 }

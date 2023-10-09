@@ -19,10 +19,10 @@ const useAuth = () => {
           router.push("/");
         }
       }
+      setUser(currentUser);
     };
 
-    const unSub = auth.onAuthStateChanged(checkLogin);
-    return unSub;
+    return auth.onAuthStateChanged(checkLogin);
   }, [pathname]);
   return user;
 };

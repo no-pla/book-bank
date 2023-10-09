@@ -3,7 +3,7 @@ import { ReactNode, memo, useEffect, useMemo } from "react";
 import useUserDepositList from "../Hooks/useUserDepositList";
 import { auth } from "@/share/firebase";
 import { useQueryClient } from "react-query";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import SkeletonAmount from "../Skeleton/SkeletonAmount";
 
 interface IBook {
@@ -39,8 +39,8 @@ const BankBook = ({
   transform,
   children,
 }: IBookBankProps) => {
+  const pathname = usePathname();
   const queryClient = useQueryClient();
-  const router = useRouter();
   const userReviewList = useUserDepositList(auth.currentUser?.uid!);
   const totalBook = userReviewList?.length;
   const amount = useMemo(() => {
@@ -61,9 +61,7 @@ const BankBook = ({
           {userReviewList ? (
             <>
               <span>{`${amount}원`}</span>
-              <span>
-                {router?.pathname == "/banking" && `(${totalBook}권)`}
-              </span>
+              <span>{pathname == "/banking" && `(${totalBook}권)`}</span>
             </>
           ) : (
             <SkeletonAmount color="#bfb0d1" />
