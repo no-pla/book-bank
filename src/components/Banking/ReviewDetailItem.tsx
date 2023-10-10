@@ -82,7 +82,7 @@ const ReviewDetailItem = () => {
                   <BookInfo>
                     <div>
                       {myBookData?.authors!.length > 1
-                        ? myBookData?.authors?.join(", ")
+                        ? myBookData?.authors?.join(" , ")
                         : myBookData?.authors![0] || "정보 없음"}
                     </div>
                     <div>{myBookData?.publisher || "정보 없음"}</div>

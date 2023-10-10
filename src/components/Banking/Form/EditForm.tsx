@@ -245,7 +245,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: scroll;
   > button:first-of-type {
     color: var(--point-color1);
     border: 1px solid var(--point-color1);

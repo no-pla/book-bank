@@ -86,7 +86,9 @@ const Page = () => {
             secondOnClick={() => router.push("/banking/deposit")}
             secondText="입금하기"
             transform="10%"
-            disabled={window.Kakao === undefined}
+            disabled={
+              typeof window !== "undefined" ? window.Kakao === undefined : false
+            }
           />
           <ReviewItem />
         </DataItemContainer>
