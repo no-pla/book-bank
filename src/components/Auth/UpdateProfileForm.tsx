@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import styled from "@emotion/styled";
 import { v4 as uuid_v4 } from "uuid";
 import Image from "next/image";

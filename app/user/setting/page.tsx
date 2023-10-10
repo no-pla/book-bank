@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
@@ -9,7 +11,6 @@ import PreviousChart from "@/components/Banking/Chart/PreviousChart";
 import UpdateProfileForm from "@/components/Auth/UpdateProfileForm";
 import { Helmet } from "react-helmet-async";
 import dynamic from "next/dynamic";
-
 const ConfirmModal = dynamic(() => import("@/components/Custom/ConfirmModal"), {
   ssr: false,
 });
@@ -17,7 +18,7 @@ const ErrorModal = dynamic(() => import("@/components/Custom/ErrorModal"), {
   ssr: false,
 });
 
-interface IBook {
+interface Book {
   title: string;
   publisher: string;
   price: number;
@@ -32,7 +33,7 @@ interface IBook {
   createdDay: number;
 }
 
-const Setting = () => {
+const Page = () => {
   const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
   const [openError, setOpenError] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const Setting = () => {
   const deleteUserBookReview = async (uid: string) => {
     try {
       const { data } = await axios.get(`${DB_LINK}/review?uid=${uid}`);
-      const promise = data.forEach(async (review: IBook) => {
+      const promise = data.forEach(async (review: Book) => {
         return await axios.delete(`${DB_LINK}/review/${review.id}`);
       });
       await Promise.all(promise);
@@ -125,8 +126,6 @@ const Setting = () => {
   );
 };
 
-export default Setting;
-
 const WithdrawalContainer = styled.div`
   margin-top: 12px;
 `;
@@ -135,6 +134,7 @@ const ContentContainer = styled.article`
   display: flex;
   flex-direction: column;
   gap: 30px;
+  height: 560px;
 `;
 
 const SettingPage = styled.section`
@@ -153,3 +153,5 @@ const WithdrawalButton = styled.button`
   display: flex;
   justify-content: flex-end;
 `;
+
+export default Page;
