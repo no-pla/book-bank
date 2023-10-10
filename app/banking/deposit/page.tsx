@@ -1,12 +1,14 @@
+"use client";
+
 import { useEffect } from "react";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { Helmet } from "react-helmet-async";
 import styled from "@emotion/styled";
-import SearchForm from "@/components/Banking/Form/SearchForm";
 import { selectBookState, userDirectFormState } from "@/share/atom";
+import SearchForm from "@/components/Banking/Form/SearchForm";
 import ReviewForm from "@/components/Banking/Form/ReviewForm";
 
-const Deposit = () => {
+const Page = () => {
   const resetList = useResetRecoilState(selectBookState);
   const resetDirectList = useResetRecoilState(userDirectFormState);
   const targetBookData = useRecoilValue(selectBookState);
@@ -38,10 +40,13 @@ const Deposit = () => {
   );
 };
 
+export default Page;
+
 const DepositContainer = styled.section<{ show: string }>`
   display: flex;
   height: 100%;
   gap: 20px;
+  width: 100%;
   position: relative;
   > article {
     width: 50%;
@@ -64,5 +69,3 @@ const DepositContainer = styled.section<{ show: string }>`
     }
   }
 `;
-
-export default Deposit;

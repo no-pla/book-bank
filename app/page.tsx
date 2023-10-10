@@ -7,20 +7,17 @@ import styled from "@emotion/styled";
 import useAuth from "../src/components/Hooks/useAuth";
 import BankBook from "../src/components/Banking/BankBook";
 import Chart from "../src/components/Banking/Chart/Chart";
-import Navigation from "../src/components/Layout/Navigation";
 import UserProfile from "../src/components/Auth/UserProfile";
 import MontlyKeywordChart from "../src/components/Banking/Chart/MontlyKeywordChart";
 
 const Page = () => {
   const router = useRouter();
   const currentUser = useAuth();
-
   return (
     <>
       <Helmet>
         <title>Book Bank</title>
       </Helmet>
-      <Navigation />
       <InfoContainer>
         <UserProfile />
         <BankBook
@@ -44,7 +41,6 @@ export default Page;
 const InfoContainer = styled.section`
   display: flex;
   gap: 12px;
-  margin: 80px 24px 0;
   > article {
     height: 212px;
     border-radius: 12px;

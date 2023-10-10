@@ -6,7 +6,7 @@ import { useQueryClient } from "react-query";
 import { usePathname } from "next/navigation";
 import SkeletonAmount from "../Skeleton/SkeletonAmount";
 
-interface IBook {
+interface Book {
   authors: string[];
   contents: string;
   datetime: string;
@@ -22,13 +22,14 @@ interface IBook {
   url: string;
 }
 
-interface IBookBankProps {
+interface BookBankProps {
   onClick: () => void;
   secondOnClick: () => void;
   text: string;
   secondText: string;
   transform: string;
   children?: ReactNode;
+  disabled?: boolean;
 }
 
 const BankBook = ({
@@ -38,14 +39,15 @@ const BankBook = ({
   secondText,
   transform,
   children,
-}: IBookBankProps) => {
+  disabled,
+}: BookBankProps) => {
   const pathname = usePathname();
   const queryClient = useQueryClient();
   const userReviewList = useUserDepositList(auth.currentUser?.uid!);
   const totalBook = userReviewList?.length;
   const amount = useMemo(() => {
     return userReviewList
-      ?.reduce((cur: number, acc: IBook) => cur + acc.price, 0)
+      ?.reduce((cur: number, acc: Book) => cur + acc.price, 0)
       .toLocaleString("ko-KR");
   }, [userReviewList]);
 
@@ -69,8 +71,12 @@ const BankBook = ({
         </BankAmount>
       </div>
       <BankPage>
-        <button onClick={onClick}>{text}</button>
-        <button onClick={secondOnClick}>{secondText}</button>
+        <button disabled={disabled} onClick={onClick}>
+          {text}
+        </button>
+        <button disabled={disabled} onClick={secondOnClick}>
+          {secondText}
+        </button>
       </BankPage>
     </BankingInfo>
   );

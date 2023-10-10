@@ -63,17 +63,18 @@ const RankingTitle = styled.div`
   font-weight: 800;
   font-size: 1rem;
   padding: 4px 0;
+  margin-bottom: 12px;
 `;
 
 const RankingList = styled.ul`
   background-color: whitesmoke;
+  min-height: calc(100% - 84px);
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding: 20px 8px;
   text-align: left;
   font-size: 0.9rem;
-  margin-top: 12px;
   border-radius: 12px;
   @media (max-width: 768px) {
     padding: 24px 8px;

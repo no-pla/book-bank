@@ -80,11 +80,13 @@ const ReviewDetailItem = () => {
                     blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mM88R8AApUByU2MEcEAAAAASUVORK5CYII="
                   />
                   <BookInfo>
-                    <div>{myBookData?.authors!.join(", ") || "정보 없음"}</div>
-                    <div>{myBookData?.publisher || "정보 없음"}</div>
                     <div>
-                      {myBookData?.price!.toLocaleString() || "정보 없음"}
+                      {myBookData?.authors!.length > 1
+                        ? myBookData?.authors?.join(", ")
+                        : myBookData?.authors![0] || "정보 없음"}
                     </div>
+                    <div>{myBookData?.publisher || "정보 없음"}</div>
+                    <div>{myBookData?.price || "정보 없음"}</div>
                   </BookInfo>
                 </BookInfoContainer>
                 <ReviewTitle>후기</ReviewTitle>

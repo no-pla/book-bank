@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useResetRecoilState } from "recoil";
 import { DB_LINK } from "@/share/server";
 import { selectMyBookState } from "@/share/atom";
@@ -75,7 +75,7 @@ const fetchBookList = async (pageParam: number, userId: string) => {
 // 독서 입금 Update
 const updateBook = async (bookInfo: IBook) => {
   try {
-    await axios.patch(`${DB_LINK}/review/${bookInfo?.id}`, bookInfo);
+    return await axios.put(`${DB_LINK}/review/${bookInfo?.id}`, bookInfo);
   } catch (error) {
     console.log(error);
   }
