@@ -76,7 +76,7 @@ const Chart = ({ currentUser }: any) => {
 
   return (
     <Container>
-      {series && (
+      {isFetched && (
         <DynamicChart
           options={{
             chart: {
@@ -129,6 +129,7 @@ const Chart = ({ currentUser }: any) => {
           series={isFetched ? series : defaultData}
           type="heatmap"
           height={240}
+          width={"100%"}
         />
       )}
     </Container>

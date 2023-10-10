@@ -1,11 +1,13 @@
+"use client";
+
 import React, { useState } from "react";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import styled from "@emotion/styled";
 import { useQuery } from "react-query";
 import { DB_LINK } from "@/share/server";
-import useAuth from "@/components/Hooks/useAuth";
-import { Title } from "@/components/Auth/UpdateProfileForm";
+import useAuth from "../../Hooks/useAuth";
+import { Title } from "../../Auth/UpdateProfileForm";
 const DynamicChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
@@ -109,6 +111,7 @@ const PreviousChart = () => {
         series={isFetched ? data : defaultData}
         type="bar"
         height={250}
+        width={"100%"}
         options={{
           chart: {
             type: "bar",
@@ -172,7 +175,7 @@ export default PreviousChart;
 const Section = styled.section`
   overflow: hidden;
   @media (max-width: 499px) {
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
   }
 `;

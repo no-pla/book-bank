@@ -8,7 +8,7 @@ import { useQuery } from "react-query";
 import CustomButton from "../../Custom/CustomButton";
 import { NO_IMAGE } from "@/share/server";
 import { selectBookState, userDirectFormState } from "@/share/atom";
-import { StyleInput } from "@/components/Custom/Input";
+import { StyleInput } from "../../Custom/Input";
 
 interface IBook {
   authors: string[];

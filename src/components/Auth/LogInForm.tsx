@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FormProvider, useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/share/firebase";
@@ -9,6 +9,7 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import useModal from "../Hooks/useModal";
 import Input from "../Custom/Input";
 import dynamic from "next/dynamic";
+import useAuth from "../Hooks/useAuth";
 
 const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {
   ssr: false,
@@ -21,6 +22,7 @@ interface ILoginData {
 
 const LoginForm = () => {
   const router = useRouter();
+  const currentUser = useAuth();
   const { isShowing, toggle } = useModal();
   const [errorMessage, setErrorMessage] = useState<string[]>(["", ""]);
   const methods = useForm({
