@@ -23,6 +23,7 @@ const ConfirmModal = ({ title, content, toggle, onFunc }: any) => {
 };
 
 export const ModalContainer = styled.div`
+  z-index: 1;
   width: 100vw;
   height: 100vh;
   display: flex;

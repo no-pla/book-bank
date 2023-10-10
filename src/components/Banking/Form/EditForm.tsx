@@ -11,8 +11,8 @@ import Image from "next/image";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuid_v4 } from "uuid";
 import { storage } from "@/share/firebase";
-import { FileInput, FileInputLabel } from "@/components/Auth/UpdateProfileForm";
-import Input, { ErrorMessage } from "@/components/Custom/Input";
+import { FileInput, FileInputLabel } from "../../Auth/UpdateProfileForm";
+import Input, { ErrorMessage } from "../../Custom/Input";
 import dynamic from "next/dynamic";
 
 const ConfirmModal = dynamic(() => import("../../Custom/ConfirmModal"), {
@@ -245,7 +245,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: scroll;
   > button:first-of-type {
     color: var(--point-color1);
     border: 1px solid var(--point-color1);

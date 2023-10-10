@@ -8,7 +8,7 @@ import { emailRegex, passwordRegex } from "@/share/utils";
 import { Button, FormContainer, ToggleLink } from "./LogInForm";
 import useModal from "../Hooks/useModal";
 import Input from "../Custom/Input";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const ErrorModal = dynamic(() => import("../Custom/ErrorModal"), {

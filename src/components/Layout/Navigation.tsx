@@ -1,3 +1,5 @@
+"use client";
+
 import styled from "@emotion/styled";
 import Link from "next/link";
 import { memo, useState } from "react";
